@@ -64,12 +64,16 @@ const CATEGORIES = [
     id: "structuring", num: "02", title: "Structuring, tax & incentives", accent: "#C46A3E",
     items: [
       { name: "Tax credit & incentive strategy", start: 0, end: 5, status: "scale" },
+      { name: "Credits, incentives & tax exemptions", start: 0, end: 5, status: "scale", note: "Property tax abatements, sales/use tax exemptions, energy credits, local grants" },
       { name: "Grants & incentives", start: 0, end: 5, status: "scale" },
       { name: "Joint ventures & partnerships", start: 0, end: 3, status: "enhance" },
       { name: "Entity & legal structuring", start: 0, end: 1, status: "scale", isNew: true },
+      { name: "REIT & investor-specific tax structuring", start: 0, end: 1, status: "scale", isNew: true, note: "Pension funds, SWFs, retail investors, HNWI/family offices" },
       { name: "Tax optimization & transfer pricing", start: 1, end: 4, status: "scale", isNew: true },
       { name: "Capital program tax advisory", start: 2, end: 4, status: "scale", isNew: true },
-      { name: "Customs & trade planning", start: 0, end: 2, status: "enhance" },
+      { name: "Cost segregation analysis", start: 2, end: 3, status: "scale", isNew: true, note: "Asset reclassification to accelerate depreciation" },
+      { name: "Customs & trade planning", start: 0, end: 2, status: "enhance", note: "Strategic \u2014 operational compliance also in cat 7" },
+      { name: "Sustainability-linked tax credits", start: 0, end: 4, status: "enhance", isNew: true, note: "ITC, PTC, energy community credits, domestic content" },
     ],
   },
   {
@@ -96,6 +100,7 @@ const CATEGORIES = [
       { name: "Organizational design", start: 2, end: 3, status: "scale" },
       { name: "Change management", start: 2, end: 3, status: "scale" },
       { name: "Sustainability & ESG", start: 0, end: 5, status: "scale" },
+      { name: "ESG-tax convergence & carbon reporting", start: 2, end: 5, status: "enhance", isNew: true, note: "Aligning tax strategy with sustainability reporting" },
       { name: "Health & safety advisory", start: 2, end: 4, status: "evaluate" },
       { name: "Risk management framework", start: 2, end: 4, status: "scale", isNew: true },
     ],
@@ -136,6 +141,8 @@ const CATEGORIES = [
       { name: "Energy cost & resilience assessment", start: 4, end: 4, status: "enhance", isNew: true },
       { name: "Financial reporting & accounting", start: 4, end: 4, status: "scale", isNew: true },
       { name: "Internal audit & benchmarking", start: 4, end: 4, status: "scale", isNew: true },
+      { name: "Credit substantiation & audit readiness", start: 4, end: 5, status: "scale", isNew: true, note: "Ongoing data capture to defend credits and incentives" },
+      { name: "Customs & trade compliance", start: 4, end: 5, status: "enhance", isNew: true, note: "Duty exposure, FTZ benefits, tariff management" },
       { name: "Cybersecurity & crisis response", start: 4, end: 4, status: "enhance", isNew: true },
       { name: "Facility operate, maintain & retire", start: 4, end: 5, status: "scale", isNew: true },
       { name: "Decommissioning & disposal", start: 5, end: 5, status: "scale", isNew: true },
@@ -203,11 +210,11 @@ function CategoryRow({ category, isExpanded, onToggle }) {
             const hasEnhance = category.items.some((it) => it.status === "enhance" && i >= it.start && i <= it.end);
             const hasEval = category.items.some((it) => it.status === "evaluate" && i >= it.start && i <= it.end);
             const active = hasScale || hasEnhance || hasEval;
-            const color = hasScale ? SCALE_COLOR : hasEnhance ? ENHANCE_COLOR : EVALUATE_COLOR;
+            const c = hasScale ? SCALE_COLOR : hasEnhance ? ENHANCE_COLOR : EVALUATE_COLOR;
             return (
               <div key={i} style={{
                 flex: 1, height: 8, borderRadius: 2,
-                backgroundColor: active ? color : "#edf0f4",
+                backgroundColor: active ? c : "#edf0f4",
                 opacity: active ? 0.55 : 0.2, transition: "opacity 0.2s",
               }} />
             );
@@ -218,14 +225,21 @@ function CategoryRow({ category, isExpanded, onToggle }) {
           <path d="M3.5 5.5L7 9L10.5 5.5" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
-      <div style={{ maxHeight: isExpanded ? category.items.length * 30 + 20 : 0, overflow: "hidden", transition: "max-height 0.35s ease" }}>
+      <div style={{ maxHeight: isExpanded ? category.items.length * 34 + 20 : 0, overflow: "hidden", transition: "max-height 0.35s ease" }}>
         <div style={{ padding: "0 12px 10px" }}>
           {category.items.map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "3px 0" }}>
               <span style={{ minWidth: 18 }} />
-              <div style={{ width: 200, minWidth: 200, fontSize: 11.5, color: "#1a1a2e", lineHeight: 1.3, display: "flex", alignItems: "center", gap: 5 }}>
-                {item.isNew && <span style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: category.accent, flexShrink: 0 }} />}
-                <span style={{ opacity: item.isNew ? 1 : 0.85 }}>{item.name}</span>
+              <div style={{ width: 200, minWidth: 200, fontSize: 11.5, color: "#1a1a2e", lineHeight: 1.3, display: "flex", alignItems: "flex-start", gap: 5 }}>
+                {item.isNew && <span style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: category.accent, flexShrink: 0, marginTop: 4 }} />}
+                <span style={{ opacity: item.isNew ? 1 : 0.85 }}>
+                  {item.name}
+                  {item.note && (
+                    <span style={{ fontSize: 10, color: "#8795a1", fontStyle: "italic", marginLeft: 4 }}>
+                      &mdash; {item.note}
+                    </span>
+                  )}
+                </span>
               </div>
               <PhaseBar item={item} />
               <span style={{ minWidth: 16 }} />
@@ -244,11 +258,17 @@ function CapabilityAssessment() {
   const toggle = (id) => { if (allExpanded) return; setExpanded(expanded === id ? null : id); };
   const toggleAll = () => { setAllExpanded(!allExpanded); if (!allExpanded) setExpanded(null); };
 
+  const totalItems = CATEGORIES.reduce((sum, c) => sum + c.items.length, 0);
+  const newItems = CATEGORIES.reduce((sum, c) => sum + c.items.filter((i) => i.isNew).length, 0);
+
   return (
     <div style={{ padding: "4px 0", maxWidth: 780, margin: "0 auto" }}>
       <div style={{ marginBottom: 12 }}>
+        <div style={{ fontSize: 11, color: "#8795a1", marginBottom: 2, fontStyle: "italic" }}>3/24 Updated &middot; Validated against PwC data center tax article</div>
         <div style={{ fontSize: 18, fontWeight: 500, color: "#1a1a2e", lineHeight: 1.3 }}>Infrastructure capability assessment</div>
-        <div style={{ fontSize: 12, color: "#8795a1", marginTop: 2 }}>Owner perspective &middot; Strategy &rarr; Dispose lifecycle</div>
+        <div style={{ fontSize: 12, color: "#8795a1", marginTop: 2 }}>
+          Owner perspective &middot; {totalItems} capabilities across 7 categories &middot; {newItems} added from transcripts, Board deck &amp; tax TL
+        </div>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2, padding: "0 12px" }}>
@@ -272,7 +292,7 @@ function CapabilityAssessment() {
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "6px 12px", borderBottom: "1px solid #dce1e8",
       }}>
-        <div style={{ display: "flex", gap: 14, fontSize: 10.5, color: "#8795a1", alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 14, fontSize: 10.5, color: "#8795a1", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
             <span style={{ width: 14, height: 4, borderRadius: 2, backgroundColor: SCALE_COLOR, opacity: 0.7, display: "inline-block" }} /> Scale
           </span>
@@ -296,6 +316,10 @@ function CapabilityAssessment() {
         {CATEGORIES.map((cat) => (
           <CategoryRow key={cat.id} category={cat} isExpanded={allExpanded || expanded === cat.id} onToggle={() => toggle(cat.id)} />
         ))}
+      </div>
+
+      <div style={{ marginTop: 10, padding: "10px 14px", backgroundColor: "#f7f8fa", borderRadius: 6, fontSize: 10.5, color: "#8795a1", lineHeight: 1.7 }}>
+        <span style={{ fontWeight: 500, color: "#4a5568" }}>Sources:</span> Partner interviews (Daryl, Tiffany, Tom, Kyle, Matt) &middot; CP&amp;I Priorities Board deck &middot; Global credential pack &middot; PwC data center tax strategy article (3/2026)
       </div>
     </div>
   );

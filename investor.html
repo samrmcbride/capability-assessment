@@ -35,102 +35,94 @@ const PWC = {
 };
 
 const PHASES = [
-  { id: "strategy", label: "Strategy" }, { id: "finance", label: "Finance" },
-  { id: "plan", label: "Plan" }, { id: "build", label: "Build" },
-  { id: "operate", label: "Operate" }, { id: "dispose", label: "Dispose" },
+  { id: "structure", label: "Structure & Fundraise" },
+  { id: "finance", label: "Finance & Plan" },
+  { id: "deploy", label: "Capital Deployment" },
+  { id: "operate", label: "Operate" },
+  { id: "dispose", label: "Dispose & Wind Down" },
 ];
 
 const BAR_COLOR = PWC.black;
 
 const PERSONAS = [
-  { id: "cfo", label: "CFO / Treasurer", description: "Capital allocation, financing, business case, financial reporting",
-    capabilities: new Set(["Capital strategy & portfolio planning","Business case & feasibility","Investment prioritization","Post investment review","Entity & investor structuring","Tax optimization & transfer pricing","Equity raise & lead advisory","Debt raise & capital markets","Financial due diligence","Valuation","Market entry & structuring","Post-deal integration","Governance & setup","Financial reporting & accounting","Internal audit & benchmarking"]) },
-  { id: "tax", label: "Tax director", description: "Credits, incentives, structuring, transfer pricing, compliance",
-    capabilities: new Set(["Tax credits & incentives","Grants, abatements & exemptions","Entity & investor structuring","Tax optimization & transfer pricing","Cost segregation analysis","Customs & trade planning","Tax due diligence","Sustainability, ESG & carbon reporting","Credit substantiation & audit readiness","Customs & trade compliance","Site selection","Business case & feasibility"]) },
-  { id: "capex", label: "Head of capital projects", description: "Program delivery, controls, procurement, governance",
-    capabilities: new Set(["Program & project management","Cost management & controls","Schedule & risk management","Procurement strategy","Commercial management","Supply chain execution","Construction oversight","Commissioning & handover","Design management","Technical advisory","Lender & investor technical advisory","Governance & setup","Regulatory & governance compliance","Risk management framework","Change management","Workforce strategy & capability building","Digital program enablement","Advanced analytics","Operational readiness planning"]) },
-  { id: "coo", label: "COO / VP operations", description: "Asset performance, energy, compliance, resilience",
-    capabilities: new Set(["Operational readiness planning","Asset management strategy","Energy management, efficiency & resilience","Financial reporting & accounting","Internal audit & benchmarking","Credit substantiation & audit readiness","Customs & trade compliance","Climate risk modeling","Cybersecurity & crisis response","Facility operate, maintain & retire","Decommissioning & disposal","Operational turnaround & restructuring","Commissioning & handover","Sustainability, ESG & carbon reporting","Health & safety advisory"]) },
-  { id: "cdo", label: "Chief development officer", description: "Site selection, JV structuring, due diligence, M&A",
-    capabilities: new Set(["Capital strategy & portfolio planning","Business case & feasibility","Site selection","Investment prioritization","Joint ventures & partnerships","Entity & investor structuring","Equity raise & lead advisory","Debt raise & capital markets","Financial due diligence","Tax due diligence","Commercial due diligence","Technical due diligence","Valuation","Market entry & structuring","Post-deal integration","Stakeholder management","Regulatory strategy"]) },
-  { id: "cio", label: "CIO / CTO", description: "Digital enablement, analytics, ERP, automation",
-    capabilities: new Set(["Digital program enablement","Advanced analytics","BIM / digital twin","ERP integration","Process automation & orchestration","Data governance & reporting"]) },
+  { id: "fund_partner", label: "Fund partner / IC", description: "Fund strategy, investment thesis, portfolio construction, LP relations",
+    capabilities: new Set(["Fund strategy & investment thesis","Portfolio construction & allocation","LP & investor reporting","Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Fundraise advisory & capital raising","Equity raise & lead advisory","Valuation","Market entry & structuring","Fund governance & compliance","ESG & sustainability reporting"]) },
+  { id: "tax", label: "Tax director", description: "Fund-level structuring, investor tax, credits, exit optimization",
+    capabilities: new Set(["Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Tax credits & incentives","Grants, abatements & exemptions","Tax optimization & transfer pricing","Cost segregation analysis","Tax due diligence","Exit tax planning & optimization","Credit substantiation & audit readiness","REIT & fund vehicle compliance"]) },
+  { id: "deal_team", label: "Head of transactions", description: "Due diligence, deal execution, SPA advisory, integration",
+    capabilities: new Set(["Financial due diligence","Tax due diligence","Commercial due diligence","Technical due diligence","Valuation","Market entry & structuring","Deal structuring & SPA advisory","Post-deal integration","Equity raise & lead advisory","Debt raise & capital markets","JV & co-investment structuring","Lender & investor technical advisory"]) },
+  { id: "portfolio_ops", label: "Portfolio operations", description: "Value creation, portco oversight, operational improvement",
+    capabilities: new Set(["Portfolio company governance & oversight","Operational improvement & value creation","Capital project oversight","Procurement strategy & cost management","Digital enablement & analytics","Workforce strategy & capability building","Asset management strategy","Energy management, efficiency & resilience","Operational turnaround & restructuring"]) },
+  { id: "fund_cfo", label: "CFO / Fund controller", description: "Fund accounting, NAV, waterfall modeling, financial reporting, audit",
+    capabilities: new Set(["Fund accounting & NAV reporting","Waterfall & distribution modeling","Financial reporting & technical accounting","Internal audit & benchmarking","LP & investor reporting","Fund governance & compliance","Regulatory & governance compliance","Valuation"]) },
+  { id: "ir", label: "Investor relations", description: "Fundraise support, LP communications, market positioning",
+    capabilities: new Set(["Fundraise advisory & capital raising","LP & investor reporting","ESG & sustainability reporting","Fund strategy & investment thesis","Market entry & structuring"]) },
 ];
 
 const CATEGORIES = [
-  { id: "investment", num: "01", title: "Capital & investment strategy", items: [
-    { name: "Capital strategy & portfolio planning", start: 0, end: 1 },
-    { name: "Business case & feasibility", start: 0, end: 2 },
-    { name: "Site selection", start: 0, end: 2 },
-    { name: "Investment prioritization", start: 0, end: 1 },
-    { name: "Post investment review", start: 4, end: 5 },
+  { id: "investment", num: "01", title: "Fund strategy & capital allocation", items: [
+    { name: "Fund strategy & investment thesis", start: 0, end: 1 },
+    { name: "Portfolio construction & allocation", start: 0, end: 2 },
+    { name: "Sector & market screening", start: 0, end: 1 },
+    { name: "Fundraise advisory & capital raising", start: 0, end: 0 },
+    { name: "LP & investor reporting", start: 0, end: 4 },
   ]},
   { id: "structuring", num: "02", title: "Structuring, tax & incentives", items: [
-    { name: "Tax credits & incentives", start: 0, end: 5 },
-    { name: "Grants, abatements & exemptions", start: 0, end: 5 },
-    { name: "Joint ventures & partnerships", start: 0, end: 3 },
-    { name: "Entity & investor structuring", start: 0, end: 1 },
-    { name: "Tax optimization & transfer pricing", start: 1, end: 4 },
-    { name: "Cost segregation analysis", start: 2, end: 3 },
-    { name: "Customs & trade planning", start: 0, end: 2 },
+    { name: "Fund structuring & domicile", start: 0, end: 0 },
+    { name: "Investor tax considerations", start: 0, end: 1 },
+    { name: "Cross-border treaty & withholding planning", start: 0, end: 4 },
+    { name: "Tax credits & incentives", start: 1, end: 4 },
+    { name: "Grants, abatements & exemptions", start: 1, end: 4 },
+    { name: "JV & co-investment structuring", start: 0, end: 2 },
+    { name: "Tax optimization & transfer pricing", start: 1, end: 3 },
+    { name: "Cost segregation analysis", start: 2, end: 2 },
+    { name: "Exit tax planning & optimization", start: 3, end: 4 },
+    { name: "REIT & fund vehicle compliance", start: 0, end: 4 },
   ]},
   { id: "financing", num: "03", title: "Financing & transactions", items: [
-    { name: "Equity raise & lead advisory", start: 0, end: 1 },
+    { name: "Equity raise & lead advisory", start: 0, end: 2 },
     { name: "Debt raise & capital markets", start: 1, end: 2 },
-    { name: "Financial due diligence", start: 1, end: 1 },
-    { name: "Tax due diligence", start: 1, end: 1 },
-    { name: "Commercial due diligence", start: 1, end: 1 },
+    { name: "Financial due diligence", start: 1, end: 2 },
+    { name: "Tax due diligence", start: 1, end: 2 },
+    { name: "Commercial due diligence", start: 1, end: 2 },
     { name: "Technical due diligence", start: 1, end: 2 },
-    { name: "Valuation", start: 0, end: 1 },
-    { name: "Market entry & structuring", start: 0, end: 1 },
-    { name: "Post-deal integration", start: 1, end: 2 },
+    { name: "Valuation", start: 0, end: 4 },
+    { name: "Market entry & structuring", start: 0, end: 2 },
+    { name: "Deal structuring & SPA advisory", start: 1, end: 2 },
+    { name: "Post-deal integration", start: 2, end: 3 },
+    { name: "Lender & investor technical advisory", start: 1, end: 2 },
   ]},
   { id: "governance", num: "04", title: "Governance, risk & compliance", items: [
-    { name: "Governance & setup", start: 0, end: 3 },
-    { name: "Regulatory strategy", start: 2, end: 3 },
-    { name: "Regulatory & governance compliance", start: 2, end: 5 },
-    { name: "Stakeholder management", start: 2, end: 4 },
-    { name: "Organizational design", start: 2, end: 3 },
-    { name: "Change management", start: 2, end: 3 },
-    { name: "Sustainability, ESG & carbon reporting", start: 0, end: 5 },
-    { name: "Workforce strategy & capability building", start: 2, end: 4 },
-    { name: "Health & safety advisory", start: 2, end: 4 },
-    { name: "Risk management framework", start: 2, end: 4 },
+    { name: "Fund governance & compliance", start: 0, end: 4 },
+    { name: "Regulatory & governance compliance", start: 1, end: 4 },
+    { name: "Stakeholder & LP management", start: 0, end: 4 },
+    { name: "ESG & sustainability reporting", start: 0, end: 4 },
+    { name: "Risk management framework", start: 1, end: 3 },
+    { name: "Portfolio company governance & oversight", start: 2, end: 4 },
   ]},
-  { id: "delivery", num: "05", title: "Program delivery & controls", items: [
-    { name: "Program & project management", start: 2, end: 3 },
-    { name: "Cost management & controls", start: 2, end: 3 },
-    { name: "Schedule & risk management", start: 2, end: 3 },
-    { name: "Procurement strategy", start: 2, end: 3 },
-    { name: "Commercial management", start: 2, end: 4 },
-    { name: "Supply chain execution", start: 2, end: 4 },
-    { name: "Construction oversight", start: 3, end: 3 },
-    { name: "Commissioning & handover", start: 3, end: 4 },
-    { name: "Design management", start: 2, end: 3 },
-    { name: "Technical advisory", start: 2, end: 3 },
-    { name: "Lender & investor technical advisory", start: 1, end: 3 },
+  { id: "delivery", num: "05", title: "Portfolio value creation", items: [
+    { name: "Operational improvement & value creation", start: 2, end: 3 },
+    { name: "Capital project oversight", start: 2, end: 3 },
+    { name: "Procurement strategy & cost management", start: 2, end: 3 },
+    { name: "Workforce strategy & capability building", start: 2, end: 3 },
+    { name: "Digital enablement & analytics", start: 2, end: 3 },
+    { name: "Operational turnaround & restructuring", start: 3, end: 4 },
   ]},
   { id: "technology", num: "06", title: "Technology & data", items: [
-    { name: "Digital program enablement", start: 1, end: 4 },
-    { name: "Advanced analytics", start: 2, end: 4 },
-    { name: "BIM / digital twin", start: 2, end: 4 },
-    { name: "ERP integration", start: 2, end: 4 },
-    { name: "Process automation & orchestration", start: 2, end: 4 },
-    { name: "Data governance & reporting", start: 2, end: 4 },
+    { name: "Digital enablement & analytics", start: 1, end: 3 },
+    { name: "Data governance & reporting", start: 1, end: 3 },
+    { name: "Waterfall & distribution modeling", start: 0, end: 4 },
+    { name: "Portfolio analytics & benchmarking", start: 2, end: 4 },
   ]},
-  { id: "operations", num: "07", title: "Operations & asset optimization", items: [
-    { name: "Operational readiness planning", start: 3, end: 4 },
-    { name: "Asset management strategy", start: 4, end: 5 },
-    { name: "Energy management, efficiency & resilience", start: 4, end: 4 },
-    { name: "Financial reporting & accounting", start: 4, end: 4 },
-    { name: "Internal audit & benchmarking", start: 4, end: 4 },
-    { name: "Credit substantiation & audit readiness", start: 4, end: 5 },
-    { name: "Customs & trade compliance", start: 4, end: 5 },
-    { name: "Climate risk modeling", start: 4, end: 5 },
-    { name: "Cybersecurity & crisis response", start: 4, end: 4 },
-    { name: "Facility operate, maintain & retire", start: 4, end: 5 },
-    { name: "Decommissioning & disposal", start: 5, end: 5 },
-    { name: "Operational turnaround & restructuring", start: 4, end: 5 },
+  { id: "operations", num: "07", title: "Asset performance & exit", items: [
+    { name: "Asset management strategy", start: 3, end: 4 },
+    { name: "Energy management, efficiency & resilience", start: 3, end: 3 },
+    { name: "Financial reporting & technical accounting", start: 3, end: 4 },
+    { name: "Fund accounting & NAV reporting", start: 0, end: 4 },
+    { name: "Internal audit & benchmarking", start: 3, end: 4 },
+    { name: "Credit substantiation & audit readiness", start: 3, end: 4 },
+    { name: "Exit preparation & vendor due diligence", start: 4, end: 4 },
+    { name: "Wind down & fund dissolution", start: 4, end: 4 },
   ]},
 ];
 
@@ -158,12 +150,10 @@ function PhaseBar({ item, dimmed }) {
 
 function PhaseBarMini({ item }) {
   return (
-    <div style={{ display: "flex", gap: 1, width: 90 }}>
+    <div style={{ display: "flex", gap: 1, width: 75 }}>
       {PHASES.map((_, i) => {
         const active = i >= item.start && i <= item.end;
-        return (
-          <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: active ? PWC.orange : PWC.grey200, opacity: active ? 0.8 : 0.4 }} />
-        );
+        return <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: active ? PWC.orange : PWC.grey200, opacity: active ? 0.8 : 0.4 }} />;
       })}
     </div>
   );
@@ -206,16 +196,11 @@ function CategoryRow({ category, isExpanded, onToggle, activePersona, selected, 
             return (
               <div key={i}
                 onClick={e => { e.stopPropagation(); onSelect(key, category.title, item); }}
-                style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 4px", cursor: "pointer", borderRadius: 3, margin: "0 -4px", backgroundColor: isSel ? PWC.orange50 : "transparent", transition: "background-color 0.15s" }}
+                style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", borderRadius: 3, margin: "0 -4px", padding: "4px 4px", backgroundColor: isSel ? PWC.orange50 : "transparent", transition: "background-color 0.15s" }}
                 onMouseEnter={e => { if (!isSel) e.currentTarget.style.backgroundColor = PWC.grey50; }}
-                onMouseLeave={e => { if (!isSel) e.currentTarget.style.backgroundColor = "transparent"; else e.currentTarget.style.backgroundColor = PWC.orange50; }}>
+                onMouseLeave={e => { if (!isSel) e.currentTarget.style.backgroundColor = isSel ? PWC.orange50 : "transparent"; }}>
                 <span style={{ minWidth: 18, display: "flex", justifyContent: "center" }}>
-                  <span style={{
-                    width: 14, height: 14, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
-                    border: isSel ? `2px solid ${PWC.orange}` : `1.5px solid ${PWC.grey300}`,
-                    backgroundColor: isSel ? PWC.orange : "transparent",
-                    transition: "all 0.15s",
-                  }}>
+                  <span style={{ width: 14, height: 14, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", border: isSel ? `2px solid ${PWC.orange}` : `1.5px solid ${PWC.grey300}`, backgroundColor: isSel ? PWC.orange : "transparent", transition: "all 0.15s" }}>
                     {isSel && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2.5 5L4.5 7L7.5 3" fill="none" stroke={PWC.white} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                   </span>
                 </span>
@@ -272,7 +257,7 @@ function App() {
     const text = Object.entries(grouped).map(([cat, items]) =>
       `${cat}\n${items.map(i => `  - ${i}`).join("\n")}`
     ).join("\n\n");
-    const header = `PwC Infrastructure Capabilities - Selected Services\n${"=".repeat(50)}\n\n`;
+    const header = `PwC Infrastructure Capabilities - Investor Perspective\n${"=".repeat(50)}\n\n`;
     navigator.clipboard.writeText(header + text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -280,7 +265,6 @@ function App() {
   };
 
   const selectedKeys = new Set(selected.keys());
-
   const grouped = {};
   selected.forEach((val, key) => {
     if (!grouped[val.catTitle]) grouped[val.catTitle] = [];
@@ -291,7 +275,7 @@ function App() {
     <div style={{ padding: "4px 0", maxWidth: 740, margin: "0 auto", fontFamily: "Arial, sans-serif" }}>
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: "bold", color: PWC.black, lineHeight: 1.2 }}>One infrastructure capability assessment</div>
-        <div style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: PWC.grey500, marginTop: 4 }}>Owner perspective</div>
+        <div style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: PWC.grey500, marginTop: 4 }}>Investor perspective</div>
       </div>
 
       <div style={{ marginBottom: 16 }}>
@@ -315,7 +299,7 @@ function App() {
         <div style={{ width: 200, minWidth: 200 }} />
         <div style={{ display: "flex", gap: 0, flex: 1 }}>
           {PHASES.map((phase, i) => (
-            <div key={phase.id} style={{ flex: 1, textAlign: "center", padding: "8px 0", backgroundColor: ["#FD5108","#F46318","#EB7528","#E28738","#D99948","#D0AB58"][i], color: i < 4 ? PWC.white : PWC.black, fontFamily: "Arial, sans-serif", fontSize: 11, fontWeight: "bold", borderRight: i<PHASES.length-1 ? "1px solid rgba(255,255,255,0.25)" : "none", borderRadius: i===0?"4px 0 0 4px":i===PHASES.length-1?"0 4px 4px 0":0 }}>{phase.label}</div>
+            <div key={phase.id} style={{ flex: 1, textAlign: "center", padding: "8px 2px", backgroundColor: ["#FD5108","#F46318","#EB7528","#D99948","#D0AB58"][i], color: i < 3 ? PWC.white : PWC.black, fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: "bold", borderRight: i<PHASES.length-1 ? "1px solid rgba(255,255,255,0.25)" : "none", borderRadius: i===0?"4px 0 0 4px":i===PHASES.length-1?"0 4px 4px 0":0, lineHeight: 1.2 }}>{phase.label}</div>
           ))}
         </div>
         <span style={{ width: 14 }} />
@@ -364,13 +348,7 @@ function App() {
                       value={item.note || ""}
                       onClick={e => e.stopPropagation()}
                       onChange={e => updateNote(item.key, e.target.value)}
-                      style={{
-                        width: "100%", marginTop: 4, padding: "5px 8px",
-                        fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black,
-                        border: `1px solid ${PWC.grey200}`, borderRadius: 3,
-                        backgroundColor: PWC.grey50, outline: "none",
-                        transition: "border-color 0.15s",
-                      }}
+                      style={{ width: "100%", marginTop: 4, padding: "5px 8px", fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, border: `1px solid ${PWC.grey200}`, borderRadius: 3, backgroundColor: PWC.grey50, outline: "none", transition: "border-color 0.15s" }}
                       onFocus={e => e.target.style.borderColor = PWC.orange}
                       onBlur={e => e.target.style.borderColor = PWC.grey200}
                     />

@@ -24,7 +24,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-const { useState, useCallback } = React;
+const { useState, useCallback, useRef } = React;
 
 const PWC = {
   orange: "#FD5108", orange400: "#FE7C39", orange300: "#FFAA72",
@@ -59,80 +59,114 @@ const PERSONAS = [
 
 const CATEGORIES = [
   { id: "investment", num: "01", title: "Capital & investment strategy", items: [
-    { name: "Capital strategy & portfolio planning", start: 0, end: 1 },
-    { name: "Business case & feasibility", start: 0, end: 2 },
-    { name: "Site selection", start: 0, end: 2 },
-    { name: "Investment prioritization", start: 0, end: 1 },
-    { name: "Post investment review", start: 4, end: 5 },
+    { name: "Capital strategy & portfolio planning", start: 0, end: 1, q: "Do we have a clear view of our total capital portfolio and where each asset sits in its lifecycle?" },
+    { name: "Business case & feasibility", start: 0, end: 2, q: "Are our assumptions stress-tested \u2014 what happens if costs overrun 20% or demand shifts?" },
+    { name: "Site selection", start: 0, end: 2, q: "Are we evaluating sites against the full cost stack \u2014 land, power, labor, tax, permitting, resilience?" },
+    { name: "Investment prioritization", start: 0, end: 1, q: "When we have more opportunities than capital, what\u2019s the decision framework?" },
+    { name: "Post investment review", start: 4, end: 5, q: "After major investments, are we systematically capturing what worked and what didn\u2019t?" },
   ]},
   { id: "structuring", num: "02", title: "Structuring, tax & incentives", items: [
-    { name: "Tax credits & incentives", start: 0, end: 5 },
-    { name: "Grants, abatements & exemptions", start: 0, end: 5 },
-    { name: "Joint ventures & partnerships", start: 0, end: 3 },
-    { name: "Entity & investor structuring", start: 0, end: 1 },
-    { name: "Tax optimization & transfer pricing", start: 1, end: 4 },
-    { name: "Cost segregation analysis", start: 2, end: 3 },
-    { name: "Customs & trade planning", start: 0, end: 2 },
+    { name: "Tax credits & incentives", start: 0, end: 5, q: "Are we identifying every eligible credit at federal, state, and local levels before breaking ground?" },
+    { name: "Grants, abatements & exemptions", start: 0, end: 5, q: "Have we modeled the full incentive value over the asset\u2019s life, including clawback risk?" },
+    { name: "Joint ventures & partnerships", start: 0, end: 3, q: "Is our JV structure optimized for each partner\u2019s tax position, or are we leaving value on the table?" },
+    { name: "Entity & investor structuring", start: 0, end: 1, q: "Is our entity structure fit for purpose across all jurisdictions, or carrying legacy complexity?" },
+    { name: "Tax optimization & transfer pricing", start: 1, end: 4, q: "Are our intercompany arrangements defensible under audit?" },
+    { name: "Cost segregation analysis", start: 2, end: 3, q: "Have we done a cost segregation study on recent builds to accelerate depreciation?" },
+    { name: "Customs & trade planning", start: 0, end: 2, q: "Are we factoring tariff exposure and trade policy volatility into procurement decisions?" },
   ]},
   { id: "financing", num: "03", title: "Financing & transactions", items: [
-    { name: "Equity raise & lead advisory", start: 0, end: 1 },
-    { name: "Debt raise & capital markets", start: 1, end: 2 },
-    { name: "Financial due diligence", start: 1, end: 1 },
-    { name: "Tax due diligence", start: 1, end: 1 },
-    { name: "Commercial due diligence", start: 1, end: 1 },
-    { name: "Technical due diligence", start: 1, end: 2 },
-    { name: "Valuation", start: 0, end: 1 },
-    { name: "Market entry & structuring", start: 0, end: 1 },
-    { name: "Post-deal integration", start: 1, end: 2 },
+    { name: "Equity raise & lead advisory", start: 0, end: 1, q: "Are we accessing the broadest set of capital sources with the right equity story?" },
+    { name: "Debt raise & capital markets", start: 1, end: 2, q: "Are our financing terms competitive, and have we stress-tested debt capacity under downside scenarios?" },
+    { name: "Financial due diligence", start: 1, end: 1, q: "Do we have full visibility into the financial health of what we\u2019re acquiring?" },
+    { name: "Tax due diligence", start: 1, end: 1, q: "Are there historical tax positions in the target that could create exposure post-close?" },
+    { name: "Commercial due diligence", start: 1, end: 1, q: "Is the market thesis behind this investment sound? Are demand projections based on contracts or assumptions?" },
+    { name: "Technical due diligence", start: 1, end: 2, q: "What\u2019s the true condition of the asset \u2014 are there deferred maintenance or capacity constraints?" },
+    { name: "Valuation", start: 0, end: 1, q: "Is our valuation methodology appropriate and defensible? Are we paying a fair price?" },
+    { name: "Market entry & structuring", start: 0, end: 1, q: "Are we entering this market with the right vehicle and at the right time?" },
+    { name: "Post-deal integration", start: 1, end: 2, q: "Do we have a 100-day integration plan that protects value? Who owns synergy realization?" },
   ]},
   { id: "governance", num: "04", title: "Governance, risk & compliance", items: [
-    { name: "Governance & setup", start: 0, end: 3 },
-    { name: "Regulatory strategy", start: 2, end: 3 },
-    { name: "Regulatory & governance compliance", start: 2, end: 5 },
-    { name: "Stakeholder management", start: 2, end: 4 },
-    { name: "Organizational design", start: 2, end: 3 },
-    { name: "Change management", start: 2, end: 3 },
-    { name: "Sustainability, ESG & carbon reporting", start: 0, end: 5 },
-    { name: "Workforce strategy & capability building", start: 2, end: 4 },
-    { name: "Health & safety advisory", start: 2, end: 4 },
-    { name: "Risk management framework", start: 2, end: 4 },
+    { name: "Governance & setup", start: 0, end: 3, q: "Do we have the right governance structure to make decisions at the speed this program requires?" },
+    { name: "Regulatory strategy", start: 2, end: 3, q: "Are we ahead of the regulatory curve or reactive? Which upcoming regulations could change our economics?" },
+    { name: "Regulatory & governance compliance", start: 2, end: 5, q: "Are we confident we\u2019d pass a regulatory audit today? Where are our blind spots?" },
+    { name: "Stakeholder management", start: 2, end: 4, q: "Have we mapped all stakeholders and do we have a strategy for each? Where could opposition derail us?" },
+    { name: "Organizational design", start: 2, end: 3, q: "Is our organization designed around the work that needs to happen, or around legacy structures?" },
+    { name: "Change management", start: 2, end: 3, q: "Are the people who need to change actually bought in, or just compliant?" },
+    { name: "Sustainability, ESG & carbon reporting", start: 0, end: 5, q: "Can we substantiate our ESG commitments with data? Are we prepared for upcoming reporting requirements?" },
+    { name: "Workforce strategy & capability building", start: 2, end: 4, q: "Can we actually staff this program with the talent we need, in the markets we need it?" },
+    { name: "Health & safety advisory", start: 2, end: 4, q: "Are our safety systems designed for the specific risks of this project?" },
+    { name: "Risk management framework", start: 2, end: 4, q: "Do we have a risk register that\u2019s actually used for decisions, or is it a compliance artifact?" },
   ]},
   { id: "delivery", num: "05", title: "Program delivery & controls", items: [
-    { name: "Program & project management", start: 2, end: 3 },
-    { name: "Cost management & controls", start: 2, end: 3 },
-    { name: "Schedule & risk management", start: 2, end: 3 },
-    { name: "Procurement strategy", start: 2, end: 3 },
-    { name: "Commercial management", start: 2, end: 4 },
-    { name: "Supply chain execution", start: 2, end: 4 },
-    { name: "Construction oversight", start: 3, end: 3 },
-    { name: "Commissioning & handover", start: 3, end: 4 },
-    { name: "Design management", start: 2, end: 3 },
-    { name: "Technical advisory", start: 2, end: 3 },
-    { name: "Lender & investor technical advisory", start: 1, end: 3 },
+    { name: "Program & project management", start: 2, end: 3, q: "Is our PMO set up to deliver, or is it just a reporting layer?" },
+    { name: "Cost management & controls", start: 2, end: 3, q: "Do we know our true cost position right now \u2014 not last month\u2019s?" },
+    { name: "Schedule & risk management", start: 2, end: 3, q: "Are we managing schedule proactively or just reporting delays after they happen?" },
+    { name: "Procurement strategy", start: 2, end: 3, q: "Are we getting the best value from our supply chain, or locked into suboptimal contracts?" },
+    { name: "Commercial management", start: 2, end: 4, q: "Are our contracts actually protecting us? When did we last review claims exposure?" },
+    { name: "Supply chain execution", start: 2, end: 4, q: "Do we have visibility into Tier 2 and Tier 3 suppliers? What happens if a key supplier fails?" },
+    { name: "Construction oversight", start: 3, end: 3, q: "Are we confident the work in the field matches the design intent?" },
+    { name: "Commissioning & handover", start: 3, end: 4, q: "Do we have a clear definition of \u2018done\u2019? Is operations ready to take over?" },
+    { name: "Design management", start: 2, end: 3, q: "Are design decisions being made with the full cost-of-ownership in mind?" },
+    { name: "Technical advisory", start: 2, end: 3, q: "Do we have the right independent technical perspective, or are we relying entirely on the contractor?" },
+    { name: "Lender & investor technical advisory", start: 1, end: 3, q: "Are our lenders and investors getting the independent assurance they need?" },
   ]},
   { id: "technology", num: "06", title: "Technology & data", items: [
-    { name: "Digital program enablement", start: 1, end: 4 },
-    { name: "Advanced analytics", start: 2, end: 4 },
-    { name: "BIM / digital twin", start: 2, end: 4 },
-    { name: "ERP integration", start: 2, end: 4 },
-    { name: "Process automation & orchestration", start: 2, end: 4 },
-    { name: "Data governance & reporting", start: 2, end: 4 },
+    { name: "Digital program enablement", start: 1, end: 4, q: "Are our digital tools helping people do their jobs better, or adding overhead?" },
+    { name: "Advanced analytics", start: 2, end: 4, q: "Are we using data to predict problems or just document them after the fact?" },
+    { name: "BIM / digital twin", start: 2, end: 4, q: "Is our digital twin maintained and used for operations, or did it stop after construction?" },
+    { name: "ERP integration", start: 2, end: 4, q: "Can our systems talk to each other, or are people manually bridging gaps?" },
+    { name: "Process automation & orchestration", start: 2, end: 4, q: "Which high-volume, low-value processes should be automated first?" },
+    { name: "Data governance & reporting", start: 2, end: 4, q: "Do we trust our data? If the board asked for a number today, how fast could we produce it?" },
   ]},
   { id: "operations", num: "07", title: "Operations & asset optimization", items: [
-    { name: "Operational readiness planning", start: 3, end: 4 },
-    { name: "Asset management strategy", start: 4, end: 5 },
-    { name: "Energy management, efficiency & resilience", start: 4, end: 4 },
-    { name: "Financial reporting & accounting", start: 4, end: 4 },
-    { name: "Internal audit & benchmarking", start: 4, end: 4 },
-    { name: "Credit substantiation & audit readiness", start: 4, end: 5 },
-    { name: "Customs & trade compliance", start: 4, end: 5 },
-    { name: "Climate risk modeling", start: 4, end: 5 },
-    { name: "Cybersecurity & crisis response", start: 4, end: 4 },
-    { name: "Facility operate, maintain & retire", start: 4, end: 5 },
-    { name: "Decommissioning & disposal", start: 5, end: 5 },
-    { name: "Operational turnaround & restructuring", start: 4, end: 5 },
+    { name: "Operational readiness planning", start: 3, end: 4, q: "Will operations be genuinely ready on day one, or are we scrambling?" },
+    { name: "Asset management strategy", start: 4, end: 5, q: "Are we managing assets for maximum lifecycle value, or just keeping them running?" },
+    { name: "Energy management, efficiency & resilience", start: 4, end: 4, q: "What\u2019s our energy cost per unit of output vs. peers? Are we resilient to grid disruption?" },
+    { name: "Financial reporting & accounting", start: 4, end: 4, q: "Are our reporting processes efficient, or are we throwing people at close cycles?" },
+    { name: "Internal audit & benchmarking", start: 4, end: 4, q: "Are we benchmarking against the right peers? Where do our operations underperform?" },
+    { name: "Credit substantiation & audit readiness", start: 4, end: 5, q: "Can we defend every credit we\u2019ve claimed with documentation? If audited tomorrow, how would we do?" },
+    { name: "Customs & trade compliance", start: 4, end: 5, q: "Are we managing duty exposure proactively, or finding out about costs at the border?" },
+    { name: "Climate risk modeling", start: 4, end: 5, q: "Have we modeled the physical and transition risks to our assets?" },
+    { name: "Cybersecurity & crisis response", start: 4, end: 4, q: "If we were breached today, what\u2019s our response plan?" },
+    { name: "Facility operate, maintain & retire", start: 4, end: 5, q: "Is our maintenance strategy predictive or reactive?" },
+    { name: "Decommissioning & disposal", start: 5, end: 5, q: "Do we know our decommissioning obligations, and are they funded?" },
+    { name: "Operational turnaround & restructuring", start: 4, end: 5, q: "If an asset is underperforming, do we have a playbook to diagnose and fix it?" },
   ]},
 ];
+
+function Tooltip({ text, children }) {
+  const [show, setShow] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const ref = useRef(null);
+
+  const onEnter = (e) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (rect) {
+      setPos({ x: rect.left + rect.width / 2, y: rect.top });
+    }
+    setShow(true);
+  };
+
+  return (
+    <span ref={ref} onMouseEnter={onEnter} onMouseLeave={() => setShow(false)} style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+      {children}
+      {show && text && (
+        <span style={{
+          position: "fixed", left: Math.min(pos.x - 140, window.innerWidth - 310), top: pos.y - 8,
+          transform: "translateY(-100%)",
+          width: 280, padding: "10px 12px",
+          backgroundColor: PWC.black, color: PWC.white,
+          fontFamily: "Arial, sans-serif", fontSize: 11.5, lineHeight: 1.45,
+          borderRadius: 4, boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+          zIndex: 1000, pointerEvents: "none",
+        }}>
+          <span style={{ color: PWC.orange300, fontWeight: "bold", fontSize: 10, display: "block", marginBottom: 3 }}>Key question</span>
+          {text}
+        </span>
+      )}
+    </span>
+  );
+}
 
 function PhaseBar({ item, dimmed }) {
   return (
@@ -161,9 +195,7 @@ function PhaseBarMini({ item }) {
     <div style={{ display: "flex", gap: 1, width: 90 }}>
       {PHASES.map((_, i) => {
         const active = i >= item.start && i <= item.end;
-        return (
-          <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: active ? PWC.orange : PWC.grey200, opacity: active ? 0.8 : 0.4 }} />
-        );
+        return <div key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: active ? PWC.orange : PWC.grey200, opacity: active ? 0.8 : 0.4 }} />;
       })}
     </div>
   );
@@ -206,20 +238,17 @@ function CategoryRow({ category, isExpanded, onToggle, activePersona, selected, 
             return (
               <div key={i}
                 onClick={e => { e.stopPropagation(); onSelect(key, category.title, item); }}
-                style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 4px", cursor: "pointer", borderRadius: 3, margin: "0 -4px", backgroundColor: isSel ? PWC.orange50 : "transparent", transition: "background-color 0.15s" }}
+                style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", borderRadius: 3, margin: "0 -4px", padding: "4px 4px", backgroundColor: isSel ? PWC.orange50 : "transparent", transition: "background-color 0.15s" }}
                 onMouseEnter={e => { if (!isSel) e.currentTarget.style.backgroundColor = PWC.grey50; }}
-                onMouseLeave={e => { if (!isSel) e.currentTarget.style.backgroundColor = "transparent"; else e.currentTarget.style.backgroundColor = PWC.orange50; }}>
+                onMouseLeave={e => { if (!isSel) e.currentTarget.style.backgroundColor = isSel ? PWC.orange50 : "transparent"; }}>
                 <span style={{ minWidth: 18, display: "flex", justifyContent: "center" }}>
-                  <span style={{
-                    width: 14, height: 14, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
-                    border: isSel ? `2px solid ${PWC.orange}` : `1.5px solid ${PWC.grey300}`,
-                    backgroundColor: isSel ? PWC.orange : "transparent",
-                    transition: "all 0.15s",
-                  }}>
+                  <span style={{ width: 14, height: 14, borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center", border: isSel ? `2px solid ${PWC.orange}` : `1.5px solid ${PWC.grey300}`, backgroundColor: isSel ? PWC.orange : "transparent", transition: "all 0.15s" }}>
                     {isSel && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2.5 5L4.5 7L7.5 3" fill="none" stroke={PWC.white} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                   </span>
                 </span>
-                <div style={{ width: 200, minWidth: 200, fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, lineHeight: 1.3, transition: "opacity 0.3s", opacity: dimmed ? 0.18 : 1, fontWeight: isSel ? "bold" : "normal" }}>{item.name}</div>
+                <Tooltip text={item.q}>
+                  <div style={{ width: 200, minWidth: 200, fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, lineHeight: 1.3, transition: "opacity 0.3s", opacity: dimmed ? 0.18 : 1, fontWeight: isSel ? "bold" : "normal", borderBottom: `1px dashed ${PWC.grey300}`, paddingBottom: 1 }}>{item.name}</div>
+                </Tooltip>
                 <PhaseBar item={item} dimmed={dimmed} />
                 <span style={{ width: 14, flexShrink: 0 }} />
               </div>
@@ -280,7 +309,6 @@ function App() {
   };
 
   const selectedKeys = new Set(selected.keys());
-
   const grouped = {};
   selected.forEach((val, key) => {
     if (!grouped[val.catTitle]) grouped[val.catTitle] = [];
@@ -323,7 +351,7 @@ function App() {
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 12px", borderBottom: `1px solid ${PWC.grey200}` }}>
         <div style={{ fontSize: 10.5, color: PWC.grey500 }}>
-          {selected.size > 0 ? `${selected.size} selected` : "Select capabilities to build your summary"}
+          {selected.size > 0 ? `${selected.size} selected` : "Hover for key questions \u00b7 Select capabilities to build your summary"}
         </div>
         <button onClick={toggleAll} style={{ fontFamily: "Arial, sans-serif", fontSize: 10.5, color: PWC.black, background: "none", border: `1px solid ${PWC.grey300}`, borderRadius: 4, padding: "3px 10px", cursor: "pointer" }}>{allExpanded ? "Collapse all" : "Expand all"}</button>
       </div>
@@ -364,13 +392,7 @@ function App() {
                       value={item.note || ""}
                       onClick={e => e.stopPropagation()}
                       onChange={e => updateNote(item.key, e.target.value)}
-                      style={{
-                        width: "100%", marginTop: 4, padding: "5px 8px",
-                        fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black,
-                        border: `1px solid ${PWC.grey200}`, borderRadius: 3,
-                        backgroundColor: PWC.grey50, outline: "none",
-                        transition: "border-color 0.15s",
-                      }}
+                      style={{ width: "100%", marginTop: 4, padding: "5px 8px", fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, border: `1px solid ${PWC.grey200}`, borderRadius: 3, backgroundColor: PWC.grey50, outline: "none", transition: "border-color 0.15s" }}
                       onFocus={e => e.target.style.borderColor = PWC.orange}
                       onBlur={e => e.target.style.borderColor = PWC.grey200}
                     />

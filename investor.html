@@ -24,7 +24,7 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-const { useState, useCallback } = React;
+const { useState, useCallback, useRef } = React;
 
 const PWC = {
   orange: "#FD5108", orange400: "#FE7C39", orange300: "#FFAA72",
@@ -46,85 +46,118 @@ const BAR_COLOR = PWC.black;
 
 const PERSONAS = [
   { id: "fund_partner", label: "Fund partner / IC", description: "Fund strategy, investment thesis, portfolio construction, LP relations",
-    capabilities: new Set(["Fund strategy & investment thesis","Portfolio construction & allocation","LP & investor reporting","Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Fundraise advisory & capital raising","Equity raise & lead advisory","Valuation","Market entry & structuring","Fund governance & compliance","ESG & sustainability reporting"]) },
+    capabilities: new Set(["Fund strategy & investment thesis","Portfolio construction & allocation","LP & investor reporting","Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Fundraise advisory & capital raising","Equity raise & lead advisory","Valuation","Market entry & structuring","Fund governance & compliance","ESG & sustainability reporting","AI governance & responsible AI frameworks"]) },
   { id: "tax", label: "Tax director", description: "Fund-level structuring, investor tax, credits, exit optimization",
-    capabilities: new Set(["Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Tax credits & incentives","Grants, abatements & exemptions","Tax optimization & transfer pricing","Cost segregation analysis","Tax due diligence","Exit tax planning & optimization","Credit substantiation & audit readiness","REIT & fund vehicle compliance"]) },
+    capabilities: new Set(["Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Tax credits & incentives","Grants, abatements & exemptions","Tax optimization & transfer pricing","Cost segregation analysis","Tax due diligence","Exit tax planning & optimization","Credit substantiation & audit readiness","REIT & fund vehicle compliance","Tax equity advisory"]) },
   { id: "deal_team", label: "Head of transactions", description: "Due diligence, deal execution, SPA advisory, integration",
     capabilities: new Set(["Financial due diligence","Tax due diligence","Commercial due diligence","Technical due diligence","Valuation","Market entry & structuring","Deal structuring & SPA advisory","Post-deal integration","Equity raise & lead advisory","Debt raise & capital markets","JV & co-investment structuring","Lender & investor technical advisory"]) },
   { id: "portfolio_ops", label: "Portfolio operations", description: "Value creation, portco oversight, operational improvement",
-    capabilities: new Set(["Portfolio company governance & oversight","Operational improvement & value creation","Capital project oversight","Procurement strategy & cost management","Digital enablement & analytics","Workforce strategy & capability building","Asset management strategy","Energy management, efficiency & resilience","Operational turnaround & restructuring"]) },
+    capabilities: new Set(["Portfolio company governance & oversight","Operational improvement & value creation","Capital project oversight","Procurement strategy & cost management","Digital enablement & analytics","Workforce strategy & capability building","Asset management strategy","Energy management, efficiency & resilience","Operational turnaround & restructuring","Cybersecurity & data privacy"]) },
   { id: "fund_cfo", label: "CFO / Fund controller", description: "Fund accounting, NAV, waterfall modeling, financial reporting, audit",
-    capabilities: new Set(["Fund accounting & NAV reporting","Waterfall & distribution modeling","Financial reporting & technical accounting","Internal audit & benchmarking","LP & investor reporting","Fund governance & compliance","Regulatory & governance compliance","Valuation"]) },
+    capabilities: new Set(["Fund accounting & NAV reporting","Waterfall & distribution modeling","Financial reporting & technical accounting","Internal audit & benchmarking","LP & investor reporting","Fund governance & compliance","Regulatory & governance compliance","Valuation","Cybersecurity & data privacy"]) },
   { id: "ir", label: "Investor relations", description: "Fundraise support, LP communications, market positioning",
     capabilities: new Set(["Fundraise advisory & capital raising","LP & investor reporting","ESG & sustainability reporting","Fund strategy & investment thesis","Market entry & structuring"]) },
 ];
 
 const CATEGORIES = [
   { id: "investment", num: "01", title: "Fund strategy & capital allocation", items: [
-    { name: "Fund strategy & investment thesis", start: 0, end: 1 },
-    { name: "Portfolio construction & allocation", start: 0, end: 2 },
-    { name: "Sector & market screening", start: 0, end: 1 },
-    { name: "Fundraise advisory & capital raising", start: 0, end: 0 },
-    { name: "LP & investor reporting", start: 0, end: 4 },
+    { name: "Fund strategy & investment thesis", start: 0, end: 1, q: ["Is our investment thesis differentiated, and can we articulate it in a way that resonates with target LPs?", "Are we disciplined about staying within our mandate, or drifting into opportunistic deals?"] },
+    { name: "Portfolio construction & allocation", start: 0, end: 2, q: ["Is our portfolio construction aligned with our fund thesis and LP expectations for diversification?", "Are we concentrating risk in ways we\u2019ve explicitly decided to, or inadvertently?"] },
+    { name: "Sector & market screening", start: 0, end: 1, q: ["Are we screening opportunities with a rigorous, repeatable framework or relying on deal flow?", "Are we seeing the best deals in our target sectors, or missing opportunities competitors are finding?"] },
+    { name: "Fundraise advisory & capital raising", start: 0, end: 0, q: ["Are we positioned competitively for the next fundraise \u2014 what\u2019s our track record story?", "Are we targeting the right LP segments, and is our marketing material compelling?"] },
+    { name: "LP & investor reporting", start: 0, end: 4, q: ["Are our LP reports meeting rising expectations for transparency, frequency, and ESG disclosure?", "Can we produce ad-hoc LP requests quickly without a fire drill?"] },
   ]},
   { id: "structuring", num: "02", title: "Structuring, tax & incentives", items: [
-    { name: "Fund structuring & domicile", start: 0, end: 0 },
-    { name: "Investor tax considerations", start: 0, end: 1 },
-    { name: "Cross-border treaty & withholding planning", start: 0, end: 4 },
-    { name: "Tax credits & incentives", start: 1, end: 4 },
-    { name: "Grants, abatements & exemptions", start: 1, end: 4 },
-    { name: "JV & co-investment structuring", start: 0, end: 2 },
-    { name: "Tax optimization & transfer pricing", start: 1, end: 3 },
-    { name: "Cost segregation analysis", start: 2, end: 2 },
-    { name: "Exit tax planning & optimization", start: 3, end: 4 },
-    { name: "REIT & fund vehicle compliance", start: 0, end: 4 },
+    { name: "Fund structuring & domicile", start: 0, end: 0, q: ["Is our fund structure optimized for our target investor base, or carrying unnecessary complexity?", "Would a different domicile or vehicle type improve tax efficiency or LP access?"] },
+    { name: "Investor tax considerations", start: 0, end: 1, q: ["Are we addressing the specific tax needs of each investor type \u2014 pension, SWF, HNWI, retail?", "Could our structure inadvertently create UBTI or other issues for tax-exempt investors?"] },
+    { name: "Cross-border treaty & withholding planning", start: 0, end: 4, q: ["Are we minimizing withholding tax leakage across jurisdictions?", "Are our treaty positions documented and defensible under audit?"] },
+    { name: "Tax credits & incentives", start: 1, end: 4, q: ["Are we capturing all available credits at the asset level and flowing them efficiently to investors?", "Are we structured to take advantage of transferability and direct pay provisions?"] },
+    { name: "Grants, abatements & exemptions", start: 1, end: 4, q: ["Are location-based incentives factored into our underwriting for each deal?", "Are we structured to retain incentives through changes in ownership or operations?"] },
+    { name: "JV & co-investment structuring", start: 0, end: 2, q: ["Are our co-investment structures aligned with partner objectives while protecting our economics?", "Are LP co-invest rights creating complexity in deal execution?"] },
+    { name: "Tax optimization & transfer pricing", start: 1, end: 3, q: ["Are intercompany arrangements across our portfolio defensible and optimized?", "Are we reviewing transfer pricing as portfolio companies grow and evolve?"] },
+    { name: "Cost segregation analysis", start: 2, end: 2, q: ["Have we accelerated depreciation on acquired assets through cost segregation?", "Are there older acquisitions where a retroactive study would unlock cash flow?"] },
+    { name: "Exit tax planning & optimization", start: 3, end: 4, q: ["Are we planning exit tax strategy early enough to maximize after-tax proceeds?", "Have we modeled the tax impact of different exit structures \u2014 sale, IPO, recapitalization?"] },
+    { name: "Tax equity advisory", start: 0, end: 2, q: ["Are we leveraging tax equity structures to monetize credits and improve investor returns?", "Is our tax equity partner getting what they need, and are we retaining maximum upside?"] },
+    { name: "REIT & fund vehicle compliance", start: 0, end: 4, q: ["Are we maintaining REIT qualification without constraining investment flexibility?", "Are compliance monitoring processes robust enough to catch issues before they become problems?"] },
   ]},
   { id: "financing", num: "03", title: "Financing & transactions", items: [
-    { name: "Equity raise & lead advisory", start: 0, end: 2 },
-    { name: "Debt raise & capital markets", start: 1, end: 2 },
-    { name: "Financial due diligence", start: 1, end: 2 },
-    { name: "Tax due diligence", start: 1, end: 2 },
-    { name: "Commercial due diligence", start: 1, end: 2 },
-    { name: "Technical due diligence", start: 1, end: 2 },
-    { name: "Valuation", start: 0, end: 4 },
-    { name: "Market entry & structuring", start: 0, end: 2 },
-    { name: "Deal structuring & SPA advisory", start: 1, end: 2 },
-    { name: "Post-deal integration", start: 2, end: 3 },
-    { name: "Lender & investor technical advisory", start: 1, end: 2 },
+    { name: "Equity raise & lead advisory", start: 0, end: 2, q: ["Are we raising at the right valuation with the right partners?", "Is our capital raising timeline creating pressure that leads to suboptimal terms?"] },
+    { name: "Debt raise & capital markets", start: 1, end: 2, q: ["Is our leverage appropriate for the asset risk profile?", "Have we stress-tested covenant headroom under realistic downside scenarios?"] },
+    { name: "Financial due diligence", start: 1, end: 2, q: ["Are the seller\u2019s financials telling the full story, or are there normalization adjustments we\u2019re missing?", "What\u2019s the quality of earnings, and how sustainable is the current run rate?"] },
+    { name: "Tax due diligence", start: 1, end: 2, q: ["What tax exposures are embedded in this target, and how do they affect post-close economics?", "Are there tax attributes \u2014 NOLs, credits, step-ups \u2014 we can capture in the deal?"] },
+    { name: "Commercial due diligence", start: 1, end: 2, q: ["Is the revenue base sustainable \u2014 are customer contracts, market position, and demand drivers robust?", "What\u2019s the competitive moat, and how durable is it over our hold period?"] },
+    { name: "Technical due diligence", start: 1, end: 2, q: ["What\u2019s the true CapEx requirement to maintain or improve this asset to our standards?", "Are there hidden technical risks \u2014 deferred maintenance, code violations, capacity limits?"] },
+    { name: "Valuation", start: 0, end: 4, q: ["Is our valuation methodology consistent across the portfolio and defensible to LPs and auditors?", "Are we anchoring to comparable transactions, or building bottom-up with defensible assumptions?"] },
+    { name: "Market entry & structuring", start: 0, end: 2, q: ["Do we understand the regulatory, competitive, and operational landscape of this market?", "Is our entry vehicle and structure right for this jurisdiction and asset class?"] },
+    { name: "Deal structuring & SPA advisory", start: 1, end: 2, q: ["Are our deal protections \u2014 reps, warranties, indemnities \u2014 calibrated to the risk?", "Are we leaving value on the table in the SPA, or creating friction that could kill the deal?"] },
+    { name: "Post-deal integration", start: 2, end: 3, q: ["Do we have a value creation plan from day one, and who is accountable for execution?", "Are we integrating at the right pace \u2014 fast enough to capture value, slow enough to avoid disruption?"] },
+    { name: "Lender & investor technical advisory", start: 1, end: 2, q: ["Are our lenders getting the independent assurance they need to maintain confidence?", "Is our technical reporting aligned with what lenders actually want to see?"] },
   ]},
   { id: "governance", num: "04", title: "Governance, risk & compliance", items: [
-    { name: "Fund governance & compliance", start: 0, end: 4 },
-    { name: "Regulatory & governance compliance", start: 1, end: 4 },
-    { name: "Stakeholder & LP management", start: 0, end: 4 },
-    { name: "ESG & sustainability reporting", start: 0, end: 4 },
-    { name: "Risk management framework", start: 1, end: 3 },
-    { name: "Portfolio company governance & oversight", start: 2, end: 4 },
+    { name: "Fund governance & compliance", start: 0, end: 4, q: ["Is our fund governance keeping pace with regulatory expectations and LP scrutiny?", "Are our compliance processes scalable as AUM grows?"] },
+    { name: "Regulatory & governance compliance", start: 1, end: 4, q: ["Are we ahead of evolving regulatory requirements, or at risk of being caught off guard?", "Do we have a clear view of our compliance obligations across every jurisdiction we operate in?"] },
+    { name: "Stakeholder & LP management", start: 0, end: 4, q: ["Are we managing LP relationships proactively, or only when it\u2019s time to fundraise?", "Do our LPs feel like partners, or are they surprised by developments?"] },
+    { name: "ESG & sustainability reporting", start: 0, end: 4, q: ["Can we demonstrate ESG impact with data, or are our commitments still aspirational?", "Are we meeting the ESG reporting standards our LPs are increasingly requiring?"] },
+    { name: "Risk management framework", start: 1, end: 3, q: ["Do we have a portfolio-wide risk view, or are we managing risk asset by asset?", "Are we stress-testing the portfolio against correlated risks \u2014 rate changes, regulation, geopolitics?"] },
+    { name: "Portfolio company governance & oversight", start: 2, end: 4, q: ["Are our portfolio company boards effective, and do we have the right level of oversight?", "Are we getting the information we need from portcos quickly enough to act on it?"] },
+    { name: "Cybersecurity & data privacy", start: 1, end: 4, q: ["Is cybersecurity a board-level topic for our portfolio companies? Where are we most exposed?", "Have we assessed cyber risk across the portfolio, and do we have incident response plans?"] },
   ]},
   { id: "delivery", num: "05", title: "Portfolio value creation", items: [
-    { name: "Operational improvement & value creation", start: 2, end: 3 },
-    { name: "Capital project oversight", start: 2, end: 3 },
-    { name: "Procurement strategy & cost management", start: 2, end: 3 },
-    { name: "Workforce strategy & capability building", start: 2, end: 3 },
-    { name: "Digital enablement & analytics", start: 2, end: 3 },
-    { name: "Operational turnaround & restructuring", start: 3, end: 4 },
+    { name: "Operational improvement & value creation", start: 2, end: 3, q: ["Do we have a repeatable playbook for driving EBITDA improvement across portfolio companies?", "Are we tracking value creation initiatives with the same rigor as the investment thesis?"] },
+    { name: "Capital project oversight", start: 2, end: 3, q: ["Are our portfolio companies\u2019 capital projects on time and budget?", "Who is providing independent oversight, and are they flagging issues early enough?"] },
+    { name: "Procurement strategy & cost management", start: 2, end: 3, q: ["Are we capturing procurement synergies across the portfolio?", "Are portfolio companies buying independently when collective purchasing power could save millions?"] },
+    { name: "Workforce strategy & capability building", start: 2, end: 3, q: ["Do our portfolio companies have the management teams they need to execute the value creation plan?", "Where are the talent gaps that are limiting performance?"] },
+    { name: "Digital enablement & analytics", start: 2, end: 3, q: ["Are we investing in digital capabilities that drive measurable value, not just modernization?", "Can we demonstrate ROI on digital investments to our LPs?"] },
+    { name: "Operational turnaround & restructuring", start: 3, end: 4, q: ["When an asset underperforms, how quickly can we diagnose the problem and deploy a fix?", "Do we have the bench strength and playbook to execute a turnaround, or do we need outside help?"] },
   ]},
   { id: "technology", num: "06", title: "Technology & data", items: [
-    { name: "Digital enablement & analytics", start: 1, end: 3 },
-    { name: "Data governance & reporting", start: 1, end: 3 },
-    { name: "Waterfall & distribution modeling", start: 0, end: 4 },
-    { name: "Portfolio analytics & benchmarking", start: 2, end: 4 },
+    { name: "Digital enablement & analytics", start: 1, end: 3, q: ["Are we using data to make better investment and portfolio management decisions?", "What decisions are we making on instinct that data could improve?"] },
+    { name: "Data governance & reporting", start: 1, end: 3, q: ["Can we produce reliable, auditable data across the portfolio on demand?", "Are data definitions and reporting standards consistent across portfolio companies?"] },
+    { name: "Waterfall & distribution modeling", start: 0, end: 4, q: ["Is our waterfall model robust enough to handle complex multi-tier structures and edge cases?", "Have we stress-tested distributions under multiple performance scenarios?"] },
+    { name: "Portfolio analytics & benchmarking", start: 2, end: 4, q: ["Are we benchmarking portfolio company performance against the right peers?", "Can we identify underperformance early enough to intervene before it affects fund returns?"] },
+    { name: "AI governance & responsible AI frameworks", start: 1, end: 4, q: ["As our portfolio companies adopt AI, do we have a governance framework to manage the risks?", "Are we positioned to capture AI upside while protecting against reputational and regulatory risk?"] },
   ]},
   { id: "operations", num: "07", title: "Asset performance & exit", items: [
-    { name: "Asset management strategy", start: 3, end: 4 },
-    { name: "Energy management, efficiency & resilience", start: 3, end: 3 },
-    { name: "Financial reporting & technical accounting", start: 3, end: 4 },
-    { name: "Fund accounting & NAV reporting", start: 0, end: 4 },
-    { name: "Internal audit & benchmarking", start: 3, end: 4 },
-    { name: "Credit substantiation & audit readiness", start: 3, end: 4 },
-    { name: "Exit preparation & vendor due diligence", start: 4, end: 4 },
-    { name: "Wind down & fund dissolution", start: 4, end: 4 },
+    { name: "Asset management strategy", start: 3, end: 4, q: ["Are we managing each asset for maximum exit value, or just steady-state performance?", "Is our hold period strategy still right, or has the market moved?"] },
+    { name: "Energy management, efficiency & resilience", start: 3, end: 3, q: ["Is energy cost and resilience a competitive advantage or a vulnerability for our assets?", "Are we capturing energy-related incentives and credits at the asset level?"] },
+    { name: "Financial reporting & technical accounting", start: 3, end: 4, q: ["Are our reporting processes efficient enough to support timely LP reporting and audit cycles?", "Are we applying technical accounting standards consistently across the portfolio?"] },
+    { name: "Fund accounting & NAV reporting", start: 0, end: 4, q: ["Is our NAV calculation methodology consistent, defensible, and meeting LP expectations?", "Can we explain NAV movements clearly when LPs ask?"] },
+    { name: "Internal audit & benchmarking", start: 3, end: 4, q: ["Are we auditing the right things at the right frequency across the portfolio?", "Are audit findings leading to action, or sitting in a report?"] },
+    { name: "Credit substantiation & audit readiness", start: 3, end: 4, q: ["Can we defend every credit claimed across the portfolio with proper documentation?", "If a portfolio company is audited, are they ready \u2014 and are we?"] },
+    { name: "Exit preparation & vendor due diligence", start: 4, end: 4, q: ["Are we starting exit preparation early enough to maximize competitive tension and proceeds?", "Would a buyer\u2019s diligence find issues we haven\u2019t already identified and addressed?"] },
+    { name: "Wind down & fund dissolution", start: 4, end: 4, q: ["Do we have a clear wind-down plan that addresses tail liabilities and LP expectations?", "Are we managing the final distributions and reporting with the same rigor as the rest of the fund lifecycle?"] },
   ]},
 ];
+
+function Tooltip({ questions, children }) {
+  const [show, setShow] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const ref = useRef(null);
+  const onEnter = () => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (rect) setPos({ x: rect.left + rect.width / 2, y: rect.top });
+    setShow(true);
+  };
+  return (
+    <span ref={ref} onMouseEnter={onEnter} onMouseLeave={() => setShow(false)} style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+      {children}
+      {show && questions && questions.length > 0 && (
+        <span style={{
+          position: "fixed", left: Math.min(pos.x - 150, window.innerWidth - 330), top: pos.y - 8,
+          transform: "translateY(-100%)", width: 300, padding: "10px 12px",
+          backgroundColor: PWC.black, color: PWC.white,
+          fontFamily: "Arial, sans-serif", fontSize: 11.5, lineHeight: 1.5,
+          borderRadius: 4, boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+          zIndex: 1000, pointerEvents: "none",
+        }}>
+          <span style={{ color: PWC.orange300, fontWeight: "bold", fontSize: 10, display: "block", marginBottom: 4 }}>Key questions</span>
+          <span style={{ display: "block", marginBottom: 4 }}>1. {questions[0]}</span>
+          <span style={{ display: "block" }}>2. {questions[1]}</span>
+        </span>
+      )}
+    </span>
+  );
+}
 
 function PhaseBar({ item, dimmed }) {
   return (
@@ -164,7 +197,6 @@ function CategoryRow({ category, isExpanded, onToggle, activePersona, selected, 
   const hasAnyMatch = persona ? category.items.some(it => persona.capabilities.has(it.name)) : true;
   const matchCount = persona ? category.items.filter(it => persona.capabilities.has(it.name)).length : 0;
   const selectedInCat = category.items.filter(it => selected.has(`${category.id}::${it.name}`)).length;
-
   return (
     <div style={{ borderBottom: `1px solid ${PWC.grey200}`, backgroundColor: isExpanded ? PWC.orange50 : "transparent", transition: "background-color 0.25s, opacity 0.3s", opacity: persona && !hasAnyMatch ? 0.3 : 1 }}>
       <div onClick={onToggle} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", cursor: "pointer", userSelect: "none" }}
@@ -194,8 +226,7 @@ function CategoryRow({ category, isExpanded, onToggle, activePersona, selected, 
             const key = `${category.id}::${item.name}`;
             const isSel = selected.has(key);
             return (
-              <div key={i}
-                onClick={e => { e.stopPropagation(); onSelect(key, category.title, item); }}
+              <div key={i} onClick={e => { e.stopPropagation(); onSelect(key, category.title, item); }}
                 style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer", borderRadius: 3, margin: "0 -4px", padding: "4px 4px", backgroundColor: isSel ? PWC.orange50 : "transparent", transition: "background-color 0.15s" }}
                 onMouseEnter={e => { if (!isSel) e.currentTarget.style.backgroundColor = PWC.grey50; }}
                 onMouseLeave={e => { if (!isSel) e.currentTarget.style.backgroundColor = isSel ? PWC.orange50 : "transparent"; }}>
@@ -204,7 +235,9 @@ function CategoryRow({ category, isExpanded, onToggle, activePersona, selected, 
                     {isSel && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2.5 5L4.5 7L7.5 3" fill="none" stroke={PWC.white} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>}
                   </span>
                 </span>
-                <div style={{ width: 200, minWidth: 200, fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, lineHeight: 1.3, transition: "opacity 0.3s", opacity: dimmed ? 0.18 : 1, fontWeight: isSel ? "bold" : "normal" }}>{item.name}</div>
+                <Tooltip questions={item.q}>
+                  <div style={{ width: 200, minWidth: 200, fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, lineHeight: 1.3, transition: "opacity 0.3s", opacity: dimmed ? 0.18 : 1, fontWeight: isSel ? "bold" : "normal", borderBottom: `1px dashed ${PWC.grey300}`, paddingBottom: 1 }}>{item.name}</div>
+                </Tooltip>
                 <PhaseBar item={item} dimmed={dimmed} />
                 <span style={{ width: 14, flexShrink: 0 }} />
               </div>
@@ -222,54 +255,38 @@ function App() {
   const [activePersona, setActivePersona] = useState(null);
   const [selected, setSelected] = useState(new Map());
   const [copied, setCopied] = useState(false);
-
   const toggle = id => { if (allExpanded) return; setExpanded(expanded===id?null:id); };
   const toggleAll = () => { setAllExpanded(!allExpanded); if (!allExpanded) setExpanded(null); };
   const activeP = activePersona ? PERSONAS.find(p => p.id === activePersona) : null;
-
   const onSelect = useCallback((key, catTitle, item) => {
     setSelected(prev => {
       const next = new Map(prev);
-      if (next.has(key)) { next.delete(key); }
-      else { next.set(key, { catTitle, name: item.name, phases: PHASES.slice(item.start, item.end + 1).map(p => p.label), note: "" }); }
+      if (next.has(key)) next.delete(key);
+      else next.set(key, { catTitle, name: item.name, phases: PHASES.slice(item.start, item.end + 1).map(p => p.label), note: "" });
       return next;
     });
   }, []);
-
   const updateNote = useCallback((key, note) => {
     setSelected(prev => {
       const next = new Map(prev);
-      const entry = next.get(key);
-      if (entry) { next.set(key, { ...entry, note }); }
+      const e = next.get(key);
+      if (e) next.set(key, { ...e, note });
       return next;
     });
   }, []);
-
   const clearAll = () => setSelected(new Map());
-
   const copyToClipboard = () => {
-    const grouped = {};
-    selected.forEach((val) => {
-      if (!grouped[val.catTitle]) grouped[val.catTitle] = [];
-      const line = val.note ? `${val.name} (${val.phases.join(", ")})\n    Note: ${val.note}` : `${val.name} (${val.phases.join(", ")})`;
-      grouped[val.catTitle].push(line);
+    const g = {};
+    selected.forEach(v => {
+      if (!g[v.catTitle]) g[v.catTitle] = [];
+      g[v.catTitle].push(v.note ? `${v.name} (${v.phases.join(", ")})\n    Note: ${v.note}` : `${v.name} (${v.phases.join(", ")})`);
     });
-    const text = Object.entries(grouped).map(([cat, items]) =>
-      `${cat}\n${items.map(i => `  - ${i}`).join("\n")}`
-    ).join("\n\n");
-    const header = `PwC Infrastructure Capabilities - Investor Perspective\n${"=".repeat(50)}\n\n`;
-    navigator.clipboard.writeText(header + text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    const text = Object.entries(g).map(([c, items]) => `${c}\n${items.map(i => `  - ${i}`).join("\n")}`).join("\n\n");
+    navigator.clipboard.writeText(`PwC Infrastructure Capabilities - Investor Perspective\n${"=".repeat(50)}\n\n${text}`).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   };
-
   const selectedKeys = new Set(selected.keys());
   const grouped = {};
-  selected.forEach((val, key) => {
-    if (!grouped[val.catTitle]) grouped[val.catTitle] = [];
-    grouped[val.catTitle].push({ ...val, key });
-  });
+  selected.forEach((v, k) => { if (!grouped[v.catTitle]) grouped[v.catTitle] = []; grouped[v.catTitle].push({ ...v, key: k }); });
 
   return (
     <div style={{ padding: "4px 0", maxWidth: 740, margin: "0 auto", fontFamily: "Arial, sans-serif" }}>
@@ -277,81 +294,56 @@ function App() {
         <div style={{ fontFamily: "Georgia, serif", fontSize: 22, fontWeight: "bold", color: PWC.black, lineHeight: 1.2 }}>One infrastructure capability assessment</div>
         <div style={{ fontFamily: "Arial, sans-serif", fontSize: 13, color: PWC.grey500, marginTop: 4 }}>Investor perspective</div>
       </div>
-
       <div style={{ marginBottom: 16 }}>
         <div style={{ fontFamily: "Arial, sans-serif", fontSize: 11, fontWeight: "bold", color: PWC.black, textTransform: "uppercase", letterSpacing: "0.4px", marginBottom: 8 }}>Filter by role</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {PERSONAS.map(p => {
-            const isActive = activePersona===p.id;
-            return (
-              <button key={p.id} onClick={() => setActivePersona(isActive?null:p.id)} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", padding: "8px 12px", borderRadius: 4, border: isActive ? `2px solid ${PWC.orange}` : `1px solid ${PWC.grey300}`, background: isActive ? PWC.orange50 : PWC.white, cursor: "pointer", fontFamily: "Arial, sans-serif", transition: "all 0.2s", flex: "1 1 calc(33.33% - 6px)", minWidth: 155 }}>
-                <span style={{ fontSize: 12.5, fontWeight: "bold", color: PWC.black }}>{p.label}</span>
-                <span style={{ fontSize: 10.5, color: PWC.grey500, lineHeight: 1.3, marginTop: 2, textAlign: "left" }}>{p.description}</span>
-              </button>
-            );
+            const isA = activePersona===p.id;
+            return <button key={p.id} onClick={() => setActivePersona(isA?null:p.id)} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", padding: "8px 12px", borderRadius: 4, border: isA ? `2px solid ${PWC.orange}` : `1px solid ${PWC.grey300}`, background: isA ? PWC.orange50 : PWC.white, cursor: "pointer", fontFamily: "Arial, sans-serif", transition: "all 0.2s", flex: "1 1 calc(33.33% - 6px)", minWidth: 155 }}>
+              <span style={{ fontSize: 12.5, fontWeight: "bold", color: PWC.black }}>{p.label}</span>
+              <span style={{ fontSize: 10.5, color: PWC.grey500, lineHeight: 1.3, marginTop: 2, textAlign: "left" }}>{p.description}</span>
+            </button>;
           })}
         </div>
         {activeP && <div style={{ marginTop: 8, fontSize: 12, color: PWC.orange, fontWeight: "bold" }}>Showing {activeP.capabilities.size} capabilities relevant to {activeP.label}</div>}
       </div>
-
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2, padding: "0 12px" }}>
-        <span style={{ minWidth: 18 }} />
-        <div style={{ width: 200, minWidth: 200 }} />
+        <span style={{ minWidth: 18 }} /><div style={{ width: 200, minWidth: 200 }} />
         <div style={{ display: "flex", gap: 0, flex: 1 }}>
-          {PHASES.map((phase, i) => (
-            <div key={phase.id} style={{ flex: 1, textAlign: "center", padding: "8px 2px", backgroundColor: ["#FD5108","#F46318","#EB7528","#D99948","#D0AB58"][i], color: i < 3 ? PWC.white : PWC.black, fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: "bold", borderRight: i<PHASES.length-1 ? "1px solid rgba(255,255,255,0.25)" : "none", borderRadius: i===0?"4px 0 0 4px":i===PHASES.length-1?"0 4px 4px 0":0, lineHeight: 1.2 }}>{phase.label}</div>
-          ))}
+          {PHASES.map((phase, i) => <div key={phase.id} style={{ flex: 1, textAlign: "center", padding: "8px 2px", backgroundColor: ["#FD5108","#F46318","#EB7528","#D99948","#D0AB58"][i], color: i < 3 ? PWC.white : PWC.black, fontFamily: "Arial, sans-serif", fontSize: 10, fontWeight: "bold", borderRight: i<PHASES.length-1 ? "1px solid rgba(255,255,255,0.25)" : "none", borderRadius: i===0?"4px 0 0 4px":i===PHASES.length-1?"0 4px 4px 0":0, lineHeight: 1.2 }}>{phase.label}</div>)}
         </div>
         <span style={{ width: 14 }} />
       </div>
-
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 12px", borderBottom: `1px solid ${PWC.grey200}` }}>
-        <div style={{ fontSize: 10.5, color: PWC.grey500 }}>
-          {selected.size > 0 ? `${selected.size} selected` : "Select capabilities to build your summary"}
-        </div>
+        <div style={{ fontSize: 10.5, color: PWC.grey500 }}>{selected.size > 0 ? `${selected.size} selected` : "Hover for key questions \u00b7 Select capabilities to build your summary"}</div>
         <button onClick={toggleAll} style={{ fontFamily: "Arial, sans-serif", fontSize: 10.5, color: PWC.black, background: "none", border: `1px solid ${PWC.grey300}`, borderRadius: 4, padding: "3px 10px", cursor: "pointer" }}>{allExpanded ? "Collapse all" : "Expand all"}</button>
       </div>
-
       <div style={{ border: `1px solid ${PWC.grey200}`, borderTop: "none", borderRadius: "0 0 4px 4px", overflow: "hidden" }}>
-        {CATEGORIES.map(cat => (
-          <CategoryRow key={cat.id} category={cat} isExpanded={allExpanded || expanded===cat.id} onToggle={() => toggle(cat.id)} activePersona={activePersona} selected={selectedKeys} onSelect={onSelect} />
-        ))}
+        {CATEGORIES.map(cat => <CategoryRow key={cat.id} category={cat} isExpanded={allExpanded || expanded===cat.id} onToggle={() => toggle(cat.id)} activePersona={activePersona} selected={selectedKeys} onSelect={onSelect} />)}
       </div>
-
       {selected.size > 0 && (
         <div style={{ marginTop: 16, border: `2px solid ${PWC.orange}`, borderRadius: 4, overflow: "hidden" }}>
           <div style={{ padding: "10px 16px", backgroundColor: PWC.orange, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontFamily: "Arial, sans-serif", fontSize: 13, fontWeight: "bold", color: PWC.white }}>Your selected capabilities ({selected.size})</span>
+            <span style={{ fontSize: 13, fontWeight: "bold", color: PWC.white }}>Your selected capabilities ({selected.size})</span>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={copyToClipboard} style={{ fontFamily: "Arial, sans-serif", fontSize: 11, fontWeight: "bold", color: PWC.orange, backgroundColor: PWC.white, border: "none", borderRadius: 4, padding: "4px 12px", cursor: "pointer" }}>
-                {copied ? "Copied" : "Copy to clipboard"}
-              </button>
-              <button onClick={clearAll} style={{ fontFamily: "Arial, sans-serif", fontSize: 11, fontWeight: "bold", color: PWC.white, backgroundColor: "transparent", border: `1px solid ${PWC.white}`, borderRadius: 4, padding: "4px 12px", cursor: "pointer" }}>
-                Clear all
-              </button>
+              <button onClick={copyToClipboard} style={{ fontSize: 11, fontWeight: "bold", color: PWC.orange, backgroundColor: PWC.white, border: "none", borderRadius: 4, padding: "4px 12px", cursor: "pointer" }}>{copied ? "Copied" : "Copy to clipboard"}</button>
+              <button onClick={clearAll} style={{ fontSize: 11, fontWeight: "bold", color: PWC.white, backgroundColor: "transparent", border: `1px solid ${PWC.white}`, borderRadius: 4, padding: "4px 12px", cursor: "pointer" }}>Clear all</button>
             </div>
           </div>
           <div style={{ padding: "12px 16px", backgroundColor: PWC.white }}>
             {Object.entries(grouped).map(([catTitle, items]) => (
               <div key={catTitle} style={{ marginBottom: 12 }}>
-                <div style={{ fontFamily: "Arial, sans-serif", fontSize: 11, fontWeight: "bold", color: PWC.black, textTransform: "uppercase", letterSpacing: "0.3px", marginBottom: 4 }}>{catTitle}</div>
+                <div style={{ fontSize: 11, fontWeight: "bold", color: PWC.black, textTransform: "uppercase", letterSpacing: "0.3px", marginBottom: 4 }}>{catTitle}</div>
                 {items.map((item, i) => (
                   <div key={i} style={{ padding: "6px 0", borderBottom: i < items.length - 1 ? `1px solid ${PWC.grey100}` : "none" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ fontFamily: "Arial, sans-serif", fontSize: 12, color: PWC.black, flex: 1, fontWeight: "bold" }}>{item.name}</span>
+                      <span style={{ fontSize: 12, color: PWC.black, flex: 1, fontWeight: "bold" }}>{item.name}</span>
                       <PhaseBarMini item={{ start: PHASES.findIndex(p => p.label === item.phases[0]), end: PHASES.findIndex(p => p.label === item.phases[item.phases.length - 1]) }} />
-                      <span style={{ fontFamily: "Arial, sans-serif", fontSize: 10, color: PWC.grey500, minWidth: 80, textAlign: "right" }}>{item.phases.join(" - ")}</span>
+                      <span style={{ fontSize: 10, color: PWC.grey500, minWidth: 80, textAlign: "right" }}>{item.phases.join(" - ")}</span>
                     </div>
-                    <input
-                      type="text"
-                      placeholder="Add a note..."
-                      value={item.note || ""}
-                      onClick={e => e.stopPropagation()}
-                      onChange={e => updateNote(item.key, e.target.value)}
-                      style={{ width: "100%", marginTop: 4, padding: "5px 8px", fontFamily: "Arial, sans-serif", fontSize: 11.5, color: PWC.black, border: `1px solid ${PWC.grey200}`, borderRadius: 3, backgroundColor: PWC.grey50, outline: "none", transition: "border-color 0.15s" }}
-                      onFocus={e => e.target.style.borderColor = PWC.orange}
-                      onBlur={e => e.target.style.borderColor = PWC.grey200}
-                    />
+                    <input type="text" placeholder="Add a note..." value={item.note || ""} onClick={e => e.stopPropagation()} onChange={e => updateNote(item.key, e.target.value)}
+                      style={{ width: "100%", marginTop: 4, padding: "5px 8px", fontSize: 11.5, color: PWC.black, border: `1px solid ${PWC.grey200}`, borderRadius: 3, backgroundColor: PWC.grey50, outline: "none", transition: "border-color 0.15s", fontFamily: "Arial, sans-serif" }}
+                      onFocus={e => e.target.style.borderColor = PWC.orange} onBlur={e => e.target.style.borderColor = PWC.grey200} />
                   </div>
                 ))}
               </div>

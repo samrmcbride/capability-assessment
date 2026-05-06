@@ -1,0 +1,302 @@
+[
+  {
+    "id": "investment",
+    "items": [
+      {
+        "poc": "Tom Hylton",
+        "team": "Deals — Infrastructure",
+        "status": "scale"
+      },
+      {
+        "poc": "Tom Hylton",
+        "team": "Deals — Infrastructure",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Strategy& / Deals",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals — Capital Markets",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Assurance / CMAAS",
+        "status": "scale"
+      }
+    ]
+  },
+  {
+    "id": "structuring",
+    "items": [
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "International Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax / SALT",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals / Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Transfer Pricing / Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax / M&A Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Infrastructure Tax / Assurance",
+        "status": "scale"
+      }
+    ]
+  },
+  {
+    "id": "financing",
+    "items": [
+      {
+        "poc": "Tom Hylton",
+        "team": "Deals — Capital Markets",
+        "status": "scale"
+      },
+      {
+        "poc": "Tom Hylton",
+        "team": "Deals — Capital Markets",
+        "status": "scale"
+      },
+      {
+        "poc": "Kyle West",
+        "team": "Deals — FDD",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Deals — Tax DD",
+        "status": "scale"
+      },
+      {
+        "poc": "Kyle West",
+        "team": " Deals",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "CP&I / Engineering",
+        "status": "evaluate"
+      },
+      {
+        "poc": "",
+        "team": "Deals — Valuation",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals / Strategy&",
+        "status": "scale"
+      },
+      {
+        "poc": "Kyle West",
+        "team": "Deals — M&A",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals — Integration",
+        "status": "enhance"
+      },
+      {
+        "poc": "",
+        "team": "CP&I / Deals",
+        "status": "scale"
+      }
+    ]
+  },
+  {
+    "id": "governance",
+    "items": [
+      {
+        "poc": "",
+        "team": "Risk & Regulatory / Assurance",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Risk & Regulatory",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals / Advisory",
+        "status": "enhance"
+      },
+      {
+        "poc": "",
+        "team": "ESG & Sustainability",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Risk Advisory",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Advisory / Operations Consulting",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Cybersecurity & Privacy",
+        "status": "enhance"
+      }
+    ]
+  },
+  {
+    "id": "delivery",
+    "items": [
+      {
+        "poc": "",
+        "team": "Operations Consulting / CP&I",
+        "status": "scale"
+      },
+      {
+        "poc": "Daryl Walcroft",
+        "team": "CP&I Delivery",
+        "status": "enhance"
+      },
+      {
+        "poc": "",
+        "team": "Operations Consulting",
+        "status": "enhance"
+      },
+      {
+        "poc": "Matt Cardamone",
+        "team": "Workforce Transformation",
+        "status": "enhance"
+      },
+      {
+        "poc": "Matt Cardamone",
+        "team": "Digital / Technology Consulting",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Operations Consulting / Restructuring",
+        "status": "enhance"
+      }
+    ]
+  },
+  {
+    "id": "technology",
+    "items": [
+      {
+        "poc": "Matt Cardamone",
+        "team": "Digital / Data Analytics",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Digital / Data Analytics",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Deals — Valuation / Technology",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Digital / Data Analytics",
+        "status": "enhance"
+      },
+      {
+        "poc": "",
+        "team": "Responsible AI / Digital",
+        "status": "evaluate"
+      }
+    ]
+  },
+  {
+    "id": "operations",
+    "items": [
+      {
+        "poc": "",
+        "team": "CP&I / Asset Management",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Sustainability / Operations",
+        "status": "enhance"
+      },
+      {
+        "poc": "",
+        "team": "CMAAS / Assurance",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "CMAAS / Fund Services",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Internal Audit Services",
+        "status": "scale"
+      },
+      {
+        "poc": "Tiffany Chu",
+        "team": "Infrastructure Tax",
+        "status": "scale"
+      },
+      {
+        "poc": "Kyle West",
+        "team": "Deals — FDD / M&A",
+        "status": "scale"
+      },
+      {
+        "poc": "",
+        "team": "Tax / Assurance / Legal",
+        "status": "scale"
+      }
+    ]
+  }
+]

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PwC CP&I — Internal Capability Assessment</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#fff;color:#000}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999}
+.modal-box{background:#fff;border-radius:8px;padding:32px;max-width:440px;width:90%;box-shadow:0 16px 48px rgba(0,0,0,0.2)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useCallback, useRef, useEffect } = React;
+
+/* ============================================================
+   GITHUB PERSISTENCE
+   ============================================================ */
+const GH_OWNER = "sam-mcbride";
+const GH_REPO = "PwC-Infrastructure-Capability-Framework";
+const BASE=window.location.pathname.replace(/\/?internal\/?$/,"").replace(/\/?index\.html$/,"").replace(/\/$/,"");
+const fwUrl=p=>`${BASE}/data/${p}`;
+
+function getToken() { return localStorage.getItem("gh_cap_token") || null; }
+function setToken(t) { localStorage.setItem("gh_cap_token", t); }
+function clearToken() { localStorage.removeItem("gh_cap_token"); }
+
+async function ghRead(path, token) {
+  try {
+    const headers = { Accept: "application/vnd.github.v3+json" };
+    if (token) headers.Authorization = `Bearer ${token}`;
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, { headers });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return { content: JSON.parse(atob(json.content)), sha: json.sha };
+  } catch { return null; }
+}
+
+let saveTimers = {};
+function ghWriteDebounced(path, data, sha, setSha, token, onStatus) {
+  if (!token) return;
+  if (saveTimers[path]) clearTimeout(saveTimers[path]);
+  saveTimers[path] = setTimeout(async () => {
+    try {
+      onStatus("Saving...");
+      const body = {
+        message: `Update ${path}`,
+        content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))),
+      };
+      if (sha) body.sha = sha;
+      const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setSha(json.content.sha);
+        onStatus("Saved");
+        setTimeout(() => onStatus(""), 2500);
+      } else {
+        onStatus("Save failed");
+        setTimeout(() => onStatus(""), 3000);
+      }
+    } catch (e) { console.error("Save failed:", e); onStatus("Save failed"); setTimeout(() => onStatus(""), 3000); }
+  }, 2000);
+}
+
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
+const PWC = {
+  orange:"#FD5108",orange400:"#FE7C39",orange300:"#FFAA72",
+  orange200:"#FFCDA8",orange100:"#FFE8D4",orange50:"#FFF5ED",
+  black:"#000000",white:"#FFFFFF",
+  grey500:"#A1A8B3",grey400:"#B5BCC4",grey300:"#CBD1D6",
+  grey200:"#DFE3E6",grey100:"#EEEFF1",grey50:"#F5F7F8",
+  green:"#059669",greenLight:"#ECFDF5",
+  blue:"#2563EB",blueLight:"#EFF6FF",
+  amber:"#D97706",amberLight:"#FFFBEB",
+};
+
+const OWNER_PHASES = [
+  {id:"strategy",label:"Strategy"},{id:"finance",label:"Finance"},
+  {id:"plan",label:"Plan"},{id:"build",label:"Build"},
+  {id:"operate",label:"Operate"},{id:"dispose",label:"Dispose"},
+];
+const INVESTOR_PHASES = [
+  {id:"structure",label:"Structure & Fundraise"},{id:"finance",label:"Finance & Plan"},
+  {id:"deploy",label:"Capital Deployment"},{id:"operate",label:"Operate"},
+  {id:"dispose",label:"Dispose & Wind Down"},
+];
+
+const STATUS_COLORS = {
+  scale:{bg:PWC.greenLight,border:PWC.green,text:PWC.green,label:"Scale"},
+  enhance:{bg:PWC.blueLight,border:PWC.blue,text:PWC.blue,label:"Enhance / Scale"},
+  evaluate:{bg:PWC.amberLight,border:PWC.amber,text:PWC.amber,label:"Evaluate"},
+};
+
+const OWNER_PERSONAS = [
+  {id:"cfo",label:"CFO / Treasurer",description:"Capital allocation, financing, business case, financial reporting",capabilities:new Set(["Capital strategy & portfolio planning","Business case & feasibility","Investment prioritization","Post investment review","Entity & investor structuring","Tax optimization & transfer pricing","Equity raise & lead advisory","Debt raise & capital markets","Financial due diligence","Valuation","Market entry & structuring","Post-deal integration","Governance & setup","Financial reporting & accounting","Internal audit & benchmarking"])},
+  {id:"tax",label:"Tax director",description:"Credits, incentives, structuring, transfer pricing, compliance",capabilities:new Set(["Tax credits & incentives","Grants, abatements & exemptions","Entity & investor structuring","Tax optimization & transfer pricing","Cost segregation analysis","Customs & trade planning","Tax due diligence","Sustainability, ESG & carbon reporting","Credit substantiation & audit readiness","Customs & trade compliance","Site selection","Business case & feasibility"])},
+  {id:"capex",label:"Head of capital projects",description:"Program delivery, controls, procurement, governance",capabilities:new Set(["Program & project management","Cost management & controls","Schedule & risk management","Procurement strategy","Commercial management","Supply chain execution","Construction oversight","Commissioning & handover","Design management","Technical advisory","Lender & investor technical advisory","Governance & setup","Regulatory & governance compliance","Risk management framework","Change management","Workforce strategy & capability building","Digital program enablement","Advanced analytics","Operational readiness planning"])},
+  {id:"coo",label:"COO / VP operations",description:"Asset performance, energy, compliance, resilience",capabilities:new Set(["Operational readiness planning","Asset management strategy","Energy management, efficiency & resilience","Financial reporting & accounting","Internal audit & benchmarking","Credit substantiation & audit readiness","Customs & trade compliance","Climate risk modeling","Cybersecurity & crisis response","Facility operate, maintain & retire","Decommissioning & disposal","Operational turnaround & restructuring","Commissioning & handover","Sustainability, ESG & carbon reporting","Health & safety advisory"])},
+  {id:"cdo",label:"Chief development officer",description:"Site selection, JV structuring, due diligence, M&A",capabilities:new Set(["Capital strategy & portfolio planning","Business case & feasibility","Site selection","Investment prioritization","Joint ventures & partnerships","Entity & investor structuring","Equity raise & lead advisory","Debt raise & capital markets","Financial due diligence","Tax due diligence","Commercial due diligence","Technical due diligence","Valuation","Market entry & structuring","Post-deal integration","Stakeholder management","Regulatory strategy"])},
+  {id:"cio",label:"CIO / CTO",description:"Digital enablement, analytics, ERP, automation",capabilities:new Set(["Digital program enablement","Advanced analytics","BIM / digital twin","ERP integration","Process automation & orchestration","Data governance & reporting"])},
+];
+const INVESTOR_PERSONAS = [
+  {id:"fund_partner",label:"Fund partner / IC",description:"Fund strategy, investment thesis, portfolio construction, LP relations",capabilities:new Set(["Fund strategy & investment thesis","Portfolio construction & allocation","LP & investor reporting","Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Fundraise advisory & capital raising","Equity raise & lead advisory","Valuation","Market entry & structuring","Fund governance & compliance","ESG & sustainability reporting","AI governance & responsible AI frameworks"])},
+  {id:"tax",label:"Tax director",description:"Fund-level structuring, investor tax, credits, exit optimization",capabilities:new Set(["Fund structuring & domicile","Investor tax considerations","Cross-border treaty & withholding planning","Tax credits & incentives","Grants, abatements & exemptions","Tax optimization & transfer pricing","Cost segregation analysis","Tax due diligence","Exit tax planning & optimization","Credit substantiation & audit readiness","REIT & fund vehicle compliance","Tax equity advisory"])},
+  {id:"deal_team",label:"Head of transactions",description:"Due diligence, deal execution, SPA advisory, integration",capabilities:new Set(["Financial due diligence","Tax due diligence","Commercial due diligence","Technical due diligence","Valuation","Market entry & structuring","Deal structuring & SPA advisory","Post-deal integration","Equity raise & lead advisory","Debt raise & capital markets","JV & co-investment structuring","Lender & investor technical advisory"])},
+  {id:"portfolio_ops",label:"Portfolio operations",description:"Value creation, portco oversight, operational improvement",capabilities:new Set(["Portfolio company governance & oversight","Operational improvement & value creation","Capital project oversight","Procurement strategy & cost management","Digital enablement & analytics","Workforce strategy & capability building","Asset management strategy","Energy management, efficiency & resilience","Operational turnaround & restructuring","Cybersecurity & data privacy"])},
+  {id:"fund_cfo",label:"CFO / Fund controller",description:"Fund accounting, NAV, waterfall modeling, financial reporting, audit",capabilities:new Set(["Fund accounting & NAV reporting","Waterfall & distribution modeling","Financial reporting & technical accounting","Internal audit & benchmarking","LP & investor reporting","Fund governance & compliance","Regulatory & governance compliance","Valuation","Cybersecurity & data privacy"])},
+  {id:"ir",label:"Investor relations",description:"Fundraise support, LP communications, market positioning",capabilities:new Set(["Fundraise advisory & capital raising","LP & investor reporting","ESG & sustainability reporting","Fund strategy & investment thesis","Market entry & structuring"])},
+];
+
+/* ============================================================
+   DEFAULT DATA
+   ============================================================ */
+const OWNER_DEFAULT = [
+  {id:"investment",num:"01",title:"Capital & investment strategy",risk:"Committing capital to the wrong project, at the wrong scale, at the wrong time \u2014 and not finding out until you\u2019re too far in to walk away.",lq:["Are we building for the demand profile we\u2019ll face in 5 years, or the one we see today \u2014 and what happens if the market moves faster than our construction timeline?","Have we pressure-tested whether our capital program can survive a significant shift in power costs, interest rates, or supply chain lead times hitting simultaneously?"],items:[
+    {name:"Capital strategy & portfolio planning",start:0,end:1,status:"scale",poc:"Daryl Walcroft",team:"CP&I Strategy",q:["Do we have a clear view of our total capital portfolio and where each asset sits in its lifecycle?","Are we allocating capital to the highest-return opportunities or just funding the loudest voices?"]},
+    {name:"Business case & feasibility",start:0,end:2,status:"scale",poc:"Daryl Walcroft",team:"CP&I Strategy",q:["Are our assumptions stress-tested \u2014 what happens if costs overrun 20% or demand shifts?","Who owns the business case after approval, and how often do we revisit it against actuals?"]},
+    {name:"Site selection",start:0,end:2,status:"scale",poc:"",team:"CP&I Strategy / Real Estate",q:["Are we evaluating sites against the full cost stack \u2014 land, power, labor, tax, permitting, resilience?","How does our site strategy align with our long-term energy and sustainability commitments?"]},
+    {name:"Investment prioritization",start:0,end:1,status:"enhance",poc:"",team:"CP&I Strategy",q:["When we have more opportunities than capital, what\u2019s the decision framework?","Are we comparing projects on a consistent, risk-adjusted basis across the portfolio?"]},
+    {name:"Post investment review",start:4,end:5,status:"scale",poc:"",team:"CP&I Strategy",q:["After major investments, are we systematically capturing what worked and what didn\u2019t?","Are lessons from past projects actually feeding into the next business case?"]},
+  ]},
+  {id:"structuring",num:"02",title:"Structuring, tax & incentives",risk:"Structuring in a way that leaves millions in uncaptured incentives, or structures that unravel under regulatory change or audit.",lq:["If the incentive landscape shifts mid-project \u2014 credits reduced, clawback provisions triggered, or new compliance requirements \u2014 does our structure still work?","Are we confident that our tax and incentive strategy is being designed at the same pace as our engineering and procurement decisions, or is tax catching up after commitments are already made?"],items:[
+    {name:"Tax credits & incentives",start:0,end:5,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Are we capturing all available credits at the asset level and flowing them efficiently to investors?","Are we structured to take advantage of transferability and direct pay provisions?"]},
+    {name:"Grants, abatements & exemptions",start:0,end:5,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax / SALT",q:["Are location-based incentives factored into our underwriting for each deal?","Are we structured to retain incentives through changes in ownership or operations?"]},
+    {name:"Joint ventures & partnerships",start:0,end:3,status:"enhance",poc:"",team:"Deals / Tax",q:["Is our JV structure optimized for each partner\u2019s tax position and risk appetite?","Who bears the downside if the partnership underperforms, and is that fair?"]},
+    {name:"Entity & investor structuring",start:0,end:1,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Is our entity structure fit for purpose across all jurisdictions, or carrying legacy complexity?","Can our current structure flex to accommodate different investor types without restructuring?"]},
+    {name:"Tax optimization & transfer pricing",start:1,end:4,status:"scale",poc:"",team:"Transfer Pricing / Infrastructure Tax",q:["Are intercompany arrangements across our portfolio defensible and optimized?","Are we reviewing transfer pricing as portfolio companies grow and evolve?"]},
+    {name:"Cost segregation analysis",start:2,end:3,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Have we accelerated depreciation on acquired assets through cost segregation?","Are there older acquisitions where a retroactive study would unlock cash flow?"]},
+    {name:"Customs & trade planning",start:0,end:2,status:"enhance",poc:"",team:"Trade & Customs",q:["Are we factoring tariff exposure and trade policy volatility into procurement decisions?","Have we evaluated foreign trade zone benefits for our key sites?"]},
+  ]},
+  {id:"financing",num:"03",title:"Financing & transactions",risk:"Not being able to close, or closing on terms that erode returns because capital markets moved or the asset didn\u2019t diligence the way the model assumed.",lq:["If our financing timeline slips by 6 months due to market volatility or permitting delays, do we have a capital bridge \u2014 or does the project stall?","Are we underwriting to a realistic base case, or relying on an optimistic revenue ramp that hasn\u2019t been independently validated?"],items:[
+    {name:"Equity raise & lead advisory",start:0,end:1,status:"scale",poc:"Tom Hylton",team:"Deals — Capital Markets",q:["Are we raising at the right valuation with the right partners?","Is our capital raising timeline creating pressure that leads to suboptimal terms?"]},
+    {name:"Debt raise & capital markets",start:1,end:2,status:"scale",poc:"Tom Hylton",team:"Deals — Capital Markets",q:["Is our leverage appropriate for the asset risk profile?","Have we stress-tested covenant headroom under realistic downside scenarios?"]},
+    {name:"Financial due diligence",start:1,end:1,status:"scale",poc:"Kyle West",team:"Deals — FDD",q:["Are the seller\u2019s financials telling the full story, or are there normalization adjustments we\u2019re missing?","What\u2019s the quality of earnings, and how sustainable is the current run rate?"]},
+    {name:"Tax due diligence",start:1,end:1,status:"scale",poc:"Tiffany Chu",team:"Deals — Tax DD",q:["What tax exposures are embedded in this target, and how do they affect post-close economics?","Are there tax attributes \u2014 NOLs, credits, step-ups \u2014 we can capture in the deal?"]},
+    {name:"Commercial due diligence",start:1,end:1,status:"scale",poc:"Kyle West",team:"Strategy& / Deals",q:["Is the revenue base sustainable \u2014 are customer contracts, market position, and demand drivers robust?","What\u2019s the competitive moat, and how durable is it over our hold period?"]},
+    {name:"Technical due diligence",start:1,end:2,status:"evaluate",poc:"",team:"CP&I / Engineering",q:["What\u2019s the true CapEx requirement to maintain or improve this asset to our standards?","Are there hidden technical risks \u2014 deferred maintenance, code violations, capacity limits?"]},
+    {name:"Valuation",start:0,end:1,status:"scale",poc:"",team:"Deals — Valuation",q:["Is our valuation methodology consistent across the portfolio and defensible to LPs and auditors?","Are we anchoring to comparable transactions, or building bottom-up with defensible assumptions?"]},
+    {name:"Market entry & structuring",start:0,end:1,status:"scale",poc:"",team:"Deals / Strategy&",q:["Do we understand the regulatory, competitive, and operational landscape of this market?","Is our entry vehicle and structure right for this jurisdiction and asset class?"]},
+    {name:"Post-deal integration",start:1,end:2,status:"enhance",poc:"",team:"Deals — Integration",q:["Do we have a value creation plan from day one, and who is accountable for execution?","Are we integrating at the right pace \u2014 fast enough to capture value, slow enough to avoid disruption?"]},
+  ]},
+  {id:"governance",num:"04",title:"Governance, risk & compliance",risk:"A regulatory, permitting, or community opposition issue stops the project cold \u2014 not because of engineering, but because of process, politics, or oversight failure.",lq:["What is the single regulatory or permitting dependency that, if delayed 12 months, would fundamentally change the project economics \u2014 and what\u2019s our plan B?","Are we treating community engagement and political risk with the same rigor as technical risk, or assuming approvals will come because the economics make sense?"],items:[
+    {name:"Governance & setup",start:0,end:3,status:"scale",poc:"Daryl Walcroft",team:"CP&I Governance",q:["Do we have the right governance structure to make decisions at the speed this program requires?","Are decision rights clear, or do things stall in committee?"]},
+    {name:"Regulatory strategy",start:2,end:3,status:"enhance",poc:"",team:"Risk & Regulatory",q:["Are we ahead of the regulatory curve, or purely reactive?","Which upcoming regulations could fundamentally change our project economics?"]},
+    {name:"Regulatory & governance compliance",start:2,end:5,status:"scale",poc:"",team:"Risk & Regulatory",q:["Are we ahead of evolving regulatory requirements, or at risk of being caught off guard?","Do we have a clear view of our compliance obligations across every jurisdiction we operate in?"]},
+    {name:"Stakeholder management",start:2,end:4,status:"enhance",poc:"",team:"CP&I / Government Affairs",q:["Have we mapped all stakeholders with a strategy for each?","Where could opposition derail the project, and do we have a mitigation plan?"]},
+    {name:"Organizational design",start:2,end:3,status:"scale",poc:"",team:"Workforce Transformation",q:["Is our organization designed around the work that needs to happen, or around legacy structures?","Do we have the right spans of control and decision authority for execution speed?"]},
+    {name:"Change management",start:2,end:3,status:"scale",poc:"",team:"Workforce Transformation",q:["Are the people who need to change actually bought in, or just compliant on paper?","What\u2019s our plan when resistance surfaces \u2014 do we have early warning indicators?"]},
+    {name:"Sustainability, ESG & carbon reporting",start:0,end:5,status:"scale",poc:"",team:"ESG & Sustainability",q:["Can we substantiate our ESG commitments with data, or are they still aspirational?","Are we prepared for the reporting requirements coming in the next 2\u20133 years?"]},
+    {name:"Workforce strategy & capability building",start:2,end:4,status:"enhance",poc:"Matt Cardamone",team:"Workforce Transformation",q:["Do our portfolio companies have the management teams they need to execute the value creation plan?","Where are the talent gaps that are limiting performance?"]},
+    {name:"Health & safety advisory",start:2,end:4,status:"evaluate",poc:"",team:"Risk Advisory",q:["Are our safety systems designed for the specific risks of this project?","Where are we most exposed, and are our leading indicators actually leading?"]},
+    {name:"Risk management framework",start:2,end:4,status:"scale",poc:"",team:"Risk Advisory",q:["Do we have a portfolio-wide risk view, or are we managing risk asset by asset?","Are we stress-testing the portfolio against correlated risks \u2014 rate changes, regulation, geopolitics?"]},
+  ]},
+  {id:"delivery",num:"05",title:"Program delivery & controls",risk:"The project runs over budget, over schedule, or delivers an asset that doesn\u2019t perform to spec \u2014 the classic capital project failure mode.",lq:["If our lead contractor or a critical equipment supplier fails to deliver, what\u2019s our recovery plan \u2014 and have we actually tested it, or is it theoretical?","Are we managing this program with the same intensity in month 18 as we did in month 1, or has governance fatigue set in while the hardest work is still ahead?"],items:[
+    {name:"Program & project management",start:2,end:3,status:"scale",poc:"Daryl Walcroft",team:"CP&I Delivery",q:["Is our PMO set up to deliver, or is it just a reporting layer?","Do project managers have the authority to make the calls they need to make?"]},
+    {name:"Cost management & controls",start:2,end:3,status:"scale",poc:"Daryl Walcroft",team:"CP&I Delivery",q:["Do we know our true cost position right now \u2014 not last month\u2019s?","Where are the biggest variances trending, and what\u2019s the corrective action plan?"]},
+    {name:"Schedule & risk management",start:2,end:3,status:"scale",poc:"Daryl Walcroft",team:"CP&I Delivery",q:["Are we managing schedule proactively, or just reporting delays after they happen?","What\u2019s on the critical path today, and what would it take to recover if it slips?"]},
+    {name:"Procurement strategy",start:2,end:3,status:"enhance",poc:"",team:"CP&I / Procurement",q:["Are we getting the best value from our supply chain, or locked into suboptimal contracts?","Are we single-sourced on anything critical, and what\u2019s our contingency?"]},
+    {name:"Commercial management",start:2,end:4,status:"enhance",poc:"",team:"CP&I Delivery",q:["Are our contracts actually protecting us in the ways that matter?","When was the last time we assessed our claims exposure across the program?"]},
+    {name:"Supply chain execution",start:2,end:4,status:"enhance",poc:"Matt Cardamone",team:"CP&I / Supply Chain",q:["Do we have visibility into Tier 2 and Tier 3 suppliers?","What happens if a key supplier fails \u2014 do we have a tested backup plan?"]},
+    {name:"Construction oversight",start:3,end:3,status:"evaluate",poc:"",team:"CP&I / Engineering",q:["Are we confident the work in the field matches the design intent and quality spec?","Who is independently verifying quality, and are they truly independent?"]},
+    {name:"Commissioning & handover",start:3,end:4,status:"evaluate",poc:"",team:"CP&I Delivery",q:["Do we have a clear, agreed definition of \u2018done\u2019 that operations has signed off on?","Is operations ready to take over on day one, or will there be a capability gap?"]},
+    {name:"Design management",start:2,end:3,status:"evaluate",poc:"",team:"CP&I / Engineering",q:["Are design decisions being made with the full cost-of-ownership in mind?","Are we designing for constructability and operability, not just performance on paper?"]},
+    {name:"Technical advisory",start:2,end:3,status:"evaluate",poc:"",team:"CP&I / Engineering",q:["Do we have the right independent technical perspective, or are we relying entirely on the contractor?","Are our technical advisors asking hard questions, or confirming what we want to hear?"]},
+    {name:"Lender & investor technical advisory",start:1,end:3,status:"scale",poc:"",team:"CP&I / Deals",q:["Are our lenders getting the independent assurance they need to maintain confidence?","Is our technical reporting aligned with what lenders actually want to see?"]},
+  ]},
+  {id:"technology",num:"06",title:"Technology & data",risk:"Making a major technology bet that becomes obsolete before the asset is operational, or failing to integrate systems in a way that creates blind spots.",lq:["Are we making technology choices today that lock us into a vendor or architecture that may not be the right answer by the time this asset is fully operational?","Do we have a single source of truth across engineering, procurement, construction, and finance \u2014 or are we running parallel systems that will diverge under pressure?"],items:[
+    {name:"Digital program enablement",start:1,end:4,status:"scale",poc:"Matt Cardamone",team:"Digital / CP&I",q:["Are our digital tools helping people do their jobs better, or just adding reporting overhead?","Are we getting value from what we\u2019ve already deployed before investing in the next platform?"]},
+    {name:"Advanced analytics",start:2,end:4,status:"scale",poc:"",team:"Digital / Data Analytics",q:["Are we using data to predict problems, or just documenting them after the fact?","What decisions would we make differently if we had better data today?"]},
+    {name:"BIM / digital twin",start:2,end:4,status:"evaluate",poc:"",team:"Digital / CP&I",q:["Is our digital twin maintained and used for operations, or did it stop being useful after construction?","What\u2019s the ROI case for maintaining it through the asset lifecycle?"]},
+    {name:"ERP integration",start:2,end:4,status:"enhance",poc:"Matt Cardamone",team:"Technology Consulting",q:["Can our systems talk to each other, or are people manually bridging gaps with spreadsheets?","Where is integration friction costing us the most time and accuracy?"]},
+    {name:"Process automation & orchestration",start:2,end:4,status:"enhance",poc:"Matt Cardamone",team:"Technology Consulting",q:["Which high-volume, low-value processes should be automated first?","What\u2019s the business case \u2014 labor savings, speed, error reduction, or all three?"]},
+    {name:"Data governance & reporting",start:2,end:4,status:"scale",poc:"",team:"Digital / Data Analytics",q:["Can we produce reliable, auditable data across the portfolio on demand?","Are data definitions and reporting standards consistent across portfolio companies?"]},
+  ]},
+  {id:"operations",num:"07",title:"Operations & asset optimization",risk:"The asset underperforms from day one because operations wasn\u2019t ready, or ongoing costs erode the returns that justified the investment.",lq:["If the asset reaches mechanical completion on schedule, can we actually operate it at design capacity from day one \u2014 and what\u2019s the revenue impact of every month of ramp-up delay?","Are our operating cost assumptions based on benchmarked reality, or did we inherit the developer\u2019s pro forma and never pressure-test it against actual comparable facilities?"],items:[
+    {name:"Operational readiness planning",start:3,end:4,status:"scale",poc:"",team:"CP&I Delivery / Operations",q:["Will operations be genuinely ready on day one, or are we going to scramble?","Have we tested our operational processes before go-live, not just documented them?"]},
+    {name:"Asset management strategy",start:4,end:5,status:"scale",poc:"",team:"CP&I / Asset Management",q:["Are we managing each asset for maximum exit value, or just steady-state performance?","Is our hold period strategy still right, or has the market moved?"]},
+    {name:"Energy management, efficiency & resilience",start:4,end:4,status:"scale",poc:"",team:"Sustainability / Operations",q:["Is energy cost and resilience a competitive advantage or a vulnerability for our assets?","Are we capturing energy-related incentives and credits at the asset level?"]},
+    {name:"Financial reporting & accounting",start:4,end:4,status:"scale",poc:"",team:"CMAAS / Assurance",q:["Are our reporting processes efficient, or are we throwing people at close cycles?","Can we report with both confidence and speed when stakeholders need answers?"]},
+    {name:"Internal audit & benchmarking",start:4,end:4,status:"scale",poc:"",team:"Internal Audit Services",q:["Are we auditing the right things at the right frequency across the portfolio?","Are audit findings leading to action, or sitting in a report?"]},
+    {name:"Credit substantiation & audit readiness",start:4,end:5,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Can we defend every credit claimed across the portfolio with proper documentation?","If a portfolio company is audited, are they ready \u2014 and are we?"]},
+    {name:"Customs & trade compliance",start:4,end:5,status:"enhance",poc:"",team:"Trade & Customs",q:["Are we managing duty exposure proactively, or finding out about costs at the border?","Are our foreign trade zone benefits fully realized?"]},
+    {name:"Climate risk modeling",start:4,end:5,status:"enhance",poc:"",team:"ESG & Sustainability",q:["Have we modeled the physical and transition risks to our assets under multiple scenarios?","Are we pricing climate risk into investment decisions, or treating it as a future problem?"]},
+    {name:"Cybersecurity & crisis response",start:4,end:4,status:"enhance",poc:"",team:"Cybersecurity & Privacy",q:["If we were breached today, what\u2019s our response plan and who leads it?","Are our operational technology systems as protected as our IT systems?"]},
+    {name:"Facility operate, maintain & retire",start:4,end:5,status:"scale",poc:"",team:"CP&I / Asset Management",q:["Is our maintenance strategy predictive or reactive?","Are we spending the right amount on maintenance \u2014 not too much, not too little?"]},
+    {name:"Decommissioning & disposal",start:5,end:5,status:"scale",poc:"",team:"CP&I / Environmental",q:["Do we know our decommissioning obligations, and are they funded?","Are there environmental liabilities we haven\u2019t quantified or disclosed?"]},
+    {name:"Operational turnaround & restructuring",start:4,end:5,status:"enhance",poc:"",team:"Operations Consulting",q:["When an asset underperforms, how quickly can we diagnose the problem and deploy a fix?","Do we have the bench strength and playbook to execute a turnaround, or do we need outside help?"]},
+  ]},
+];
+
+const INVESTOR_DEFAULT = [
+  {id:"investment",num:"01",title:"Fund strategy & capital allocation",items:[
+    {name:"Fund strategy & investment thesis",start:0,end:1,status:"scale",poc:"Tom Hylton",team:"Deals — Infrastructure",q:["Is our investment thesis differentiated, and can we articulate it in a way that resonates with target LPs?","Are we disciplined about staying within our mandate, or drifting into opportunistic deals?"]},
+    {name:"Portfolio construction & allocation",start:0,end:2,status:"scale",poc:"Tom Hylton",team:"Deals — Infrastructure",q:["Is our portfolio construction aligned with our fund thesis and LP expectations for diversification?","Are we concentrating risk in ways we\u2019ve explicitly decided to, or inadvertently?"]},
+    {name:"Sector & market screening",start:0,end:1,status:"scale",poc:"",team:"Strategy& / Deals",q:["Are we screening opportunities with a rigorous, repeatable framework or relying on deal flow?","Are we seeing the best deals in our target sectors, or missing opportunities competitors are finding?"]},
+    {name:"Fundraise advisory & capital raising",start:0,end:0,status:"scale",poc:"",team:"Deals — Capital Markets",q:["Are we positioned competitively for the next fundraise \u2014 what\u2019s our track record story?","Are we targeting the right LP segments, and is our marketing material compelling?"]},
+    {name:"LP & investor reporting",start:0,end:4,status:"scale",poc:"",team:"Assurance / CMAAS",q:["Are our LP reports meeting rising expectations for transparency, frequency, and ESG disclosure?","Can we produce ad-hoc LP requests quickly without a fire drill?"]},
+  ]},
+  {id:"structuring",num:"02",title:"Structuring, tax & incentives",items:[
+    {name:"Fund structuring & domicile",start:0,end:0,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Is our fund structure optimized for our target investor base, or carrying unnecessary complexity?","Would a different domicile or vehicle type improve tax efficiency or LP access?"]},
+    {name:"Investor tax considerations",start:0,end:1,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Are we addressing the specific tax needs of each investor type \u2014 pension, SWF, HNWI, retail?","Could our structure inadvertently create UBTI or other issues for tax-exempt investors?"]},
+    {name:"Cross-border treaty & withholding planning",start:0,end:4,status:"scale",poc:"Tiffany Chu",team:"International Tax",q:["Are we minimizing withholding tax leakage across jurisdictions?","Are our treaty positions documented and defensible under audit?"]},
+    {name:"Tax credits & incentives",start:1,end:4,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Are we capturing all available credits at the asset level and flowing them efficiently to investors?","Are we structured to take advantage of transferability and direct pay provisions?"]},
+    {name:"Grants, abatements & exemptions",start:1,end:4,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax / SALT",q:["Are location-based incentives factored into our underwriting for each deal?","Are we structured to retain incentives through changes in ownership or operations?"]},
+    {name:"JV & co-investment structuring",start:0,end:2,status:"scale",poc:"",team:"Deals / Tax",q:["Are our co-investment structures aligned with partner objectives while protecting our economics?","Are LP co-invest rights creating complexity in deal execution?"]},
+    {name:"Tax optimization & transfer pricing",start:1,end:3,status:"scale",poc:"",team:"Transfer Pricing / Infrastructure Tax",q:["Are intercompany arrangements across our portfolio defensible and optimized?","Are we reviewing transfer pricing as portfolio companies grow and evolve?"]},
+    {name:"Cost segregation analysis",start:2,end:2,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Have we accelerated depreciation on acquired assets through cost segregation?","Are there older acquisitions where a retroactive study would unlock cash flow?"]},
+    {name:"Exit tax planning & optimization",start:3,end:4,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax / M&A Tax",q:["Are we planning exit tax strategy early enough to maximize after-tax proceeds?","Have we modeled the tax impact of different exit structures \u2014 sale, IPO, recapitalization?"]},
+    {name:"Tax equity advisory",start:0,end:2,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Are we leveraging tax equity structures to monetize credits and improve investor returns?","Is our tax equity partner getting what they need, and are we retaining maximum upside?"]},
+    {name:"REIT & fund vehicle compliance",start:0,end:4,status:"scale",poc:"",team:"Infrastructure Tax / Assurance",q:["Are we maintaining REIT qualification without constraining investment flexibility?","Are compliance monitoring processes robust enough to catch issues before they become problems?"]},
+  ]},
+  {id:"financing",num:"03",title:"Financing & transactions",items:[
+    {name:"Equity raise & lead advisory",start:0,end:2,status:"scale",poc:"Tom Hylton",team:"Deals — Capital Markets",q:["Are we raising at the right valuation with the right partners?","Is our capital raising timeline creating pressure that leads to suboptimal terms?"]},
+    {name:"Debt raise & capital markets",start:1,end:2,status:"scale",poc:"Tom Hylton",team:"Deals — Capital Markets",q:["Is our leverage appropriate for the asset risk profile?","Have we stress-tested covenant headroom under realistic downside scenarios?"]},
+    {name:"Financial due diligence",start:1,end:2,status:"scale",poc:"Kyle West",team:"Deals — FDD",q:["Are the seller\u2019s financials telling the full story, or are there normalization adjustments we\u2019re missing?","What\u2019s the quality of earnings, and how sustainable is the current run rate?"]},
+    {name:"Tax due diligence",start:1,end:2,status:"scale",poc:"Tiffany Chu",team:"Deals — Tax DD",q:["What tax exposures are embedded in this target, and how do they affect post-close economics?","Are there tax attributes \u2014 NOLs, credits, step-ups \u2014 we can capture in the deal?"]},
+    {name:"Commercial due diligence",start:1,end:2,status:"scale",poc:"Kyle West",team:"Strategy& / Deals",q:["Is the revenue base sustainable \u2014 are customer contracts, market position, and demand drivers robust?","What\u2019s the competitive moat, and how durable is it over our hold period?"]},
+    {name:"Technical due diligence",start:1,end:2,status:"evaluate",poc:"",team:"CP&I / Engineering",q:["What\u2019s the true CapEx requirement to maintain or improve this asset to our standards?","Are there hidden technical risks \u2014 deferred maintenance, code violations, capacity limits?"]},
+    {name:"Valuation",start:0,end:4,status:"scale",poc:"",team:"Deals — Valuation",q:["Is our valuation methodology consistent across the portfolio and defensible to LPs and auditors?","Are we anchoring to comparable transactions, or building bottom-up with defensible assumptions?"]},
+    {name:"Market entry & structuring",start:0,end:2,status:"scale",poc:"",team:"Deals / Strategy&",q:["Do we understand the regulatory, competitive, and operational landscape of this market?","Is our entry vehicle and structure right for this jurisdiction and asset class?"]},
+    {name:"Deal structuring & SPA advisory",start:1,end:2,status:"scale",poc:"Kyle West",team:"Deals — M&A",q:["Are our deal protections \u2014 reps, warranties, indemnities \u2014 calibrated to the risk?","Are we leaving value on the table in the SPA, or creating friction that could kill the deal?"]},
+    {name:"Post-deal integration",start:2,end:3,status:"enhance",poc:"",team:"Deals — Integration",q:["Do we have a value creation plan from day one, and who is accountable for execution?","Are we integrating at the right pace \u2014 fast enough to capture value, slow enough to avoid disruption?"]},
+    {name:"Lender & investor technical advisory",start:1,end:2,status:"scale",poc:"",team:"CP&I / Deals",q:["Are our lenders getting the independent assurance they need to maintain confidence?","Is our technical reporting aligned with what lenders actually want to see?"]},
+  ]},
+  {id:"governance",num:"04",title:"Governance, risk & compliance",items:[
+    {name:"Fund governance & compliance",start:0,end:4,status:"scale",poc:"",team:"Risk & Regulatory / Assurance",q:["Is our fund governance keeping pace with regulatory expectations and LP scrutiny?","Are our compliance processes scalable as AUM grows?"]},
+    {name:"Regulatory & governance compliance",start:1,end:4,status:"scale",poc:"",team:"Risk & Regulatory",q:["Are we ahead of evolving regulatory requirements, or at risk of being caught off guard?","Do we have a clear view of our compliance obligations across every jurisdiction we operate in?"]},
+    {name:"Stakeholder & LP management",start:0,end:4,status:"enhance",poc:"",team:"Deals / Advisory",q:["Are we managing LP relationships proactively, or only when it\u2019s time to fundraise?","Do our LPs feel like partners, or are they surprised by developments?"]},
+    {name:"ESG & sustainability reporting",start:0,end:4,status:"scale",poc:"",team:"ESG & Sustainability",q:["Can we demonstrate ESG impact with data, or are our commitments still aspirational?","Are we meeting the ESG reporting standards our LPs are increasingly requiring?"]},
+    {name:"Risk management framework",start:1,end:3,status:"scale",poc:"",team:"Risk Advisory",q:["Do we have a portfolio-wide risk view, or are we managing risk asset by asset?","Are we stress-testing the portfolio against correlated risks \u2014 rate changes, regulation, geopolitics?"]},
+    {name:"Portfolio company governance & oversight",start:2,end:4,status:"scale",poc:"",team:"Advisory / Operations Consulting",q:["Are our portfolio company boards effective, and do we have the right level of oversight?","Are we getting the information we need from portcos quickly enough to act on it?"]},
+    {name:"Cybersecurity & data privacy",start:1,end:4,status:"enhance",poc:"",team:"Cybersecurity & Privacy",q:["Is cybersecurity a board-level topic for our portfolio companies? Where are we most exposed?","Have we assessed cyber risk across the portfolio, and do we have incident response plans?"]},
+  ]},
+  {id:"delivery",num:"05",title:"Portfolio value creation",items:[
+    {name:"Operational improvement & value creation",start:2,end:3,status:"scale",poc:"",team:"Operations Consulting / CP&I",q:["Do we have a repeatable playbook for driving EBITDA improvement across portfolio companies?","Are we tracking value creation initiatives with the same rigor as the investment thesis?"]},
+    {name:"Capital project oversight",start:2,end:3,status:"enhance",poc:"Daryl Walcroft",team:"CP&I Delivery",q:["Are our portfolio companies\u2019 capital projects on time and budget?","Who is providing independent oversight, and are they flagging issues early enough?"]},
+    {name:"Procurement strategy & cost management",start:2,end:3,status:"enhance",poc:"",team:"Operations Consulting",q:["Are we capturing procurement synergies across the portfolio?","Are portfolio companies buying independently when collective purchasing power could save millions?"]},
+    {name:"Workforce strategy & capability building",start:2,end:3,status:"enhance",poc:"Matt Cardamone",team:"Workforce Transformation",q:["Do our portfolio companies have the management teams they need to execute the value creation plan?","Where are the talent gaps that are limiting performance?"]},
+    {name:"Digital enablement & analytics",start:2,end:3,status:"scale",poc:"Matt Cardamone",team:"Digital / Technology Consulting",q:["Are we using data to make better investment and portfolio management decisions?","What decisions are we making on instinct that data could improve?"]},
+    {name:"Operational turnaround & restructuring",start:3,end:4,status:"enhance",poc:"",team:"Operations Consulting / Restructuring",q:["When an asset underperforms, how quickly can we diagnose the problem and deploy a fix?","Do we have the bench strength and playbook to execute a turnaround, or do we need outside help?"]},
+  ]},
+  {id:"technology",num:"06",title:"Technology & data",items:[
+    {name:"Digital enablement & analytics",start:1,end:3,status:"scale",poc:"Matt Cardamone",team:"Digital / Data Analytics",q:["Are we using data to make better investment and portfolio management decisions?","What decisions are we making on instinct that data could improve?"]},
+    {name:"Data governance & reporting",start:1,end:3,status:"scale",poc:"",team:"Digital / Data Analytics",q:["Can we produce reliable, auditable data across the portfolio on demand?","Are data definitions and reporting standards consistent across portfolio companies?"]},
+    {name:"Waterfall & distribution modeling",start:0,end:4,status:"scale",poc:"",team:"Deals — Valuation / Technology",q:["Is our waterfall model robust enough to handle complex multi-tier structures and edge cases?","Have we stress-tested distributions under multiple performance scenarios?"]},
+    {name:"Portfolio analytics & benchmarking",start:2,end:4,status:"enhance",poc:"",team:"Digital / Data Analytics",q:["Are we benchmarking portfolio company performance against the right peers?","Can we identify underperformance early enough to intervene before it affects fund returns?"]},
+    {name:"AI governance & responsible AI frameworks",start:1,end:4,status:"evaluate",poc:"",team:"Responsible AI / Digital",q:["As our portfolio companies adopt AI, do we have a governance framework to manage the risks?","Are we positioned to capture AI upside while protecting against reputational and regulatory risk?"]},
+  ]},
+  {id:"operations",num:"07",title:"Asset performance & exit",items:[
+    {name:"Asset management strategy",start:3,end:4,status:"scale",poc:"",team:"CP&I / Asset Management",q:["Are we managing each asset for maximum exit value, or just steady-state performance?","Is our hold period strategy still right, or has the market moved?"]},
+    {name:"Energy management, efficiency & resilience",start:3,end:3,status:"enhance",poc:"",team:"Sustainability / Operations",q:["Is energy cost and resilience a competitive advantage or a vulnerability for our assets?","Are we capturing energy-related incentives and credits at the asset level?"]},
+    {name:"Financial reporting & technical accounting",start:3,end:4,status:"scale",poc:"",team:"CMAAS / Assurance",q:["Are our reporting processes efficient enough to support timely LP reporting and audit cycles?","Are we applying technical accounting standards consistently across the portfolio?"]},
+    {name:"Fund accounting & NAV reporting",start:0,end:4,status:"scale",poc:"",team:"CMAAS / Fund Services",q:["Is our NAV calculation methodology consistent, defensible, and meeting LP expectations?","Can we explain NAV movements clearly when LPs ask?"]},
+    {name:"Internal audit & benchmarking",start:3,end:4,status:"scale",poc:"",team:"Internal Audit Services",q:["Are we auditing the right things at the right frequency across the portfolio?","Are audit findings leading to action, or sitting in a report?"]},
+    {name:"Credit substantiation & audit readiness",start:3,end:4,status:"scale",poc:"Tiffany Chu",team:"Infrastructure Tax",q:["Can we defend every credit claimed across the portfolio with proper documentation?","If a portfolio company is audited, are they ready \u2014 and are we?"]},
+    {name:"Exit preparation & vendor due diligence",start:4,end:4,status:"scale",poc:"Kyle West",team:"Deals — FDD / M&A",q:["Are we starting exit preparation early enough to maximize competitive tension and proceeds?","Would a buyer\u2019s diligence find issues we haven\u2019t already identified and addressed?"]},
+    {name:"Wind down & fund dissolution",start:4,end:4,status:"scale",poc:"",team:"Tax / Assurance / Legal",q:["Do we have a clear wind-down plan that addresses tail liabilities and LP expectations?","Are we managing the final distributions and reporting with the same rigor as the rest of the fund lifecycle?"]},
+  ]},
+];
+
+/* ============================================================
+   SHARED COMPONENTS
+   ============================================================ */
+function Tooltip({questions,children}){
+  const[show,setShow]=useState(false);const[pos,setPos]=useState({x:0,y:0});const ref=useRef(null);
+  const onEnter=()=>{const r=ref.current?.getBoundingClientRect();if(r)setPos({x:r.left+r.width/2,y:r.top});setShow(true);};
+  return React.createElement("span",{ref,onMouseEnter:onEnter,onMouseLeave:()=>setShow(false),style:{position:"relative",display:"inline-flex",alignItems:"center"}},children,
+    show&&questions?.length>0&&React.createElement("span",{style:{position:"fixed",left:Math.min(pos.x-150,window.innerWidth-330),top:pos.y-8,transform:"translateY(-100%)",width:300,padding:"10px 12px",backgroundColor:PWC.black,color:PWC.white,fontFamily:"Arial,sans-serif",fontSize:"11.5px",lineHeight:1.5,borderRadius:4,boxShadow:"0 4px 16px rgba(0,0,0,0.25)",zIndex:1000,pointerEvents:"none"}},
+      React.createElement("span",{style:{color:PWC.orange300,fontWeight:"bold",fontSize:"10px",display:"block",marginBottom:4}},"Key questions"),
+      React.createElement("span",{style:{display:"block",marginBottom:4}},`1. ${questions[0]}`),
+      React.createElement("span",{style:{display:"block"}},`2. ${questions[1]}`)
+    ));
+}
+
+function CategoryTooltip({risk,questions,children}){
+  const[show,setShow]=useState(false);const[pos,setPos]=useState({x:0,y:0});const ref=useRef(null);
+  const onEnter=()=>{const r=ref.current?.getBoundingClientRect();if(r)setPos({x:r.left+r.width/2,y:r.top});setShow(true);};
+  if(!risk)return children;
+  return React.createElement("span",{ref,onMouseEnter:onEnter,onMouseLeave:()=>setShow(false),style:{display:"inline-flex",alignItems:"center"}},children,
+    show&&React.createElement("span",{style:{position:"fixed",left:Math.min(pos.x-160,window.innerWidth-360),top:pos.y-8,transform:"translateY(-100%)",width:340,display:"flex",borderRadius:4,boxShadow:"0 6px 24px rgba(0,0,0,0.3)",zIndex:1000,pointerEvents:"none",overflow:"hidden"}},
+      React.createElement("span",{style:{width:5,backgroundColor:PWC.orange,flexShrink:0}}),
+      React.createElement("span",{style:{padding:"12px 14px",backgroundColor:"#1a1a1a",color:PWC.white,fontFamily:"Arial,sans-serif",fontSize:"11.5px",lineHeight:1.5,flex:1}},
+        React.createElement("span",{style:{color:PWC.orange,fontWeight:"bold",fontSize:"10.5px",textTransform:"uppercase",letterSpacing:"0.5px",display:"block",marginBottom:6}},"\u26A0 Critical risk"),
+        React.createElement("span",{style:{display:"block",color:PWC.orange200,marginBottom:10}},risk),
+        React.createElement("span",{style:{display:"block",borderTop:"1px solid #333",paddingTop:8}},
+          React.createElement("span",{style:{color:PWC.grey400,fontWeight:"bold",fontSize:"10px",textTransform:"uppercase",display:"block",marginBottom:5}},"Executive questions"),
+          React.createElement("span",{style:{display:"block",marginBottom:5}},`1. ${questions[0]}`),
+          React.createElement("span",{style:{display:"block"}},`2. ${questions[1]}`)
+        ))));
+}
+
+function StatusBadge({status}){const s=STATUS_COLORS[status];return React.createElement("span",{style:{fontSize:9,fontWeight:"bold",padding:"2px 6px",borderRadius:3,backgroundColor:s.bg,color:s.text,border:`1px solid ${s.border}30`,whiteSpace:"nowrap"}},s.label);}
+
+function PhaseBar({item,dimmed,statusColor,phases}){
+  return React.createElement("div",{style:{display:"flex",gap:1,flex:1,transition:"opacity 0.3s",opacity:dimmed?0.12:1}},
+    phases.map((_,i)=>{const a=i>=item.start&&i<=item.end,isS=i===item.start,isE=i===item.end;
+      return React.createElement("div",{key:i,style:{flex:1,display:"flex",alignItems:"center",height:10}},
+        a?React.createElement("div",{style:{width:"100%",height:5,backgroundColor:statusColor,borderRadius:`${isS?3:0}px ${isE?3:0}px ${isE?3:0}px ${isS?3:0}px`,opacity:0.85,position:"relative"}},
+          isS&&React.createElement("div",{style:{position:"absolute",left:-1,top:-1,width:7,height:7,borderRadius:1,backgroundColor:statusColor,opacity:0.9}}),
+          isE&&React.createElement("div",{style:{position:"absolute",right:-1,top:-1,width:7,height:7,borderRadius:1,backgroundColor:statusColor,opacity:0.9}})
+        ):React.createElement("div",{style:{width:"100%",height:1,backgroundColor:PWC.grey300,opacity:0.35}}));}));
+}
+
+function CategoryRow({category,isExpanded,onToggle,activePersona,personas,items,onUpdateItem,phases,showRisk,canEdit}){
+  const persona=activePersona?personas.find(p=>p.id===activePersona):null;
+  const hasAny=persona?items.some(it=>persona.capabilities.has(it.name)):true;
+  const matchCount=persona?items.filter(it=>persona.capabilities.has(it.name)).length:0;
+  const counts={scale:0,enhance:0,evaluate:0};items.forEach(it=>{if(counts[it.status]!==undefined)counts[it.status]++;});
+  const titleEl=React.createElement("span",{style:{fontFamily:"Arial,sans-serif",fontSize:12,fontWeight:"bold",color:PWC.black,lineHeight:1.3,borderBottom:showRisk?`1.5px dashed ${PWC.orange300}`:"none",paddingBottom:showRisk?1:0}},category.title);
+  const wrappedTitle=showRisk&&category.risk?React.createElement(CategoryTooltip,{risk:category.risk,questions:category.lq},titleEl):titleEl;
+  return React.createElement("div",{style:{borderBottom:`1px solid ${PWC.grey200}`,backgroundColor:isExpanded?PWC.orange50:"transparent",transition:"background-color 0.25s,opacity 0.3s",opacity:persona&&!hasAny?0.3:1}},
+    React.createElement("div",{onClick:onToggle,style:{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",cursor:"pointer",userSelect:"none"},onMouseEnter:e=>{if(!isExpanded)e.currentTarget.style.backgroundColor=PWC.grey50},onMouseLeave:e=>{if(!isExpanded)e.currentTarget.style.backgroundColor="transparent"}},
+      React.createElement("span",{style:{fontFamily:"Georgia,serif",fontSize:11,color:PWC.orange,minWidth:18,textAlign:"right"}},category.num),
+      React.createElement("div",{style:{width:180,minWidth:180,display:"flex",alignItems:"center",gap:6}},wrappedTitle,
+        persona&&hasAny&&React.createElement("span",{style:{fontSize:9,padding:"1px 6px",borderRadius:3,backgroundColor:PWC.orange100,color:PWC.black,fontWeight:"bold"}},matchCount)),
+      React.createElement("div",{style:{display:"flex",gap:3,minWidth:80}},
+        counts.scale>0&&React.createElement("span",{style:{fontSize:9,color:PWC.green,fontWeight:"bold"}},`${counts.scale}S`),
+        counts.enhance>0&&React.createElement("span",{style:{fontSize:9,color:PWC.blue,fontWeight:"bold"}},`${counts.enhance}E`),
+        counts.evaluate>0&&React.createElement("span",{style:{fontSize:9,color:PWC.amber,fontWeight:"bold"}},`${counts.evaluate}G`)),
+      React.createElement("div",{style:{display:"flex",gap:2,flex:1}},phases.map((_,i)=>{const rel=persona?items.filter(it=>persona.capabilities.has(it.name)):items;const a=rel.some(it=>i>=it.start&&i<=it.end);return React.createElement("div",{key:i,style:{flex:1,height:8,borderRadius:2,backgroundColor:a?PWC.black:PWC.grey100,opacity:a?0.45:0.3,transition:"all 0.3s"}});})),
+      React.createElement("svg",{width:14,height:14,viewBox:"0 0 14 14",style:{transform:isExpanded?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.25s",flexShrink:0,opacity:0.4}},React.createElement("path",{d:"M3.5 5.5L7 9L10.5 5.5",fill:"none",stroke:PWC.black,strokeWidth:1.3,strokeLinecap:"round",strokeLinejoin:"round"}))),
+    React.createElement("div",{style:{maxHeight:isExpanded?items.length*70+20:0,overflow:"hidden",transition:"max-height 0.4s ease"}},
+      React.createElement("div",{style:{padding:"0 12px 10px"}},items.map((item,i)=>{
+        const dimmed=persona&&!persona.capabilities.has(item.name);const sc=STATUS_COLORS[item.status];
+        return React.createElement("div",{key:i,style:{display:"flex",alignItems:"flex-start",gap:8,padding:"6px 4px",borderRadius:3,margin:"0 -4px",borderBottom:`1px solid ${PWC.grey100}`,opacity:dimmed?0.2:1,transition:"opacity 0.3s"}},
+          React.createElement("span",{style:{minWidth:18}}),
+          React.createElement("div",{style:{width:170,minWidth:170}},
+            React.createElement(Tooltip,{questions:item.q},React.createElement("div",{style:{fontFamily:"Arial,sans-serif",fontSize:11.5,color:PWC.black,lineHeight:1.3,borderBottom:`1px dashed ${PWC.grey300}`,paddingBottom:1}},item.name)),
+            React.createElement("div",{style:{display:"flex",gap:4,marginTop:4}},React.createElement(StatusBadge,{status:item.status}))),
+          React.createElement(PhaseBar,{item,dimmed,statusColor:sc.text,phases}),
+          React.createElement("div",{style:{width:160,minWidth:160,flexShrink:0}},
+            canEdit?React.createElement(React.Fragment,null,
+              React.createElement("input",{type:"text",value:item.poc,placeholder:"Point of contact...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"poc",e.target.value),style:{width:"100%",padding:"2px 6px",fontSize:10.5,fontFamily:"Arial,sans-serif",color:PWC.black,fontWeight:"bold",border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none",marginBottom:2},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}}),
+              React.createElement("input",{type:"text",value:item.team,placeholder:"Team / practice...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"team",e.target.value),style:{width:"100%",padding:"2px 6px",fontSize:10,fontFamily:"Arial,sans-serif",color:PWC.grey500,border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none"},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}})
+            ):React.createElement(React.Fragment,null,
+              React.createElement("div",{style:{fontSize:10.5,fontWeight:"bold",color:PWC.black,padding:"2px 0"}},item.poc||"—"),
+              React.createElement("div",{style:{fontSize:10,color:PWC.grey500}},item.team||"—"))
+          ));}))));
+}
+
+/* ============================================================
+   ASSESSMENT VIEW
+   ============================================================ */
+function AssessmentView({title,subtitle,personas,phases,phaseColors,defaultData,dataFile,showRisk,token}){
+  const[expanded,setExpanded]=useState(null);const[allExpanded,setAllExpanded]=useState(false);
+  const[activePersona,setActivePersona]=useState(null);const[categories,setCategories]=useState(defaultData);
+  const[sha,setSha]=useState(null);const[saveStatus,setSaveStatus]=useState("");const[loaded,setLoaded]=useState(false);
+  const canEdit=!!token;
+
+  useEffect(()=>{
+    ghRead(dataFile,token).then(result=>{
+      if(result){
+        const merged=defaultData.map(dc=>{const sc=result.content.find(c=>c.id===dc.id);if(!sc)return dc;
+          return{...dc,items:dc.items.map((di,idx)=>{const si=sc.items?.[idx];if(!si)return di;return{...di,poc:si.poc||di.poc,team:si.team||di.team,status:si.status||di.status};})};});
+        setCategories(merged);setSha(result.sha);
+      }
+      setLoaded(true);
+    });
+  },[token]);
+
+  const toggle=id=>{if(allExpanded)return;setExpanded(expanded===id?null:id);};
+  const toggleAll=()=>{setAllExpanded(!allExpanded);if(!allExpanded)setExpanded(null);};
+  const activeP=activePersona?personas.find(p=>p.id===activePersona):null;
+
+  const onUpdateItem=useCallback((catId,itemIdx,field,value)=>{
+    if(!canEdit)return;
+    setCategories(prev=>{const next=prev.map(cat=>{if(cat.id!==catId)return cat;const ni=[...cat.items];ni[itemIdx]={...ni[itemIdx],[field]:value};return{...cat,items:ni};});
+      const saveData=next.map(c=>({id:c.id,items:c.items.map(it=>({poc:it.poc,team:it.team,status:it.status}))}));
+      ghWriteDebounced(dataFile,saveData,sha,setSha,token,setSaveStatus);return next;});
+  },[sha,token,canEdit]);
+
+  const totals={scale:0,enhance:0,evaluate:0};categories.forEach(c=>c.items.forEach(it=>{if(totals[it.status]!==undefined)totals[it.status]++;}));
+  if(!loaded)return React.createElement("div",{style:{padding:40,textAlign:"center",color:PWC.grey500}},"Loading...");
+
+  return React.createElement("div",{style:{padding:"4px 0",maxWidth:800,margin:"0 auto",fontFamily:"Arial,sans-serif"}},
+    React.createElement("div",{style:{marginBottom:12}},
+      React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}},
+        React.createElement("div",null,
+          React.createElement("div",{style:{fontFamily:"Georgia,serif",fontSize:22,fontWeight:"bold",color:PWC.black,lineHeight:1.2}},title),
+          React.createElement("div",{style:{display:"flex",gap:8,alignItems:"center",marginTop:4}},
+            React.createElement("span",{style:{fontSize:13,color:PWC.grey500}},subtitle),
+            !canEdit&&React.createElement("span",{style:{fontSize:10,padding:"2px 8px",borderRadius:3,backgroundColor:PWC.grey100,color:PWC.grey500,fontWeight:"bold"}},"View only"),
+            canEdit&&saveStatus&&React.createElement("span",{style:{fontSize:10,color:saveStatus==="Saved"?PWC.green:saveStatus==="Saving..."?PWC.blue:PWC.amber,fontWeight:"bold"}},saveStatus))),
+        React.createElement("div",{style:{display:"flex",gap:12,alignItems:"center",paddingTop:4}},
+          ...["scale","enhance","evaluate"].map(s=>React.createElement("span",{key:s,style:{display:"flex",alignItems:"center",gap:4,fontSize:11}},
+            React.createElement("span",{style:{width:10,height:10,borderRadius:2,backgroundColor:STATUS_COLORS[s].text,display:"inline-block"}}),
+            React.createElement("span",{style:{color:STATUS_COLORS[s].text,fontWeight:"bold"}},STATUS_COLORS[s].label),
+            React.createElement("span",{style:{color:PWC.grey500}},`(${totals[s]})`)))))),
+    React.createElement("div",{style:{marginBottom:14}},
+      React.createElement("div",{style:{fontSize:11,fontWeight:"bold",color:PWC.black,textTransform:"uppercase",letterSpacing:"0.4px",marginBottom:8}},"Filter by client role"),
+      React.createElement("div",{style:{display:"flex",flexWrap:"wrap",gap:6}},personas.map(p=>{const isA=activePersona===p.id;
+        return React.createElement("button",{key:p.id,onClick:()=>setActivePersona(isA?null:p.id),style:{display:"flex",flexDirection:"column",alignItems:"flex-start",padding:"8px 12px",borderRadius:4,border:isA?`2px solid ${PWC.orange}`:`1px solid ${PWC.grey300}`,background:isA?PWC.orange50:PWC.white,cursor:"pointer",fontFamily:"Arial,sans-serif",transition:"all 0.2s",flex:"1 1 calc(33.33% - 6px)",minWidth:145}},
+          React.createElement("span",{style:{fontSize:12,fontWeight:"bold",color:PWC.black}},p.label),
+          React.createElement("span",{style:{fontSize:10,color:PWC.grey500,lineHeight:1.3,marginTop:2,textAlign:"left"}},p.description));})),
+      activeP&&React.createElement("div",{style:{marginTop:8,fontSize:12,color:PWC.orange,fontWeight:"bold"}},`Showing ${activeP.capabilities.size} capabilities relevant to ${activeP.label}`)),
+    React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:2,padding:"0 12px"}},
+      React.createElement("span",{style:{minWidth:18}}),React.createElement("div",{style:{width:180,minWidth:180}}),React.createElement("div",{style:{minWidth:80}}),
+      React.createElement("div",{style:{display:"flex",gap:0,flex:1}},phases.map((ph,i)=>React.createElement("div",{key:ph.id,style:{flex:1,textAlign:"center",padding:"7px 2px",backgroundColor:phaseColors[i],color:i<(phases.length>5?4:3)?PWC.white:PWC.black,fontFamily:"Arial,sans-serif",fontSize:phases.length>5?10.5:9.5,fontWeight:"bold",borderRight:i<phases.length-1?"1px solid rgba(255,255,255,0.25)":"none",borderRadius:i===0?"4px 0 0 4px":i===phases.length-1?"0 4px 4px 0":0,lineHeight:1.2}},ph.label))),
+      React.createElement("div",{style:{width:160,minWidth:160,textAlign:"center",fontSize:10,fontWeight:"bold",color:PWC.grey500}},"Owner / Team")),
+    React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 12px",borderBottom:`1px solid ${PWC.grey200}`}},
+      React.createElement("div",{style:{fontSize:10.5,color:PWC.grey500}},canEdit?"Hover for questions \u00b7 Edit contacts inline \u00b7 Auto-saves":"Hover for questions \u00b7 View-only mode"),
+      React.createElement("button",{onClick:toggleAll,style:{fontSize:10.5,color:PWC.black,background:"none",border:`1px solid ${PWC.grey300}`,borderRadius:4,padding:"3px 10px",cursor:"pointer",fontFamily:"Arial,sans-serif"}},allExpanded?"Collapse all":"Expand all")),
+    React.createElement("div",{style:{border:`1px solid ${PWC.grey200}`,borderTop:"none",borderRadius:"0 0 4px 4px",overflow:"hidden"}},
+      categories.map(cat=>React.createElement(CategoryRow,{key:cat.id,category:cat,isExpanded:allExpanded||expanded===cat.id,onToggle:()=>toggle(cat.id),activePersona,personas,items:cat.items,onUpdateItem,phases,showRisk,canEdit}))));
+}
+
+/* ============================================================
+   TOKEN MODAL
+   ============================================================ */
+function TokenModal({onSubmit,onViewOnly}){
+  const[val,setVal]=useState("");
+  const[error,setError]=useState("");
+  const trySubmit=async()=>{
+    if(!val.trim()){setError("Please enter a token");return;}
+    setError("Verifying...");
+    try{
+      const res=await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`,{headers:{Authorization:`Bearer ${val.trim()}`}});
+      if(res.ok){setToken(val.trim());onSubmit(val.trim());}
+      else{setError("Invalid token or insufficient permissions. Check that the token has Contents read/write access to this repo.");}
+    }catch{setError("Could not reach GitHub. Check your network connection.");}
+  };
+  return React.createElement("div",{className:"modal-overlay"},
+    React.createElement("div",{className:"modal-box"},
+      React.createElement("div",{style:{textAlign:"center",marginBottom:20}},
+        React.createElement("div",{style:{fontFamily:"Georgia,serif",fontSize:20,fontWeight:"bold",color:PWC.black,marginBottom:4}},"Capability Assessment"),
+        React.createElement("div",{style:{fontSize:12,color:PWC.grey500}},"Internal View")),
+      React.createElement("div",{style:{backgroundColor:PWC.orange50,borderLeft:`4px solid ${PWC.orange}`,padding:"12px 14px",borderRadius:"0 4px 4px 0",marginBottom:20}},
+        React.createElement("div",{style:{fontSize:12,fontWeight:"bold",color:PWC.black,marginBottom:4}},"Edit access"),
+        React.createElement("div",{style:{fontSize:11.5,color:"#333",lineHeight:1.5}},"Enter a GitHub personal access token to edit contact names and practice areas. For token access, reach out to ",
+          React.createElement("span",{style:{fontWeight:"bold"}},"Sam McBride"),
+          ".")),
+      React.createElement("input",{type:"text",value:val,onChange:e=>{setVal(e.target.value);setError("");},placeholder:"Paste your GitHub token here...",
+        onKeyDown:e=>{if(e.key==="Enter")trySubmit();},
+        style:{width:"100%",padding:"10px 12px",fontSize:13,fontFamily:"Arial,sans-serif",border:`1px solid ${PWC.grey300}`,borderRadius:4,outline:"none",marginBottom:8},
+        onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey300}}),
+      error&&React.createElement("div",{style:{fontSize:11,color:error==="Verifying..."?PWC.blue:"#DC2626",marginBottom:8}},error),
+      React.createElement("button",{onClick:trySubmit,style:{width:"100%",padding:"10px",fontSize:13,fontWeight:"bold",color:PWC.white,backgroundColor:PWC.orange,border:"none",borderRadius:4,cursor:"pointer",marginBottom:12,fontFamily:"Arial,sans-serif"}},"Connect & Edit"),
+      React.createElement("div",{style:{textAlign:"center"}},
+        React.createElement("button",{onClick:onViewOnly,style:{background:"none",border:"none",color:PWC.grey500,fontSize:12,cursor:"pointer",fontFamily:"Arial,sans-serif",textDecoration:"underline"}},"Continue in view-only mode"))));
+}
+
+/* ============================================================
+   APP
+   ============================================================ */
+function App(){
+  const[token,setTokenState]=useState(getToken());
+  const[viewOnly,setViewOnly]=useState(false);
+  const[showModal,setShowModal]=useState(!getToken());
+  const[view,setView]=useState("owner");
+  const[fwOwner,setFwOwner]=useState(null);
+  const[fwInvestor,setFwInvestor]=useState(null);
+  useEffect(()=>{
+    fetch(fwUrl("owner_framework.json")).then(r=>r.json()).then(d=>{
+      const merged=d.categories.map(c=>({...c,items:c.items.map(it=>({...it}))}));
+      setFwOwner({personas:d.personas,phases:d.phases,phaseColors:d.phaseColors,categories:merged});
+    }).catch(()=>console.log("Using default owner data"));
+    fetch(fwUrl("investor_framework.json")).then(r=>r.json()).then(d=>{
+      const merged=d.categories.map(c=>({...c,items:c.items.map(it=>({...it}))}));
+      setFwInvestor({personas:d.personas,phases:d.phases,phaseColors:d.phaseColors,categories:merged});
+    }).catch(()=>console.log("Using default investor data"));
+  },[]);
+
+  const ownerColors=["#FD5108","#F46318","#EB7528","#E28738","#D99948","#D0AB58"];
+  const investorColors=["#FD5108","#F46318","#EB7528","#D99948","#D0AB58"];
+
+  if(showModal&&!token&&!viewOnly){
+    return React.createElement(TokenModal,{
+      onSubmit:t=>{setTokenState(t);setShowModal(false);},
+      onViewOnly:()=>{setViewOnly(true);setShowModal(false);}
+    });
+  }
+
+  return React.createElement("div",{style:{minHeight:"100vh",backgroundColor:"#fff"}},
+    React.createElement("div",{style:{display:"flex",gap:0,borderBottom:`2px solid ${PWC.grey200}`,maxWidth:800,margin:"0 auto",paddingTop:8,alignItems:"center"}},
+      ["owner","investor"].map(v=>React.createElement("button",{key:v,onClick:()=>setView(v),style:{padding:"10px 24px",fontFamily:"Arial,sans-serif",fontSize:13,fontWeight:"bold",color:view===v?PWC.orange:PWC.grey500,backgroundColor:"transparent",border:"none",cursor:"pointer",borderBottom:view===v?`3px solid ${PWC.orange}`:"3px solid transparent",marginBottom:-2,transition:"all 0.2s"}},v==="owner"?"Owner Perspective":"Investor Perspective")),
+      React.createElement("div",{style:{flex:1}}),
+      !token&&React.createElement("button",{onClick:()=>{setShowModal(true);setViewOnly(false);},style:{fontSize:11,color:PWC.orange,background:"none",border:`1px solid ${PWC.orange}`,borderRadius:4,padding:"4px 12px",cursor:"pointer",fontFamily:"Arial,sans-serif",fontWeight:"bold",marginRight:4,marginBottom:2}},"Enter token to edit"),
+      token&&React.createElement("button",{onClick:()=>{clearToken();setTokenState(null);setViewOnly(true);},style:{fontSize:10,color:PWC.grey500,background:"none",border:`1px solid ${PWC.grey300}`,borderRadius:4,padding:"3px 10px",cursor:"pointer",fontFamily:"Arial,sans-serif",marginRight:4,marginBottom:2}},"Disconnect")),
+    view==="owner"&&React.createElement(AssessmentView,{title:"One infrastructure capability assessment",subtitle:"Owner perspective \u2014 Internal view",personas:fwOwner?fwOwner.personas.map(p=>({...p,capabilities:new Set(p.capabilities)})):OWNER_PERSONAS,phases:fwOwner?fwOwner.phases:OWNER_PHASES,phaseColors:fwOwner?fwOwner.phaseColors:ownerColors,defaultData:fwOwner?fwOwner.categories:OWNER_DEFAULT,dataFile:"data/owner_edits.json",showRisk:true,token}),
+    view==="investor"&&React.createElement(AssessmentView,{title:"One infrastructure capability assessment",subtitle:"Investor perspective \u2014 Internal view",personas:fwInvestor?fwInvestor.personas.map(p=>({...p,capabilities:new Set(p.capabilities)})):INVESTOR_PERSONAS,phases:fwInvestor?fwInvestor.phases:INVESTOR_PHASES,phaseColors:fwInvestor?fwInvestor.phaseColors:investorColors,defaultData:fwInvestor?fwInvestor.categories:INVESTOR_DEFAULT,dataFile:"data/investor_edits.json",showRisk:false,token}));
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+</script>
+</body>
+</html>

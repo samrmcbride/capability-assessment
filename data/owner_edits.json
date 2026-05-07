@@ -4,7 +4,7 @@
     "items": [
       {
         "poc": "Earl Simpkins",
-        "team": "Strategy&",
+        "team": "Strategy& / Team",
         "status": "scale"
       },
       {
@@ -74,22 +74,22 @@
     "items": [
       {
         "poc": "Tom Hylton",
-        "team": "Deals — Capital Markets",
+        "team": "Deals â Capital Markets",
         "status": "scale"
       },
       {
         "poc": "Tom Hylton",
-        "team": "Deals — Capital Markets",
+        "team": "Deals â Capital Markets",
         "status": "scale"
       },
       {
         "poc": "Kyle West",
-        "team": "Deals — FDD",
+        "team": "Deals â FDD",
         "status": "scale"
       },
       {
         "poc": "Tiffany Chu",
-        "team": "Deals — Tax DD",
+        "team": "Deals â Tax DD",
         "status": "scale"
       },
       {
@@ -104,7 +104,7 @@
       },
       {
         "poc": "",
-        "team": "Deals — Valuation",
+        "team": "Deals â Valuation",
         "status": "scale"
       },
       {
@@ -114,7 +114,7 @@
       },
       {
         "poc": "",
-        "team": "Deals — Integration",
+        "team": "Deals â Integration",
         "status": "enhance"
       }
     ]

@@ -168,7 +168,7 @@
           "start": 0,
           "end": 1,
           "status": "scale",
-          "poc": "",
+          "poc": "Tara Woram",
           "team": "Strategy& / Deals",
           "q": [
             "Are we originating opportunities with proprietary relationships, or relying on inbound deal flow and competitive processes?",
@@ -180,7 +180,7 @@
           "start": 0,
           "end": 0,
           "status": "scale",
-          "poc": "",
+          "poc": "Tom Hylton",
           "team": "Deals — Capital Markets",
           "q": [
             "Are we positioned competitively for the next fund raise — what’s our track record story and how does it compare to peers?",
@@ -192,13 +192,18 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Erika Ryback",
           "team": "Assurance / CMAAS",
           "q": [
             "Are our LP reports meeting rising expectations for transparency, frequency, and ESG disclosure?",
             "Can we produce ad-hoc LP requests quickly without a fire drill?"
           ]
         }
+      ],
+      "risk": "Raising a fund without a differentiated thesis, or deploying capital into opportunities that don’t match LP expectations — eroding credibility for the next fundraise before the current one is fully deployed.",
+      "lq": [
+        "Is our investment thesis differentiated enough to win capital in a competitive fundraise — and can we demonstrate the track record to back it up?",
+        "Are we deploying capital with the discipline to say no when an opportunity doesn’t fit the thesis, even when deal flow is thin?"
       ]
     },
     {
@@ -271,7 +276,7 @@
           "start": 0,
           "end": 2,
           "status": "scale",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals / Tax",
           "q": [
             "Are our co-investment structures aligned with partner objectives while protecting our economics?",
@@ -283,7 +288,7 @@
           "start": 1,
           "end": 3,
           "status": "scale",
-          "poc": "",
+          "poc": "Tiffany Chu",
           "team": "Transfer Pricing / Infrastructure Tax",
           "q": [
             "Are intercompany arrangements across our portfolio defensible and optimized?",
@@ -331,13 +336,18 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Tiffany Chu",
           "team": "Infrastructure Tax / Assurance",
           "q": [
             "Are we maintaining REIT qualification without constraining investment flexibility?",
             "Are compliance monitoring processes robust enough to catch issues before they become problems?"
           ]
         }
+      ],
+      "risk": "Fund structures that create friction with target investors, or asset-level tax strategies that don’t flow benefits efficiently to LPs — leaving value trapped between layers of the structure.",
+      "lq": [
+        "Is our fund structure creating barriers for the LP segments we most want to attract — and would a restructuring unlock meaningful new capital?",
+        "Are we capturing tax value at the asset level and flowing it through to investors efficiently, or is value leaking between layers of our structure?"
       ]
     },
     {
@@ -422,7 +432,7 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals — Valuation",
           "q": [
             "Is our valuation methodology consistent across the portfolio and defensible to LPs and auditors?",
@@ -434,7 +444,7 @@
           "start": 0,
           "end": 2,
           "status": "scale",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals / Strategy&",
           "q": [
             "Do we understand the regulatory, competitive, and operational landscape of this market?",
@@ -458,7 +468,7 @@
           "start": 2,
           "end": 3,
           "status": "enhance",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals — Integration",
           "q": [
             "Do we have a value creation plan from day one, and who is accountable for execution?",
@@ -470,13 +480,18 @@
           "start": 1,
           "end": 2,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "CP&I / Deals",
           "q": [
             "Are our lenders getting the independent assurance they need to maintain confidence?",
             "Is our technical reporting aligned with what lenders actually want to see?"
           ]
         }
+      ],
+      "risk": "Overpaying for an asset, missing diligence red flags, or closing on terms that erode returns over the hold period — turning a good thesis into a bad investment.",
+      "lq": [
+        "Are we underwriting to a base case that would survive scrutiny from our toughest LP — or are we relying on assumptions that make the deal work on paper?",
+        "If diligence surfaces a material issue at the eleventh hour, do we have the discipline to walk away or renegotiate rather than close a compromised deal?"
       ]
     },
     {
@@ -489,7 +504,7 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "Risk & Regulatory / Assurance",
           "q": [
             "Is our fund governance keeping pace with regulatory expectations and LP scrutiny?",
@@ -501,7 +516,7 @@
           "start": 1,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "Risk & Regulatory",
           "q": [
             "Are we ahead of evolving regulatory requirements, or at risk of being caught off guard?",
@@ -513,7 +528,7 @@
           "start": 0,
           "end": 4,
           "status": "enhance",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals / Advisory",
           "q": [
             "Are we managing LP relationships proactively, or only when it’s time to fundraise?",
@@ -525,7 +540,7 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Meredith Strong",
           "team": "ESG & Sustainability",
           "q": [
             "Can we demonstrate ESG impact with data, or are our commitments still aspirational?",
@@ -537,7 +552,7 @@
           "start": 1,
           "end": 3,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "Risk Advisory",
           "q": [
             "Do we have a portfolio-wide risk view, or are we managing risk asset by asset?",
@@ -549,7 +564,7 @@
           "start": 2,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "Advisory / Operations Consulting",
           "q": [
             "Are our portfolio company boards effective, and do we have the right level of oversight?",
@@ -561,13 +576,18 @@
           "start": 1,
           "end": 4,
           "status": "enhance",
-          "poc": "",
+          "poc": "Meredith Strong",
           "team": "Cybersecurity & Privacy",
           "q": [
             "Is cybersecurity a board-level topic for our portfolio companies? Where are we most exposed?",
             "Have we assessed cyber risk across the portfolio, and do we have incident response plans?"
           ]
         }
+      ],
+      "risk": "Regulatory surprises, LP trust erosion, or portfolio-level risk concentrations that aren’t visible until it’s too late — threatening fund performance and the GP’s reputation.",
+      "lq": [
+        "If a major regulatory change hit our portfolio tomorrow, do we have the governance infrastructure to assess exposure and respond across all assets in weeks, not months?",
+        "Are we managing LP relationships with enough transparency that bad news is a conversation, not a crisis?"
       ]
     },
     {
@@ -580,7 +600,7 @@
           "start": 2,
           "end": 3,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "Operations Consulting / CP&I",
           "q": [
             "Do we have a repeatable playbook for driving EBITDA improvement across portfolio companies?",
@@ -604,7 +624,7 @@
           "start": 2,
           "end": 3,
           "status": "enhance",
-          "poc": "",
+          "poc": "Michael Kohl",
           "team": "Operations Consulting",
           "q": [
             "Are we capturing procurement synergies across the portfolio?",
@@ -640,13 +660,18 @@
           "start": 3,
           "end": 4,
           "status": "enhance",
-          "poc": "",
+          "poc": "Michael Kohl",
           "team": "Operations Consulting / Restructuring",
           "q": [
             "When an asset underperforms, how quickly can we diagnose the problem and deploy a fix?",
             "Do we have the bench strength and playbook to execute a turnaround, or do we need outside help?"
           ]
         }
+      ],
+      "risk": "Acquiring assets with a value creation thesis but lacking the operational capability or discipline to execute it — leaving underwriting assumptions unrealized at exit.",
+      "lq": [
+        "Do we have a repeatable value creation playbook that works across asset types, or are we reinventing the approach with every deal?",
+        "Are we measuring value creation with the same rigor we apply to underwriting — and holding ourselves accountable when initiatives fall short?"
       ]
     },
     {
@@ -671,7 +696,7 @@
           "start": 1,
           "end": 3,
           "status": "scale",
-          "poc": "",
+          "poc": "Matt Cardamone",
           "team": "Digital / Data Analytics",
           "q": [
             "Can we produce reliable, auditable data across the portfolio on demand?",
@@ -683,7 +708,7 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Kyle West",
           "team": "Deals — Valuation / Technology",
           "q": [
             "Is our waterfall model robust enough to handle complex multi-tier structures and edge cases?",
@@ -695,7 +720,7 @@
           "start": 2,
           "end": 4,
           "status": "enhance",
-          "poc": "",
+          "poc": "Matt Cardamone",
           "team": "Digital / Data Analytics",
           "q": [
             "Are we benchmarking portfolio company performance against the right peers?",
@@ -714,6 +739,11 @@
             "Are we positioned to capture AI upside while protecting against reputational and regulatory risk?"
           ]
         }
+      ],
+      "risk": "Operating with fragmented data across the portfolio, making it impossible to see the full picture or report with confidence — undermining LP trust and decision-making speed.",
+      "lq": [
+        "Can we produce a reliable, portfolio-wide performance view on demand — or does every reporting cycle require manual reconciliation across disconnected systems?",
+        "Are we investing in technology at the fund level that will scale with AUM growth, or patching together tools that will break under the weight of the next fund?"
       ]
     },
     {
@@ -726,7 +756,7 @@
           "start": 3,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Daryl Walcroft",
           "team": "CP&I / Asset Management",
           "q": [
             "Are we managing each asset for maximum exit value, or just steady-state performance?",
@@ -738,7 +768,7 @@
           "start": 3,
           "end": 3,
           "status": "enhance",
-          "poc": "",
+          "poc": "Meredith Strong",
           "team": "Sustainability / Operations",
           "q": [
             "Is energy cost and resilience a competitive advantage or a vulnerability for our assets?",
@@ -750,7 +780,7 @@
           "start": 3,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Erika Ryback",
           "team": "CMAAS / Assurance",
           "q": [
             "Are our reporting processes efficient enough to support timely LP reporting and audit cycles?",
@@ -762,7 +792,7 @@
           "start": 0,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Erika Ryback",
           "team": "CMAAS / Fund Services",
           "q": [
             "Is our NAV calculation methodology consistent, defensible, and meeting LP expectations?",
@@ -774,7 +804,7 @@
           "start": 3,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Erika Ryback",
           "team": "Internal Audit Services",
           "q": [
             "Are we auditing the right things at the right frequency across the portfolio?",
@@ -810,13 +840,18 @@
           "start": 4,
           "end": 4,
           "status": "scale",
-          "poc": "",
+          "poc": "Tiffany Chu",
           "team": "Tax / Assurance / Legal",
           "q": [
             "Do we have a clear wind-down plan that addresses tail liabilities and LP expectations?",
             "Are we managing the final distributions and reporting with the same rigor as the rest of the fund lifecycle?"
           ]
         }
+      ],
+      "risk": "Starting exit preparation too late, leaving value on the table, or getting surprised by issues a buyer’s diligence uncovers first — compressing proceeds and damaging track record.",
+      "lq": [
+        "Are we actively managing each asset toward an exit thesis from acquisition — or do we start thinking about exit when the fund timeline forces it?",
+        "If a buyer ran diligence on our top asset today, would they find issues we haven’t already identified and addressed?"
       ]
     }
   ]

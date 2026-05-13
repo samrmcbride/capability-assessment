@@ -168,9 +168,9 @@
       "id": "investment",
       "num": "01",
       "title": "Capital & investment strategy",
-      "risk": "Committing capital to the wrong project, at the wrong scale, at the wrong time — and not finding out until you’re too far in to walk away.",
+      "risk": "Committing capital to the wrong project, at the wrong scale, at the wrong time - and not finding out until you’re too far in to walk away.",
       "lq": [
-        "Are we building for the demand profile we’ll face in 5 years, or the one we see today — and what happens if the market moves faster than our construction timeline?",
+        "Are we building for the demand profile we’ll face in 5 years, or the one we see today - and what happens if the market moves faster than our construction timeline?",
         "Have we pressure-tested whether our capital program can survive a significant shift in power costs, interest rates, or supply chain lead times hitting simultaneously?"
       ],
       "items": [
@@ -194,7 +194,7 @@
           "poc": "Daryl Walcroft",
           "team": "CP&I Strategy",
           "q": [
-            "Are our assumptions stress-tested — what happens if costs overrun 20% or demand shifts?",
+            "Are our assumptions stress-tested - what happens if costs overrun 20% or demand shifts?",
             "Who owns the business case after approval, and how often do we revisit it against actuals?"
           ]
         },
@@ -206,7 +206,7 @@
           "poc": "Daryl Walcroft",
           "team": "CP&I Strategy / Real Estate",
           "q": [
-            "Are we evaluating sites against the full cost stack — land, power, labor, tax, permitting, resilience?",
+            "Are we evaluating sites against the full cost stack - land, power, labor, tax, permitting, resilience?",
             "How does our site strategy align with our long-term energy and sustainability commitments?"
           ]
         },
@@ -254,7 +254,7 @@
       "title": "Structuring, tax & incentives",
       "risk": "Structuring in a way that leaves millions in uncaptured incentives, or structures that unravel under regulatory change or audit.",
       "lq": [
-        "If the incentive landscape shifts mid-project — credits reduced, clawback provisions triggered, or new compliance requirements — does our structure still work?",
+        "If the incentive landscape shifts mid-project - credits reduced, clawback provisions triggered, or new compliance requirements - does our structure still work?",
         "Are we confident that our tax and incentive strategy is being designed at the same pace as our engineering and procurement decisions, or is tax catching up after commitments are already made?"
       ],
       "items": [
@@ -348,10 +348,10 @@
       "id": "financing",
       "num": "03",
       "title": "Financing & transactions",
-      "risk": "Not being able to close financing, or closing on terms that erode returns — whether because capital markets shifted, diligence uncovered issues the model didn’t anticipate, or the project timeline slipped past the financing window.",
+      "risk": "Not being able to close financing, or closing on terms that erode returns - whether because capital markets shifted, diligence uncovered issues the model didn’t anticipate, or the project timeline slipped past the financing window.",
       "lq": [
-        "If our financing timeline slips by 6 months due to market volatility or permitting delays, do we have a capital bridge — or does the project stall?",
-        "Are we underwriting to a realistic base case on cost, schedule, and technical performance — or are we relying on assumptions that haven’t been independently stress-tested against what actually happens on projects of this scale?"
+        "If our financing timeline slips by 6 months due to market volatility or permitting delays, do we have a capital bridge - or does the project stall?",
+        "Are we underwriting to a realistic base case on cost, schedule, and technical performance - or are we relying on assumptions that haven’t been independently stress-tested against what actually happens on projects of this scale?"
       ],
       "items": [
         {
@@ -360,7 +360,7 @@
           "end": 1,
           "status": "scale",
           "poc": "Tom Hylton",
-          "team": "Deals — Capital Markets",
+          "team": "Deals - Capital Markets",
           "q": [
             "Are we accessing the broadest set of capital sources with the right equity story?",
             "Is our capital structure optimized for this phase of growth, or are we over- or under-equitized?"
@@ -372,7 +372,7 @@
           "end": 2,
           "status": "scale",
           "poc": "Tom Hylton",
-          "team": "Deals — Capital Markets",
+          "team": "Deals - Capital Markets",
           "q": [
             "Are our financing terms competitive, and have we stress-tested debt capacity under downside scenarios?",
             "Do we have covenant headroom for the next 2–3 years under realistic assumptions?"
@@ -384,7 +384,7 @@
           "end": 1,
           "status": "scale",
           "poc": "Kyle West",
-          "team": "Deals — FDD",
+          "team": "Deals - FDD",
           "q": [
             "Do we have full visibility into the financial health of what we’re acquiring?",
             "Are the seller’s projections grounded in contractual reality, or built on optimistic assumptions?"
@@ -396,7 +396,7 @@
           "end": 1,
           "status": "scale",
           "poc": "Tiffany Chu",
-          "team": "Deals — Tax DD",
+          "team": "Deals - Tax DD",
           "q": [
             "Are there historical tax positions in the target that could create exposure post-close?",
             "Are we capturing the full tax synergies available in this deal structure?"
@@ -422,7 +422,7 @@
           "poc": "",
           "team": "CP&I / Engineering",
           "q": [
-            "What’s the true condition of the asset — are there deferred maintenance or capacity constraints?",
+            "What’s the true condition of the asset - are there deferred maintenance or capacity constraints?",
             "What’s the real CapEx needed to bring this asset to our operating standard?"
           ]
         },
@@ -432,7 +432,7 @@
           "end": 1,
           "status": "scale",
           "poc": "Kyle West",
-          "team": "Deals — Valuation",
+          "team": "Deals - Valuation",
           "q": [
             "Is our valuation methodology appropriate and defensible to stakeholders?",
             "Are we paying a fair price, or are competitive dynamics inflating the bid?"
@@ -456,7 +456,7 @@
           "end": 2,
           "status": "enhance",
           "poc": "Kyle West",
-          "team": "Deals — Integration",
+          "team": "Deals - Integration",
           "q": [
             "Do we have a 100-day integration plan that protects value from day one?",
             "Who is accountable for realizing the synergies we underwrote in the business case?"
@@ -468,9 +468,9 @@
       "id": "governance",
       "num": "04",
       "title": "Governance, risk & compliance",
-      "risk": "A regulatory, permitting, or community opposition issue stops the project cold — not because of engineering, but because of process, politics, or oversight failure.",
+      "risk": "A regulatory, permitting, or community opposition issue stops the project cold - not because of engineering, but because of process, politics, or oversight failure.",
       "lq": [
-        "What is the single regulatory or permitting dependency that, if delayed 12 months, would fundamentally change the project economics — and what’s our plan B?",
+        "What is the single regulatory or permitting dependency that, if delayed 12 months, would fundamentally change the project economics - and what’s our plan B?",
         "Are we treating community engagement and political risk with the same rigor as technical risk, or assuming approvals will come because the economics make sense?"
       ],
       "items": [
@@ -543,7 +543,7 @@
           "team": "Workforce Transformation",
           "q": [
             "Are the people who need to change actually bought in, or just compliant on paper?",
-            "What’s our plan when resistance surfaces — do we have early warning indicators?"
+            "What’s our plan when resistance surfaces - do we have early warning indicators?"
           ]
         },
         {
@@ -591,7 +591,7 @@
           "team": "Risk Advisory",
           "q": [
             "Do we have a risk register that’s actually used for decisions, or is it a compliance artifact?",
-            "What’s the risk we’re not talking about — the one that could change everything?"
+            "What’s the risk we’re not talking about - the one that could change everything?"
           ]
         }
       ]
@@ -600,9 +600,9 @@
       "id": "delivery",
       "num": "05",
       "title": "Program delivery & controls",
-      "risk": "The project runs over budget, over schedule, or delivers an asset that doesn’t perform to spec — the classic capital project failure mode.",
+      "risk": "The project runs over budget, over schedule, or delivers an asset that doesn’t perform to spec - the classic capital project failure mode.",
       "lq": [
-        "If our lead contractor or a critical equipment supplier fails to deliver, what’s our recovery plan — and have we actually tested it, or is it theoretical?",
+        "If our lead contractor or a critical equipment supplier fails to deliver, what’s our recovery plan - and have we actually tested it, or is it theoretical?",
         "Are we managing this program with the same intensity in month 18 as we did in month 1, or has governance fatigue set in while the hardest work is still ahead?"
       ],
       "items": [
@@ -626,7 +626,7 @@
           "poc": "Daryl Walcroft",
           "team": "CP&I Delivery",
           "q": [
-            "Do we know our true cost position right now — not last month’s?",
+            "Do we know our true cost position right now - not last month’s?",
             "Where are the biggest variances trending, and what’s the corrective action plan?"
           ]
         },
@@ -675,7 +675,7 @@
           "team": "CP&I / Supply Chain",
           "q": [
             "Do we have visibility into Tier 2 and Tier 3 suppliers?",
-            "What happens if a key supplier fails — do we have a tested backup plan?"
+            "What happens if a key supplier fails - do we have a tested backup plan?"
           ]
         },
         {
@@ -747,7 +747,7 @@
       "risk": "Making a major technology bet that becomes obsolete before the asset is operational, or failing to integrate systems in a way that creates blind spots.",
       "lq": [
         "Are we making technology choices today that lock us into a vendor or architecture that may not be the right answer by the time this asset is fully operational?",
-        "Do we have a single source of truth across engineering, procurement, construction, and finance — or are we running parallel systems that will diverge under pressure?"
+        "Do we have a single source of truth across engineering, procurement, construction, and finance - or are we running parallel systems that will diverge under pressure?"
       ],
       "items": [
         {
@@ -807,7 +807,7 @@
           "team": "Technology Consulting",
           "q": [
             "Which high-volume, low-value processes should be automated first?",
-            "What’s the business case — labor savings, speed, error reduction, or all three?"
+            "What’s the business case - labor savings, speed, error reduction, or all three?"
           ]
         },
         {
@@ -830,7 +830,7 @@
       "title": "Operations & asset optimization",
       "risk": "The asset underperforms from day one because operations wasn’t ready, or ongoing costs erode the returns that justified the investment.",
       "lq": [
-        "If the asset reaches mechanical completion on schedule, can we actually operate it at design capacity from day one — and what’s the revenue impact of every month of ramp-up delay?",
+        "If the asset reaches mechanical completion on schedule, can we actually operate it at design capacity from day one - and what’s the revenue impact of every month of ramp-up delay?",
         "Are our operating cost assumptions based on benchmarked reality, or did we inherit the developer’s pro forma and never pressure-test it against actual comparable facilities?"
       ],
       "items": [
@@ -855,7 +855,7 @@
           "team": "CP&I / Asset Management",
           "q": [
             "Are we managing assets for maximum lifecycle value, or just keeping them running?",
-            "When does it make more sense to replace than maintain — and do we have a framework for that call?"
+            "When does it make more sense to replace than maintain - and do we have a framework for that call?"
           ]
         },
         {
@@ -926,7 +926,7 @@
           "poc": "Meredith Strong",
           "team": "ESG & Sustainability",
           "q": [
-            "Are we actively monitoring and adapting to physical climate risks — extreme weather, water stress, grid reliability — at each operating site?",
+            "Are we actively monitoring and adapting to physical climate risks - extreme weather, water stress, grid reliability - at each operating site?",
             "Are our climate risk disclosures and reporting keeping pace with evolving regulatory and stakeholder expectations?"
           ]
         },
@@ -951,7 +951,7 @@
           "team": "CP&I / Asset Management",
           "q": [
             "Is our maintenance strategy predictive or reactive?",
-            "Are we spending the right amount on maintenance — not too much, not too little?"
+            "Are we spending the right amount on maintenance - not too much, not too little?"
           ]
         },
         {
@@ -975,7 +975,7 @@
           "team": "Operations Consulting",
           "q": [
             "If an asset is underperforming, do we have a playbook to diagnose and fix it fast?",
-            "At what point do we cut losses versus invest in a turnaround — and who makes that call?"
+            "At what point do we cut losses versus invest in a turnaround - and who makes that call?"
           ]
         }
       ]

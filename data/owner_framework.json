@@ -132,7 +132,7 @@
     {
       "id": "clo",
       "label": "Chief Legal / Commercial Officer",
-      "description": "Contracting strategy, risk allocation, lease and customer terms, development agreements, power procurement terms, incentive agreements, and documentation rights",
+      "description": "Contracting strategy, risk allocation, commercial terms, power procurement, documentation rights",
       "capabilities": [
         "Business case & feasibility",
         "Tax credits & incentives",
@@ -221,7 +221,8 @@
           "q": [
             "Do we have a clear view of our total capital portfolio and where each asset sits in its lifecycle?",
             "Are we allocating capital to the highest-return opportunities or just funding the loudest voices?"
-          ]
+          ],
+          "desc": "Strategic planning and prioritization of capital investments across the asset portfolio, including lifecycle positioning, capital allocation frameworks, and long-range investment roadmaps."
         },
         {
           "name": "Business case & feasibility",
@@ -233,7 +234,8 @@
           "q": [
             "Are our assumptions stress-tested - what happens if costs overrun 20% or demand shifts?",
             "Who owns the business case after approval, and how often do we revisit it against actuals?"
-          ]
+          ],
+          "desc": "Development and stress-testing of investment business cases, including demand analysis, cost modeling, risk-adjusted returns, and ongoing tracking of actuals against approved assumptions."
         },
         {
           "name": "Site assessment & location advisory",
@@ -245,7 +247,8 @@
           "q": [
             "Are we evaluating sites against the full cost stack - land, power, labor, tax, permitting, resilience?",
             "How does our site strategy align with our long-term energy and sustainability commitments?"
-          ]
+          ],
+          "desc": "Evaluation of potential sites against the full cost stack — land, power availability, labor markets, tax and incentive landscape, permitting complexity, and long-term resilience factors."
         },
         {
           "name": "Investment prioritization",
@@ -257,7 +260,8 @@
           "q": [
             "When we have more opportunities than capital, what’s the decision framework?",
             "Are we comparing projects on a consistent, risk-adjusted basis across the portfolio?"
-          ]
+          ],
+          "desc": "Structured frameworks for ranking and selecting capital investments when opportunities exceed available capital, using consistent risk-adjusted criteria across the portfolio."
         },
         {
           "name": "Post investment review",
@@ -269,7 +273,8 @@
           "q": [
             "After major investments, are we systematically capturing what worked and what didn’t?",
             "Are lessons from past projects actually feeding into the next business case?"
-          ]
+          ],
+          "desc": "Systematic assessment of completed investments to capture lessons learned, compare outcomes to original business case assumptions, and feed insights into future decision-making."
         },
         {
           "name": "Climate & resilience risk screening",
@@ -281,7 +286,8 @@
           "q": [
             "Have we assessed the physical and transition climate risks to this asset over its expected life?",
             "Could climate-related regulatory changes, energy cost shifts, or physical hazards fundamentally alter the investment thesis?"
-          ]
+          ],
+          "desc": "Pre-investment assessment of physical and transition climate risks, including regulatory exposure, energy cost volatility, and long-term asset viability under multiple climate scenarios."
         }
       ]
     },
@@ -305,7 +311,8 @@
           "q": [
             "Are we identifying every eligible credit at federal, state, and local levels before breaking ground?",
             "Are we structured to actually capture and monetize the credits we’re eligible for?"
-          ]
+          ],
+          "desc": "Identification, structuring, and monetization of federal, state, and local tax credits — including ITC, PTC, and transferability provisions — to maximize after-tax project returns."
         },
         {
           "name": "Grants, abatements & exemptions",
@@ -317,7 +324,8 @@
           "q": [
             "Have we modeled the full incentive value over the asset’s life, including clawback risk?",
             "Are we negotiating the best possible terms, or accepting standard packages?"
-          ]
+          ],
+          "desc": "Evaluation, negotiation, and lifecycle management of government grants, property tax abatements, and sales tax exemptions, including clawback risk modeling and compliance monitoring."
         },
         {
           "name": "Joint ventures & partnerships",
@@ -329,7 +337,8 @@
           "q": [
             "Is our JV structure optimized for each partner’s tax position and risk appetite?",
             "Who bears the downside if the partnership underperforms, and is that fair?"
-          ]
+          ],
+          "desc": "Structuring and optimization of joint venture arrangements, including partner alignment on economics, tax positions, governance, risk allocation, and downside protection."
         },
         {
           "name": "Entity & investor structuring",
@@ -341,7 +350,8 @@
           "q": [
             "Is our entity structure fit for purpose across all jurisdictions, or carrying legacy complexity?",
             "Can our current structure flex to accommodate different investor types without restructuring?"
-          ]
+          ],
+          "desc": "Design of legal entity structures across jurisdictions to optimize tax efficiency, accommodate diverse investor types, and maintain flexibility for future capital events."
         },
         {
           "name": "Tax optimization & transfer pricing",
@@ -353,7 +363,8 @@
           "q": [
             "Are our intercompany arrangements defensible under audit?",
             "Are we proactively managing transfer pricing as the business evolves, or waiting for a challenge?"
-          ]
+          ],
+          "desc": "Ongoing management of intercompany arrangements and transfer pricing policies to ensure tax efficiency across the enterprise while maintaining audit defensibility."
         },
         {
           "name": "Cost segregation analysis",
@@ -365,7 +376,8 @@
           "q": [
             "Have we done a cost segregation study on recent builds to accelerate depreciation?",
             "Are we leaving cash flow on the table by using default asset classifications?"
-          ]
+          ],
+          "desc": "Engineering-based study of constructed or acquired assets to reclassify building components into shorter depreciation categories, accelerating tax deductions and improving cash flow."
         },
         {
           "name": "Customs & trade planning",
@@ -377,7 +389,8 @@
           "q": [
             "Are we factoring tariff exposure and trade policy volatility into procurement decisions?",
             "Have we evaluated foreign trade zone benefits for our key sites?"
-          ]
+          ],
+          "desc": "Strategic management of tariff exposure, trade policy volatility, and foreign trade zone benefits as they apply to equipment procurement, construction materials, and ongoing operations."
         }
       ]
     },
@@ -401,7 +414,8 @@
           "q": [
             "Are we accessing the broadest set of capital sources with the right equity story?",
             "Is our capital structure optimized for this phase of growth, or are we over- or under-equitized?"
-          ]
+          ],
+          "desc": "Advisory on equity capital raises, including investor targeting, equity story development, capital structure optimization, and negotiation of terms with equity partners."
         },
         {
           "name": "Debt raise & capital markets",
@@ -413,7 +427,8 @@
           "q": [
             "Are our financing terms competitive, and have we stress-tested debt capacity under downside scenarios?",
             "Do we have covenant headroom for the next 2–3 years under realistic assumptions?"
-          ]
+          ],
+          "desc": "Structuring and execution of debt financing, including bank lending, bond issuances, and project finance — with stress-testing of covenant headroom and refinancing risk."
         },
         {
           "name": "Financial due diligence",
@@ -425,7 +440,8 @@
           "q": [
             "Do we have full visibility into the financial health of what we’re acquiring?",
             "Are the seller’s projections grounded in contractual reality, or built on optimistic assumptions?"
-          ]
+          ],
+          "desc": "Assessment of a target's financial health during a transaction, including quality of earnings, working capital analysis, debt and liability review, and validation of management projections."
         },
         {
           "name": "Tax due diligence",
@@ -437,7 +453,8 @@
           "q": [
             "Are there historical tax positions in the target that could create exposure post-close?",
             "Are we capturing the full tax synergies available in this deal structure?"
-          ]
+          ],
+          "desc": "Analysis of historical and current tax positions in an acquisition target to identify exposures, quantify risks, and capture available tax synergies in the deal structure."
         },
         {
           "name": "Commercial due diligence",
@@ -449,7 +466,8 @@
           "q": [
             "Is the market thesis behind this investment sound and independently validated?",
             "Are demand projections based on contracts, letters of intent, or just management forecasts?"
-          ]
+          ],
+          "desc": "Independent validation of the market thesis behind an investment, including demand drivers, competitive positioning, customer contract quality, and revenue sustainability."
         },
         {
           "name": "Technical due diligence",
@@ -461,7 +479,8 @@
           "q": [
             "What’s the true condition of the asset - are there deferred maintenance or capacity constraints?",
             "What’s the real CapEx needed to bring this asset to our operating standard?"
-          ]
+          ],
+          "desc": "Independent assessment of an asset's physical condition, design adequacy, deferred maintenance, capacity constraints, and the true capital expenditure required to meet operating standards."
         },
         {
           "name": "Valuation",
@@ -473,7 +492,8 @@
           "q": [
             "Is our valuation methodology appropriate and defensible to stakeholders?",
             "Are we paying a fair price, or are competitive dynamics inflating the bid?"
-          ]
+          ],
+          "desc": "Application of defensible valuation methodologies — DCF, comparable transactions, and precedent analysis — to establish fair value for transactions, reporting, or strategic planning."
         },
         {
           "name": "Market entry & structuring",
@@ -485,7 +505,8 @@
           "q": [
             "Are we entering this market with the right vehicle and at the right time?",
             "What’s our competitive advantage versus incumbents, and is it sustainable?"
-          ]
+          ],
+          "desc": "Advisory on entering new markets or asset classes, including competitive landscape assessment, regulatory environment, optimal entry vehicle, and go-to-market structuring."
         },
         {
           "name": "Post-deal integration",
@@ -497,7 +518,8 @@
           "q": [
             "Do we have a 100-day integration plan that protects value from day one?",
             "Who is accountable for realizing the synergies we underwrote in the business case?"
-          ]
+          ],
+          "desc": "Planning and execution of post-close integration, including day-one readiness, synergy tracking, organizational alignment, and the transition from deal team to operational ownership."
         }
       ]
     },
@@ -521,7 +543,8 @@
           "q": [
             "Do we have the right governance structure to make decisions at the speed this program requires?",
             "Are decision rights clear, or do things stall in committee?"
-          ]
+          ],
+          "desc": "Design and implementation of program governance structures, including decision rights, reporting cadences, escalation protocols, and committee frameworks scaled to program complexity."
         },
         {
           "name": "Regulatory strategy",
@@ -533,7 +556,8 @@
           "q": [
             "Are we ahead of the regulatory curve, or purely reactive?",
             "Which upcoming regulations could fundamentally change our project economics?"
-          ]
+          ],
+          "desc": "Proactive identification and management of regulatory requirements that could impact project economics, including permitting pathways, environmental approvals, and emerging regulatory trends."
         },
         {
           "name": "Regulatory & governance compliance",
@@ -545,7 +569,8 @@
           "q": [
             "Are we confident we’d pass a regulatory audit today?",
             "Where are the compliance blind spots we haven’t stress-tested?"
-          ]
+          ],
+          "desc": "Ongoing monitoring and assurance of compliance with regulatory obligations, permit conditions, and internal governance standards across the project lifecycle."
         },
         {
           "name": "Stakeholder management",
@@ -557,7 +582,8 @@
           "q": [
             "Have we mapped all stakeholders with a strategy for each?",
             "Where could opposition derail the project, and do we have a mitigation plan?"
-          ]
+          ],
+          "desc": "Mapping and engagement of all project stakeholders — community groups, regulators, political bodies, and partners — with tailored strategies to build support and mitigate opposition risk."
         },
         {
           "name": "Organizational design",
@@ -569,7 +595,8 @@
           "q": [
             "Is our organization designed around the work that needs to happen, or around legacy structures?",
             "Do we have the right spans of control and decision authority for execution speed?"
-          ]
+          ],
+          "desc": "Design of organizational structures, roles, and decision authority to match the operational demands of the program, moving beyond legacy structures to execution-oriented models."
         },
         {
           "name": "Change management",
@@ -581,7 +608,8 @@
           "q": [
             "Are the people who need to change actually bought in, or just compliant on paper?",
             "What’s our plan when resistance surfaces - do we have early warning indicators?"
-          ]
+          ],
+          "desc": "Structured approach to driving adoption and behavior change across the organization, including stakeholder readiness assessment, resistance management, and sustained engagement."
         },
         {
           "name": "Sustainability, ESG & carbon reporting",
@@ -593,7 +621,8 @@
           "q": [
             "Can we substantiate our ESG commitments with data, or are they still aspirational?",
             "Are we prepared for the reporting requirements coming in the next 2–3 years?"
-          ]
+          ],
+          "desc": "Measurement, reporting, and assurance of ESG commitments and carbon impact, including alignment with emerging disclosure frameworks and stakeholder reporting expectations."
         },
         {
           "name": "Workforce strategy & capability building",
@@ -605,7 +634,8 @@
           "q": [
             "Can we actually staff this program with the talent we need, in the markets we need it?",
             "Are we building long-term capability, or just filling seats to hit a milestone?"
-          ]
+          ],
+          "desc": "Planning for the talent and skills required to deliver and operate the asset, including labor market assessment, capability gap analysis, training programs, and long-term workforce development."
         },
         {
           "name": "Health & safety advisory",
@@ -617,7 +647,8 @@
           "q": [
             "Are our safety systems designed for the specific risks of this project?",
             "Where are we most exposed, and are our leading indicators actually leading?"
-          ]
+          ],
+          "desc": "Design and assurance of health and safety management systems tailored to project-specific risks, including leading indicator programs, incident response, and regulatory compliance."
         },
         {
           "name": "Risk management framework",
@@ -629,7 +660,8 @@
           "q": [
             "Do we have a risk register that’s actually used for decisions, or is it a compliance artifact?",
             "What’s the risk we’re not talking about - the one that could change everything?"
-          ]
+          ],
+          "desc": "Development and operationalization of enterprise risk frameworks that actively inform decisions — moving beyond compliance artifacts to tools that surface emerging and correlated risks."
         }
       ]
     },
@@ -653,7 +685,8 @@
           "q": [
             "Is our PMO set up to deliver, or is it just a reporting layer?",
             "Do project managers have the authority to make the calls they need to make?"
-          ]
+          ],
+          "desc": "Establishment and operation of the program management office, including governance, reporting, resource management, and the authority structure needed to drive execution."
         },
         {
           "name": "Cost management & controls",
@@ -665,7 +698,8 @@
           "q": [
             "Do we know our true cost position right now - not last month’s?",
             "Where are the biggest variances trending, and what’s the corrective action plan?"
-          ]
+          ],
+          "desc": "Real-time tracking and control of project costs, including budget management, variance analysis, forecasting, earned value reporting, and corrective action protocols."
         },
         {
           "name": "Schedule & risk management",
@@ -677,7 +711,8 @@
           "q": [
             "Are we managing schedule proactively, or just reporting delays after they happen?",
             "What’s on the critical path today, and what would it take to recover if it slips?"
-          ]
+          ],
+          "desc": "Proactive management of the project schedule, including critical path analysis, risk-based scheduling, delay mitigation, and recovery planning when milestones slip."
         },
         {
           "name": "Procurement strategy",
@@ -689,7 +724,8 @@
           "q": [
             "Are we getting the best value from our supply chain, or locked into suboptimal contracts?",
             "Are we single-sourced on anything critical, and what’s our contingency?"
-          ]
+          ],
+          "desc": "Development of sourcing strategies that balance cost, risk, and schedule — including contract type selection, market engagement, and supplier qualification frameworks."
         },
         {
           "name": "Commercial management",
@@ -701,7 +737,8 @@
           "q": [
             "Are our contracts actually protecting us in the ways that matter?",
             "When was the last time we assessed our claims exposure across the program?"
-          ]
+          ],
+          "desc": "Management of contractual relationships across the program lifecycle, including contract strategy, claims and disputes, change order administration, risk allocation, and commercial close-out."
         },
         {
           "name": "Supply chain execution",
@@ -713,7 +750,8 @@
           "q": [
             "Do we have visibility into Tier 2 and Tier 3 suppliers?",
             "What happens if a key supplier fails - do we have a tested backup plan?"
-          ]
+          ],
+          "desc": "End-to-end management of the project supply chain, including supplier performance monitoring, logistics coordination, Tier 2/3 visibility, and contingency planning for supplier failure."
         },
         {
           "name": "Construction oversight",
@@ -725,7 +763,8 @@
           "q": [
             "Are we confident the work in the field matches the design intent and quality spec?",
             "Who is independently verifying quality, and are they truly independent?"
-          ]
+          ],
+          "desc": "Independent monitoring of construction quality, progress, and compliance with design intent — ensuring the work in the field meets specifications before issues compound."
         },
         {
           "name": "Commissioning & handover",
@@ -737,7 +776,8 @@
           "q": [
             "Do we have a clear, agreed definition of ‘done’ that operations has signed off on?",
             "Is operations ready to take over on day one, or will there be a capability gap?"
-          ]
+          ],
+          "desc": "Structured process for testing, validating, and transferring the completed asset from the construction team to operations, including definition of completion criteria and readiness verification."
         },
         {
           "name": "Design management",
@@ -749,7 +789,8 @@
           "q": [
             "Are design decisions being made with the full cost-of-ownership in mind?",
             "Are we designing for constructability and operability, not just performance on paper?"
-          ]
+          ],
+          "desc": "Oversight of the design process to ensure decisions are made with full cost-of-ownership, constructability, and operability in mind — not just technical performance on paper."
         },
         {
           "name": "Technical advisory",
@@ -761,7 +802,8 @@
           "q": [
             "Do we have the right independent technical perspective, or are we relying entirely on the contractor?",
             "Are our technical advisors asking hard questions, or confirming what we want to hear?"
-          ]
+          ],
+          "desc": "Independent technical perspective on engineering decisions, contractor performance, and technical risk — providing the project owner with assurance beyond what the contractor delivers."
         },
         {
           "name": "Lender & investor technical advisory",
@@ -773,7 +815,8 @@
           "q": [
             "Are our lenders and investors getting the independent assurance they need?",
             "Is there a gap between what we’re reporting and what they need to see?"
-          ]
+          ],
+          "desc": "Independent technical assurance provided to lenders and investors, including progress reporting, risk assessment, and verification that the project meets financing requirements."
         },
         {
           "name": "Vendor selection",
@@ -785,7 +828,8 @@
           "q": [
             "Are we evaluating vendors against a consistent set of criteria - technical capability, financial stability, track record, and cultural fit?",
             "Is our vendor selection process fast enough to keep pace with the project timeline without compromising rigor?"
-          ]
+          ],
+          "desc": "Structured evaluation and selection of vendors and contractors against consistent criteria — technical capability, financial stability, track record, and alignment with project requirements."
         }
       ]
     },
@@ -809,7 +853,8 @@
           "q": [
             "Are our digital tools helping people do their jobs better, or just adding reporting overhead?",
             "Are we getting value from what we’ve already deployed before investing in the next platform?"
-          ]
+          ],
+          "desc": "Selection, deployment, and integration of digital tools to support project execution and reporting — including project controls platforms, collaboration tools, and data dashboards."
         },
         {
           "name": "Advanced analytics",
@@ -821,7 +866,8 @@
           "q": [
             "Are we using data to predict problems, or just documenting them after the fact?",
             "What decisions would we make differently if we had better data today?"
-          ]
+          ],
+          "desc": "Application of data analytics, predictive modeling, and machine learning to project and operational data to drive earlier, better-informed decisions across the asset lifecycle."
         },
         {
           "name": "BIM / digital twin",
@@ -833,7 +879,8 @@
           "q": [
             "Is our digital twin maintained and used for operations, or did it stop being useful after construction?",
             "What’s the ROI case for maintaining it through the asset lifecycle?"
-          ]
+          ],
+          "desc": "Creation and maintenance of building information models and digital twins that support design coordination during construction and asset management through operations."
         },
         {
           "name": "ERP integration",
@@ -845,7 +892,8 @@
           "q": [
             "Can our systems talk to each other, or are people manually bridging gaps with spreadsheets?",
             "Where is integration friction costing us the most time and accuracy?"
-          ]
+          ],
+          "desc": "Integration of enterprise resource planning systems across project and operational functions, eliminating manual data bridging and ensuring a connected information environment."
         },
         {
           "name": "Process automation & orchestration",
@@ -857,7 +905,8 @@
           "q": [
             "Which high-volume, low-value processes should be automated first?",
             "What’s the business case - labor savings, speed, error reduction, or all three?"
-          ]
+          ],
+          "desc": "Identification and implementation of automation opportunities across high-volume, low-value processes to improve speed, accuracy, and cost efficiency."
         },
         {
           "name": "Data governance & reporting",
@@ -869,7 +918,8 @@
           "q": [
             "Do we trust our data enough to make decisions on it without manual verification?",
             "If the board asked for a number today, how quickly and confidently could we produce it?"
-          ]
+          ],
+          "desc": "Establishment of data standards, ownership, and quality controls that enable trusted, auditable reporting and confident decision-making across the organization."
         }
       ]
     },
@@ -893,7 +943,8 @@
           "q": [
             "Will operations be genuinely ready on day one, or are we going to scramble?",
             "Have we tested our operational processes before go-live, not just documented them?"
-          ]
+          ],
+          "desc": "Structured preparation to ensure operations teams, processes, systems, and supply chains are genuinely ready to take over and perform at design capacity from day one of commercial operation."
         },
         {
           "name": "Asset management strategy",
@@ -905,7 +956,8 @@
           "q": [
             "Are we managing assets for maximum lifecycle value, or just keeping them running?",
             "When does it make more sense to replace than maintain - and do we have a framework for that call?"
-          ]
+          ],
+          "desc": "Long-term strategy for maximizing asset value over its full lifecycle, including maintenance optimization, capital renewal planning, and replacement-versus-repair decision frameworks."
         },
         {
           "name": "Energy management, efficiency & resilience",
@@ -917,7 +969,8 @@
           "q": [
             "What’s our energy cost per unit of output versus peers?",
             "Are we resilient to grid disruption or price spikes, or is that a blind spot?"
-          ]
+          ],
+          "desc": "Optimization of energy procurement, consumption, and resilience across operating assets, including power contract strategy, demand management, grid risk mitigation, and peer benchmarking."
         },
         {
           "name": "Financial reporting & technical accounting",
@@ -929,7 +982,8 @@
           "q": [
             "Are our reporting processes efficient, or are we throwing people at close cycles?",
             "Can we report with both confidence and speed when stakeholders need answers?"
-          ]
+          ],
+          "desc": "Efficient and accurate financial reporting processes, including technical accounting for complex asset structures, close-cycle optimization, and stakeholder-ready reporting."
         },
         {
           "name": "Internal cost audit & benchmarking",
@@ -941,7 +995,8 @@
           "q": [
             "Are we benchmarking against the right peers with the right metrics?",
             "Where do our operations underperform, and do we understand the root cause?"
-          ]
+          ],
+          "desc": "Systematic review of operating costs against peer benchmarks and internal targets, identifying underperformance root causes and opportunities for efficiency improvement."
         },
         {
           "name": "Credit substantiation & audit readiness",
@@ -953,7 +1008,8 @@
           "q": [
             "Can we defend every credit we’ve claimed with documentation?",
             "If audited tomorrow, what would we be scrambling to pull together?"
-          ]
+          ],
+          "desc": "Documentation, tracking, and defense of all claimed tax credits, ensuring complete audit trails and readiness for federal, state, or local examination at any time."
         },
         {
           "name": "Customs & trade compliance",
@@ -965,7 +1021,8 @@
           "q": [
             "Are we managing duty exposure proactively, or finding out about costs at the border?",
             "Are our foreign trade zone benefits fully realized?"
-          ]
+          ],
+          "desc": "Ongoing management of duty exposure, import/export compliance, and foreign trade zone benefits across operating assets and supply chains."
         },
         {
           "name": "Climate risk modeling",
@@ -977,7 +1034,8 @@
           "q": [
             "Are we actively monitoring and adapting to physical climate risks - extreme weather, water stress, grid reliability - at each operating site?",
             "Are our climate risk disclosures and reporting keeping pace with evolving regulatory and stakeholder expectations?"
-          ]
+          ],
+          "desc": "Active monitoring and adaptation to physical climate risks at operating sites, including extreme weather exposure, water stress, grid reliability, and alignment with evolving disclosure requirements."
         },
         {
           "name": "Cybersecurity, data privacy & crisis response",
@@ -989,7 +1047,8 @@
           "q": [
             "If we were breached today, what’s our response plan and who leads it?",
             "Are our operational technology systems as protected as our IT systems?"
-          ]
+          ],
+          "desc": "Protection of operational technology and IT systems from cyber threats, management of data privacy obligations, and maintenance of tested incident response and crisis management plans."
         },
         {
           "name": "Facility operate, maintain & retire",
@@ -1001,7 +1060,8 @@
           "q": [
             "Is our maintenance strategy predictive or reactive?",
             "Are we spending the right amount on maintenance - not too much, not too little?"
-          ]
+          ],
+          "desc": "Day-to-day operation and maintenance of the physical asset, including predictive maintenance strategies, condition monitoring, and lifecycle cost optimization."
         },
         {
           "name": "Decommissioning & disposal",
@@ -1013,7 +1073,8 @@
           "q": [
             "Do we know our decommissioning obligations, and are they funded?",
             "Are there environmental liabilities we haven’t quantified or disclosed?"
-          ]
+          ],
+          "desc": "Planning and execution of end-of-life activities, including environmental remediation, regulatory closeout, asset disposal or repurposing, and management of decommissioning obligations."
         },
         {
           "name": "Operational turnaround & restructuring",
@@ -1025,7 +1086,8 @@
           "q": [
             "If an asset is underperforming, do we have a playbook to diagnose and fix it fast?",
             "At what point do we cut losses versus invest in a turnaround - and who makes that call?"
-          ]
+          ],
+          "desc": "Rapid diagnosis and remediation of underperforming assets, including root cause analysis, operational restructuring, performance recovery planning, and go/no-go decision frameworks."
         }
       ]
     }

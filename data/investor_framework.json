@@ -154,7 +154,8 @@
           "q": [
             "Is our investment thesis differentiated, and can we articulate it in a way that resonates with target LPs?",
             "Are we disciplined about staying within our mandate, or drifting into opportunistic deals?"
-          ]
+          ],
+          "desc": "Definition and articulation of a differentiated fund investment thesis, including target sectors, return profiles, geographic focus, and the track record narrative for LP fundraising."
         },
         {
           "name": "Portfolio construction & allocation",
@@ -166,7 +167,8 @@
           "q": [
             "Is our portfolio construction aligned with our fund thesis and LP expectations for diversification?",
             "Are we concentrating risk in ways we’ve explicitly decided to, or inadvertently?"
-          ]
+          ],
+          "desc": "Strategic construction of the fund portfolio to align with the investment thesis and LP expectations, including diversification targets, concentration limits, and vintage management."
         },
         {
           "name": "Sector & market screening",
@@ -178,7 +180,8 @@
           "q": [
             "Are we originating opportunities with proprietary relationships, or relying on inbound deal flow and competitive processes?",
             "Are we seeing the best deals in our target sectors, or missing opportunities competitors are finding?"
-          ]
+          ],
+          "desc": "Systematic screening of sectors and markets for investment opportunities, using repeatable frameworks that go beyond inbound deal flow to identify proprietary origination advantages."
         },
         {
           "name": "Fund fundraise & LP capital raising",
@@ -190,7 +193,8 @@
           "q": [
             "Are we positioned competitively for the next fund raise - what’s our track record story and how does it compare to peers?",
             "Are we targeting the right LP segments with the right fund terms, and is our marketing material compelling?"
-          ]
+          ],
+          "desc": "Positioning and execution of fund capital raises, including LP targeting, fund terms negotiation, marketing material development, and track record presentation."
         },
         {
           "name": "LP & investor reporting",
@@ -202,7 +206,8 @@
           "q": [
             "Are our LP reports meeting rising expectations for transparency, frequency, and ESG disclosure?",
             "Can we produce ad-hoc LP requests quickly without a fire drill?"
-          ]
+          ],
+          "desc": "Delivery of transparent, timely reporting to limited partners, including fund performance, portfolio updates, ESG metrics, and ad-hoc information requests."
         }
       ],
       "risk": "Raising a fund without a differentiated thesis, or deploying capital into opportunities that don’t match LP expectations - eroding credibility for the next fundraise before the current one is fully deployed.",
@@ -226,7 +231,8 @@
           "q": [
             "Is our fund structure optimized for our target investor base, or carrying unnecessary complexity?",
             "Would a different domicile or vehicle type improve tax efficiency or LP access?"
-          ]
+          ],
+          "desc": "Design of fund vehicle structures and domicile selection to optimize tax efficiency, regulatory compliance, and accessibility for target investor segments."
         },
         {
           "name": "Investor tax considerations",
@@ -238,7 +244,8 @@
           "q": [
             "Are we addressing the specific tax needs of each investor type - pension, SWF, HNWI, retail?",
             "Could our structure inadvertently create UBTI or other issues for tax-exempt investors?"
-          ]
+          ],
+          "desc": "Analysis and management of tax implications for each investor type — pension funds, sovereign wealth funds, HNWIs, tax-exempt entities — including UBTI exposure and blocker structures."
         },
         {
           "name": "Cross-border treaty & withholding planning",
@@ -250,7 +257,8 @@
           "q": [
             "Are we minimizing withholding tax leakage across jurisdictions?",
             "Are our treaty positions documented and defensible under audit?"
-          ]
+          ],
+          "desc": "Minimization of withholding tax leakage across jurisdictions through treaty planning, structuring, and documentation that is defensible under audit."
         },
         {
           "name": "Tax credits & incentives",
@@ -262,7 +270,8 @@
           "q": [
             "Are we capturing all available credits at the asset level and flowing them efficiently to investors?",
             "Are we structured to take advantage of transferability and direct pay provisions?"
-          ]
+          ],
+          "desc": "Identification and structuring of tax credits at the asset level — including IRA provisions, transferability, and direct pay — to maximize flow-through value to fund investors."
         },
         {
           "name": "Grants, abatements & exemptions",
@@ -274,7 +283,8 @@
           "q": [
             "Are location-based incentives factored into our underwriting for each deal?",
             "Are we structured to retain incentives through changes in ownership or operations?"
-          ]
+          ],
+          "desc": "Integration of location-based incentives into deal underwriting and structuring to retain benefits through ownership changes and operational transitions."
         },
         {
           "name": "JV & co-investment structuring",
@@ -286,7 +296,8 @@
           "q": [
             "Are our co-investment structures aligned with partner objectives while protecting our economics?",
             "Are LP co-invest rights creating complexity in deal execution?"
-          ]
+          ],
+          "desc": "Structuring of joint ventures and co-investment arrangements that align partner economics, protect GP interests, and manage the complexity of LP co-invest rights in deal execution."
         },
         {
           "name": "Tax optimization & transfer pricing",
@@ -298,7 +309,8 @@
           "q": [
             "Are intercompany arrangements across our portfolio defensible and optimized?",
             "Are we reviewing transfer pricing as portfolio companies grow and evolve?"
-          ]
+          ],
+          "desc": "Management of intercompany arrangements and transfer pricing across portfolio companies to ensure tax efficiency and audit defensibility as businesses grow and evolve."
         },
         {
           "name": "Cost segregation analysis",
@@ -310,7 +322,8 @@
           "q": [
             "Have we accelerated depreciation on acquired assets through cost segregation?",
             "Are there older acquisitions where a retroactive study would unlock cash flow?"
-          ]
+          ],
+          "desc": "Acceleration of depreciation on acquired infrastructure assets through engineering-based cost segregation studies, including retroactive studies on prior vintage acquisitions."
         },
         {
           "name": "Exit tax planning & optimization",
@@ -322,7 +335,8 @@
           "q": [
             "Are we planning exit tax strategy early enough to maximize after-tax proceeds?",
             "Have we modeled the tax impact of different exit structures - sale, IPO, recapitalization?"
-          ]
+          ],
+          "desc": "Early-stage planning of exit tax strategy to maximize after-tax proceeds, including modeling of sale, IPO, recapitalization, and secondary structures."
         },
         {
           "name": "Tax equity advisory",
@@ -334,7 +348,8 @@
           "q": [
             "Are we leveraging tax equity structures to monetize credits and improve investor returns?",
             "Is our tax equity partner getting what they need, and are we retaining maximum upside?"
-          ]
+          ],
+          "desc": "Structuring and negotiation of tax equity partnerships to monetize tax credits and improve investor returns while retaining maximum economic upside for the fund."
         },
         {
           "name": "REIT & fund vehicle compliance",
@@ -346,7 +361,8 @@
           "q": [
             "Are we maintaining REIT qualification without constraining investment flexibility?",
             "Are compliance monitoring processes robust enough to catch issues before they become problems?"
-          ]
+          ],
+          "desc": "Ongoing monitoring and management of REIT qualification and fund vehicle compliance requirements, ensuring investment flexibility is maintained without triggering violations."
         }
       ],
       "risk": "Fund structures that create friction with target investors, or asset-level tax strategies that don’t flow benefits efficiently to LPs - leaving value trapped between layers of the structure.",
@@ -370,7 +386,8 @@
           "q": [
             "Are we raising at the right valuation with the right partners?",
             "Is our capital raising timeline creating pressure that leads to suboptimal terms?"
-          ]
+          ],
+          "desc": "Advisory on equity capital raises for portfolio acquisitions, including co-investor syndication, valuation negotiation, and capital structure optimization."
         },
         {
           "name": "Debt raise & capital markets",
@@ -382,7 +399,8 @@
           "q": [
             "Is our leverage appropriate for the asset risk profile?",
             "Have we stress-tested covenant headroom under realistic downside scenarios?"
-          ]
+          ],
+          "desc": "Structuring and execution of acquisition and portfolio company financing, including leverage optimization, covenant negotiation, and stress-testing under downside scenarios."
         },
         {
           "name": "Financial due diligence",
@@ -394,7 +412,8 @@
           "q": [
             "Are the seller’s financials telling the full story, or are there normalization adjustments we’re missing?",
             "Does the asset demonstrate key attributes of infrastructure - barriers to entry, competitive moat, asset intensity, long-term contracts, minimal volumetric or price risk, inflation linkage, and downside protection?"
-          ]
+          ],
+          "desc": "Assessment of a target's financial health, including quality of earnings, working capital normalization, and validation that the asset demonstrates core infrastructure characteristics."
         },
         {
           "name": "Tax due diligence",
@@ -406,7 +425,8 @@
           "q": [
             "What tax exposures are embedded in this target, and how do they affect post-close economics?",
             "Are there tax attributes - NOLs, credits, step-ups - we can capture in the deal?"
-          ]
+          ],
+          "desc": "Identification of embedded tax exposures in acquisition targets and assessment of capturable tax attributes — NOLs, credits, and step-up opportunities — that affect post-close economics."
         },
         {
           "name": "Commercial due diligence",
@@ -418,7 +438,8 @@
           "q": [
             "Is the revenue base sustainable - are customer contracts, market position, and demand drivers robust?",
             "What’s the competitive moat, and how durable is it over our hold period?"
-          ]
+          ],
+          "desc": "Independent validation of the revenue thesis, including customer contract quality, competitive positioning, demand durability, and market dynamics over the projected hold period."
         },
         {
           "name": "Technical due diligence",
@@ -430,7 +451,8 @@
           "q": [
             "What’s the true CapEx requirement to maintain or improve this asset to our standards?",
             "Are there hidden technical risks - deferred maintenance, code violations, capacity limits?"
-          ]
+          ],
+          "desc": "Independent assessment of asset condition, deferred maintenance, capacity constraints, and the true capital expenditure required to bring the asset to the fund's operating standards."
         },
         {
           "name": "Valuation",
@@ -442,7 +464,8 @@
           "q": [
             "Is our valuation methodology consistent across the portfolio and defensible to LPs and auditors?",
             "Are we anchoring to comparable transactions, or building bottom-up with defensible assumptions?"
-          ]
+          ],
+          "desc": "Consistent application of defensible valuation methodologies across the portfolio, supporting acquisition pricing, ongoing NAV reporting, and LP/auditor-ready documentation."
         },
         {
           "name": "Market entry & structuring",
@@ -454,7 +477,8 @@
           "q": [
             "Do we understand the regulatory, competitive, and operational landscape of this market?",
             "Is our entry vehicle and structure right for this jurisdiction and asset class?"
-          ]
+          ],
+          "desc": "Advisory on entering new geographies or asset classes, including regulatory landscape, competitive dynamics, and selection of the right investment vehicle and structure."
         },
         {
           "name": "Deal structuring & SPA advisory",
@@ -466,7 +490,8 @@
           "q": [
             "Are our deal protections - reps, warranties, indemnities - calibrated to the risk?",
             "Are we leaving value on the table in the SPA, or creating friction that could kill the deal?"
-          ]
+          ],
+          "desc": "Structuring of transaction terms and sale/purchase agreement provisions, including reps and warranties, indemnities, earnouts, and risk allocation between buyer and seller."
         },
         {
           "name": "Post-deal integration",
@@ -478,7 +503,8 @@
           "q": [
             "Do we have a value creation plan from day one, and who is accountable for execution?",
             "Are we integrating at the right pace - fast enough to capture value, slow enough to avoid disruption?"
-          ]
+          ],
+          "desc": "Execution of post-close value creation plans, including day-one operational control, management team alignment, governance standup, and integration pacing to protect value."
         },
         {
           "name": "Lender & investor technical advisory",
@@ -490,7 +516,8 @@
           "q": [
             "Are our lenders getting the independent assurance they need to maintain confidence?",
             "Is our technical reporting aligned with what lenders actually want to see?"
-          ]
+          ],
+          "desc": "Independent technical assurance for lenders and co-investors, including construction progress monitoring, risk assessment, and alignment of technical reporting with financing requirements."
         }
       ],
       "risk": "Overpaying for an asset, missing diligence red flags, or closing on terms that erode returns over the hold period - turning a good thesis into a bad investment.",
@@ -514,7 +541,8 @@
           "q": [
             "Is our fund governance keeping pace with regulatory expectations and LP scrutiny?",
             "Are our compliance processes scalable as AUM grows?"
-          ]
+          ],
+          "desc": "Design and maintenance of fund-level governance structures, compliance programs, and regulatory monitoring that scale with AUM growth and meet evolving LP and regulatory expectations."
         },
         {
           "name": "Regulatory & governance compliance",
@@ -526,7 +554,8 @@
           "q": [
             "Are we ahead of evolving regulatory requirements, or at risk of being caught off guard?",
             "Do we have a clear view of our compliance obligations across every jurisdiction we operate in?"
-          ]
+          ],
+          "desc": "Proactive management of compliance obligations across every jurisdiction the fund operates in, including regulatory change monitoring and impact assessment."
         },
         {
           "name": "Stakeholder & LP management",
@@ -538,7 +567,8 @@
           "q": [
             "Are we managing LP relationships proactively, or only when it’s time to fundraise?",
             "Do our LPs feel like partners, or are they surprised by developments?"
-          ]
+          ],
+          "desc": "Strategic management of LP relationships throughout the fund lifecycle — beyond fundraise cycles — including transparency, communication cadence, and proactive engagement on portfolio developments."
         },
         {
           "name": "ESG & sustainability reporting",
@@ -550,7 +580,8 @@
           "q": [
             "Can we demonstrate ESG impact with data, or are our commitments still aspirational?",
             "Are we meeting the ESG reporting standards our LPs are increasingly requiring?"
-          ]
+          ],
+          "desc": "Measurement and reporting of ESG performance across the portfolio, aligned with LP expectations and emerging regulatory disclosure frameworks like SFDR and TCFD."
         },
         {
           "name": "Risk management framework",
@@ -562,7 +593,8 @@
           "q": [
             "Do we have a portfolio-wide risk view, or are we managing risk asset by asset?",
             "Are we stress-testing the portfolio against correlated risks - rate changes, regulation, geopolitics?"
-          ]
+          ],
+          "desc": "Portfolio-wide risk identification and management, including stress-testing against correlated risks — interest rates, regulatory shifts, geopolitical exposure — rather than asset-by-asset assessment."
         },
         {
           "name": "Portfolio company governance & oversight",
@@ -574,7 +606,8 @@
           "q": [
             "Are our portfolio company boards effective, and do we have the right level of oversight?",
             "Are we getting the information we need from portcos quickly enough to act on it?"
-          ]
+          ],
+          "desc": "Establishment and oversight of portfolio company boards, management reporting, and information flows that enable timely GP intervention when performance deviates from plan."
         },
         {
           "name": "Cybersecurity & data privacy",
@@ -586,7 +619,8 @@
           "q": [
             "Is cybersecurity a board-level topic for our portfolio companies? Where are we most exposed?",
             "Have we assessed cyber risk across the portfolio, and do we have incident response plans?"
-          ]
+          ],
+          "desc": "Assessment and management of cybersecurity risk across the portfolio, including board-level governance, incident response planning, and data privacy compliance at the portco level."
         }
       ],
       "risk": "Regulatory surprises, LP trust erosion, or portfolio-level risk concentrations that aren’t visible until it’s too late - threatening fund performance and the GP’s reputation.",
@@ -610,7 +644,8 @@
           "q": [
             "Do we have a repeatable playbook for driving EBITDA improvement across portfolio companies?",
             "Are we tracking value creation initiatives with the same rigor as the investment thesis?"
-          ]
+          ],
+          "desc": "Repeatable playbook for driving EBITDA improvement across portfolio companies, including margin enhancement, revenue optimization, and rigorous tracking against the underwritten value creation plan."
         },
         {
           "name": "Capital project oversight",
@@ -622,7 +657,8 @@
           "q": [
             "Are our portfolio companies’ capital projects on time and budget?",
             "Who is providing independent oversight, and are they flagging issues early enough?"
-          ]
+          ],
+          "desc": "Independent oversight of portfolio company capital projects to ensure on-time, on-budget delivery and early identification of issues before they impact fund returns."
         },
         {
           "name": "Procurement strategy & cost management",
@@ -634,7 +670,8 @@
           "q": [
             "Are we capturing procurement synergies across the portfolio?",
             "Are portfolio companies buying independently when collective purchasing power could save millions?"
-          ]
+          ],
+          "desc": "Capture of procurement synergies across the portfolio through collective purchasing power, category management, and supplier consolidation."
         },
         {
           "name": "Workforce strategy & capability building",
@@ -646,7 +683,8 @@
           "q": [
             "Do our portfolio companies have the management teams they need to execute the value creation plan?",
             "Where are the talent gaps that are limiting performance?"
-          ]
+          ],
+          "desc": "Assessment and strengthening of portfolio company management teams, including talent gap identification, leadership development, and organizational capability building."
         },
         {
           "name": "Digital enablement & analytics",
@@ -658,7 +696,8 @@
           "q": [
             "Are we investing in digital capabilities that drive measurable value, not just modernization?",
             "Can we demonstrate ROI on digital investments to our LPs?"
-          ]
+          ],
+          "desc": "Application of data and analytics at the fund level to improve investment decision-making, portfolio monitoring, and operational performance tracking."
         },
         {
           "name": "Operational turnaround & restructuring",
@@ -670,7 +709,8 @@
           "q": [
             "When an asset underperforms, how quickly can we diagnose the problem and deploy a fix?",
             "Do we have the bench strength and playbook to execute a turnaround, or do we need outside help?"
-          ]
+          ],
+          "desc": "Rapid diagnosis and remediation of underperforming portfolio assets, including operational restructuring, management changes, and deployment of turnaround resources."
         }
       ],
       "risk": "Acquiring assets with a value creation thesis but lacking the operational capability or discipline to execute it - leaving underwriting assumptions unrealized at exit.",
@@ -694,7 +734,8 @@
           "q": [
             "Are we using data to make better investment and portfolio management decisions?",
             "What decisions are we making on instinct that data could improve?"
-          ]
+          ],
+          "desc": "Application of data and analytics at the fund level to improve investment decision-making, portfolio monitoring, and operational performance tracking."
         },
         {
           "name": "Data governance & reporting",
@@ -706,7 +747,8 @@
           "q": [
             "Can we produce reliable, auditable data across the portfolio on demand?",
             "Are data definitions and reporting standards consistent across portfolio companies?"
-          ]
+          ],
+          "desc": "Establishment of consistent data definitions, quality standards, and reporting frameworks across portfolio companies to enable reliable, auditable fund-level reporting."
         },
         {
           "name": "Waterfall & distribution modeling",
@@ -718,7 +760,8 @@
           "q": [
             "Is our waterfall model robust enough to handle complex multi-tier structures and edge cases?",
             "Have we stress-tested distributions under multiple performance scenarios?"
-          ]
+          ],
+          "desc": "Development and maintenance of robust waterfall models that handle complex multi-tier fund structures, edge cases, and stress-tested distribution scenarios."
         },
         {
           "name": "Portfolio analytics & benchmarking",
@@ -730,7 +773,8 @@
           "q": [
             "Are we benchmarking portfolio company performance against the right peers?",
             "Can we identify underperformance early enough to intervene before it affects fund returns?"
-          ]
+          ],
+          "desc": "Systematic benchmarking of portfolio company performance against relevant peers, enabling early identification of underperformance before it affects fund-level returns."
         },
         {
           "name": "AI governance & responsible AI frameworks",
@@ -742,7 +786,8 @@
           "q": [
             "As our portfolio companies adopt AI, do we have a governance framework to manage the risks?",
             "Are we positioned to capture AI upside while protecting against reputational and regulatory risk?"
-          ]
+          ],
+          "desc": "Governance frameworks for managing AI adoption risk across portfolio companies, balancing the capture of AI-driven value with reputational, regulatory, and operational safeguards."
         }
       ],
       "risk": "Operating with fragmented data across the portfolio, making it impossible to see the full picture or report with confidence - undermining LP trust and decision-making speed.",
@@ -766,7 +811,8 @@
           "q": [
             "Are we managing each asset for maximum exit value, or just steady-state performance?",
             "Is our hold period strategy still right, or has the market moved?"
-          ]
+          ],
+          "desc": "Active management of each portfolio asset toward maximum exit value, including hold period optimization, capital improvement planning, and ongoing market positioning."
         },
         {
           "name": "Energy management, efficiency & resilience",
@@ -778,7 +824,8 @@
           "q": [
             "Is energy cost and resilience a competitive advantage or a vulnerability for our assets?",
             "Are we capturing energy-related incentives and credits at the asset level?"
-          ]
+          ],
+          "desc": "Management of energy cost and resilience as a competitive differentiator for portfolio assets, including procurement optimization and capture of energy-related incentives."
         },
         {
           "name": "Financial reporting & technical accounting",
@@ -790,7 +837,8 @@
           "q": [
             "Are our reporting processes efficient enough to support timely LP reporting and audit cycles?",
             "Are we applying technical accounting standards consistently across the portfolio?"
-          ]
+          ],
+          "desc": "Efficient and technically sound financial reporting across the portfolio, supporting timely LP reporting, audit cycles, and consistent application of accounting standards."
         },
         {
           "name": "Fund accounting & NAV reporting",
@@ -802,7 +850,8 @@
           "q": [
             "Is our NAV calculation methodology consistent, defensible, and meeting LP expectations?",
             "Can we explain NAV movements clearly when LPs ask?"
-          ]
+          ],
+          "desc": "Accurate and defensible NAV calculation and reporting, with clear methodology documentation and the ability to explain movements to LPs and auditors on demand."
         },
         {
           "name": "Internal cost audit & benchmarking",
@@ -814,7 +863,8 @@
           "q": [
             "Are we auditing the right things at the right frequency across the portfolio?",
             "Are audit findings leading to action, or sitting in a report?"
-          ]
+          ],
+          "desc": "Regular audit of operating costs and portfolio performance against benchmarks, ensuring audit findings drive action rather than accumulating in reports."
         },
         {
           "name": "Credit substantiation & audit readiness",
@@ -826,7 +876,8 @@
           "q": [
             "Can we defend every credit claimed across the portfolio with proper documentation?",
             "If a portfolio company is audited, are they ready - and are we?"
-          ]
+          ],
+          "desc": "Documentation and defense of all tax credits claimed across the portfolio, ensuring every portfolio company maintains audit-ready records at all times."
         },
         {
           "name": "Exit preparation & vendor due diligence",
@@ -838,7 +889,8 @@
           "q": [
             "Are we starting exit preparation early enough to maximize competitive tension and proceeds?",
             "Would a buyer’s diligence find issues we haven’t already identified and addressed?"
-          ]
+          ],
+          "desc": "Early and thorough preparation for asset exits, including vendor due diligence, data room preparation, and proactive identification of issues a buyer would surface."
         },
         {
           "name": "Wind down & fund dissolution",
@@ -850,7 +902,8 @@
           "q": [
             "Do we have a clear wind-down plan that addresses tail liabilities and LP expectations?",
             "Are we managing the final distributions and reporting with the same rigor as the rest of the fund lifecycle?"
-          ]
+          ],
+          "desc": "Structured management of fund wind-down, including tail asset disposition, final distributions, LP communication, and regulatory closeout with the same rigor applied throughout the fund lifecycle."
         }
       ],
       "risk": "Starting exit preparation too late, leaving value on the table, or getting surprised by issues a buyer’s diligence uncovers first - compressing proceeds and damaging track record.",

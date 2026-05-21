@@ -303,6 +303,7 @@ function CategoryTooltip({risk,questions,children}){
 
 function StatusBadge({status}){const s=STATUS_COLORS[status];return React.createElement("span",{style:{fontSize:9,fontWeight:"bold",padding:"2px 6px",borderRadius:3,backgroundColor:s.bg,color:s.text,border:`1px solid ${s.border}30`,whiteSpace:"nowrap"}},s.label);}
 
+function PhaseTooltip({tooltip,children}){const[show,setShow]=useState(false);const[pos,setPos]=useState({x:0,y:0});const ref=useRef(null);const onEnter=()=>{const r=ref.current?.getBoundingClientRect();if(r)setPos({x:r.left+r.width/2,y:r.bottom});setShow(true);};if(!tooltip)return children;return React.createElement("div",{ref,onMouseEnter:onEnter,onMouseLeave:()=>setShow(false),style:{position:"relative",cursor:"default"}},children,show&&React.createElement("div",{style:{position:"fixed",left:Math.min(Math.max(pos.x-140,8),window.innerWidth-296),top:pos.y+8,width:280,padding:"10px 12px",backgroundColor:PWC.black,color:PWC.white,fontFamily:"Arial,sans-serif",fontSize:"11px",lineHeight:1.5,borderRadius:4,boxShadow:"0 4px 16px rgba(0,0,0,0.3)",zIndex:1000,pointerEvents:"none"}},React.createElement("span",{style:{display:"block"}},tooltip)));}
 function PhaseBar({item,dimmed,statusColor,phases}){
   return React.createElement("div",{style:{display:"flex",gap:1,flex:1,transition:"opacity 0.3s",opacity:dimmed?0.12:1}},
     phases.map((_,i)=>{const a=i>=item.start&&i<=item.end,isS=i===item.start,isE=i===item.end;
@@ -331,24 +332,27 @@ function CategoryRow({category,isExpanded,onToggle,activePersona,personas,items,
         counts.evaluate>0&&React.createElement("span",{style:{fontSize:9,color:PWC.amber,fontWeight:"bold"}},`${counts.evaluate}G`)),
       React.createElement("div",{style:{display:"flex",gap:2,flex:1}},phases.map((_,i)=>{const rel=persona?items.filter(it=>persona.capabilities.has(it.name)):items;const a=rel.some(it=>i>=it.start&&i<=it.end);return React.createElement("div",{key:i,style:{flex:1,height:8,borderRadius:2,backgroundColor:a?PWC.black:PWC.grey100,opacity:a?0.45:0.3,transition:"all 0.3s"}});})),
       React.createElement("svg",{width:14,height:14,viewBox:"0 0 14 14",style:{transform:isExpanded?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.25s",flexShrink:0,opacity:0.4}},React.createElement("path",{d:"M3.5 5.5L7 9L10.5 5.5",fill:"none",stroke:PWC.black,strokeWidth:1.3,strokeLinecap:"round",strokeLinejoin:"round"}))),
-    React.createElement("div",{style:{maxHeight:isExpanded?items.length*70+20:0,overflow:"hidden",transition:"max-height 0.4s ease"}},
+    React.createElement("div",{style:{maxHeight:isExpanded?items.length*85+20:0,overflow:"hidden",transition:"max-height 0.4s ease"}},
       React.createElement("div",{style:{padding:"0 12px 10px"}},items.map((item,i)=>{
         const dimmed=persona&&!persona.capabilities.has(item.name);const sc=STATUS_COLORS[item.status];
-        return React.createElement("div",{key:i,style:{display:"flex",alignItems:"flex-start",gap:8,padding:"6px 4px",borderRadius:3,margin:"0 -4px",borderBottom:`1px solid ${PWC.grey100}`,opacity:dimmed?0.2:1,transition:"opacity 0.3s"}},
-          React.createElement("span",{style:{minWidth:18}}),
-          React.createElement("div",{style:{width:180,minWidth:180}},
-            React.createElement(Tooltip,{questions:item.q},React.createElement("div",{style:{fontFamily:"Arial,sans-serif",fontSize:11.5,color:PWC.black,lineHeight:1.3,borderBottom:`1px dashed ${PWC.grey300}`,paddingBottom:1}},item.name)),
-            React.createElement("div",{style:{display:"flex",gap:4,marginTop:4}},React.createElement(StatusBadge,{status:item.status}))),
-          React.createElement("div",{style:{width:80,minWidth:80,flexShrink:0}}),
-          React.createElement(PhaseBar,{item,dimmed,statusColor:sc.text,phases}),
-          React.createElement("div",{style:{width:160,minWidth:160,flexShrink:0}},
+        return React.createElement("div",{key:i,style:{padding:"6px 4px",borderRadius:3,margin:"0 -4px",borderBottom:`1px solid ${PWC.grey100}`,opacity:dimmed?0.2:1,transition:"opacity 0.3s"}},
+          React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8}},
+            React.createElement("span",{style:{minWidth:18}}),
+            React.createElement("div",{style:{width:180,minWidth:180,display:"flex",alignItems:"center",gap:6}},
+              React.createElement(Tooltip,{questions:item.q},React.createElement("div",{style:{fontFamily:"Arial,sans-serif",fontSize:11.5,color:PWC.black,lineHeight:1.3,borderBottom:`1px dashed ${PWC.grey300}`,paddingBottom:1}},item.name)),
+              React.createElement(StatusBadge,{status:item.status})),
+            React.createElement("div",{style:{width:80,minWidth:80,flexShrink:0}}),
+            React.createElement(PhaseBar,{item,dimmed,statusColor:sc.text,phases}),
+            React.createElement("span",{style:{width:14,flexShrink:0}})),
+          React.createElement("div",{style:{display:"flex",gap:8,marginTop:4,paddingLeft:26}},
+            React.createElement("span",{style:{fontSize:9,color:PWC.grey400,fontWeight:"bold",textTransform:"uppercase",letterSpacing:"0.3px",minWidth:60,paddingTop:3}},"Owner / Team"),
             canEdit?React.createElement(React.Fragment,null,
-              React.createElement("input",{type:"text",value:item.poc,placeholder:"Point of contact...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"poc",e.target.value),style:{width:"100%",padding:"2px 6px",fontSize:10.5,fontFamily:"Arial,sans-serif",color:PWC.black,fontWeight:"bold",border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none",marginBottom:2},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}}),
-              React.createElement("input",{type:"text",value:item.team,placeholder:"Team / practice...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"team",e.target.value),style:{width:"100%",padding:"2px 6px",fontSize:10,fontFamily:"Arial,sans-serif",color:PWC.grey500,border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none"},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}})
+              React.createElement("input",{type:"text",value:item.poc,placeholder:"Point of contact...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"poc",e.target.value),style:{flex:1,padding:"2px 8px",fontSize:10.5,fontFamily:"Arial,sans-serif",color:PWC.black,fontWeight:"bold",border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none"},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}}),
+              React.createElement("input",{type:"text",value:item.team,placeholder:"Team / practice...",onClick:e=>e.stopPropagation(),onChange:e=>onUpdateItem(category.id,i,"team",e.target.value),style:{flex:1,padding:"2px 8px",fontSize:10.5,fontFamily:"Arial,sans-serif",color:PWC.grey500,border:`1px solid ${PWC.grey200}`,borderRadius:3,backgroundColor:PWC.white,outline:"none"},onFocus:e=>{e.target.style.borderColor=PWC.orange},onBlur:e=>{e.target.style.borderColor=PWC.grey200}})
             ):React.createElement(React.Fragment,null,
-              React.createElement("div",{style:{fontSize:10.5,fontWeight:"bold",color:PWC.black,padding:"2px 0"}},item.poc||"—"),
-              React.createElement("div",{style:{fontSize:10,color:PWC.grey500}},item.team||"—"))
-          ),React.createElement("span",{style:{width:14,flexShrink:0}}));}))));
+              React.createElement("span",{style:{fontSize:10.5,fontWeight:"bold",color:PWC.black}},item.poc||"—"),
+              React.createElement("span",{style:{fontSize:10.5,color:PWC.grey500,marginLeft:8}},item.team||"—"))
+          ));}))));
 }
 
 /* ============================================================
@@ -364,7 +368,7 @@ function AssessmentView({title,subtitle,personas,phases,phaseColors,defaultData,
     ghRead(dataFile,token).then(result=>{
       if(result){
         const merged=defaultData.map(dc=>{const sc=result.content.find(c=>c.id===dc.id);if(!sc)return dc;
-          return{...dc,items:dc.items.map((di,idx)=>{const si=sc.items?.[idx];if(!si)return di;return{...di,poc:si.poc||di.poc,team:si.team||di.team,status:si.status||di.status};})};});
+          return{...dc,items:dc.items.map((di,idx)=>{const si=sc.items?.[idx];if(!si)return di;return{...di,poc:"poc" in si?si.poc:di.poc,team:"team" in si?si.team:di.team,status:si.status||di.status};})};});
         setCategories(merged);setSha(result.sha);
       }
       setLoaded(true);
@@ -408,7 +412,7 @@ function AssessmentView({title,subtitle,personas,phases,phaseColors,defaultData,
       activeP&&React.createElement("div",{style:{marginTop:8,fontSize:12,color:PWC.orange,fontWeight:"bold"}},`Showing ${activeP.capabilities.size} capabilities relevant to ${activeP.label}`)),
     React.createElement("div",{style:{display:"flex",alignItems:"center",gap:8,marginBottom:2,padding:"0 12px"}},
       React.createElement("span",{style:{minWidth:18}}),React.createElement("div",{style:{width:180,minWidth:180}}),React.createElement("div",{style:{width:80,minWidth:80,flexShrink:0}}),
-      React.createElement("div",{style:{display:"flex",gap:0,flex:1}},phases.map((ph,i)=>React.createElement("div",{key:ph.id,style:{flex:1,textAlign:"center",padding:"7px 2px",backgroundColor:phaseColors[i],color:i<(phases.length>5?4:3)?PWC.white:PWC.black,fontFamily:"Arial,sans-serif",fontSize:phases.length>5?10.5:9.5,fontWeight:"bold",borderRight:i<phases.length-1?"1px solid rgba(255,255,255,0.25)":"none",borderRadius:i===0?"4px 0 0 4px":i===phases.length-1?"0 4px 4px 0":0,lineHeight:1.2}},ph.label))),
+      React.createElement("div",{style:{display:"flex",gap:0,flex:1}},phases.map((ph,i)=>React.createElement(PhaseTooltip,{key:ph.id,tooltip:ph.tooltip},React.createElement("div",{style:{flex:1,textAlign:"center",padding:"7px 2px",backgroundColor:phaseColors[i],color:i<(phases.length>5?4:3)?PWC.white:PWC.black,fontFamily:"Arial,sans-serif",fontSize:phases.length>5?10.5:9.5,fontWeight:"bold",borderRight:i<phases.length-1?"1px solid rgba(255,255,255,0.25)":"none",borderRadius:i===0?"4px 0 0 4px":i===phases.length-1?"0 4px 4px 0":0,lineHeight:1.2}},ph.label)))),
       React.createElement("span",{style:{width:14,flexShrink:0}})),
     React.createElement("div",{style:{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"6px 12px",borderBottom:`1px solid ${PWC.grey200}`}},
       React.createElement("div",{style:{fontSize:10.5,color:PWC.grey500}},canEdit?"Hover for questions \u00b7 Edit contacts inline \u00b7 Auto-saves":"Hover for questions \u00b7 View-only mode"),

@@ -83,7 +83,7 @@
         "Fund accounting & NAV reporting",
         "Waterfall & distribution modeling",
         "Financial reporting & technical accounting",
-        "Internal audit & benchmarking",
+        "Internal cost audit & benchmarking",
         "LP & investor reporting",
         "Fund governance & compliance",
         "Regulatory & governance compliance",
@@ -107,23 +107,28 @@
   "phases": [
     {
       "id": "structure",
-      "label": "Structure & Fundraise"
+      "label": "Structure & Fundraise",
+      "tooltip": "Defining the fund thesis, structuring the vehicle, selecting domicile, and raising capital from LPs. Fund-level tax planning and investor structuring are established here."
     },
     {
       "id": "finance",
-      "label": "Finance & Plan"
+      "label": "Finance & Plan",
+      "tooltip": "Deploying capital into deals - sourcing, screening, conducting due diligence, structuring transactions, and closing. This is where the investment thesis meets execution."
     },
     {
       "id": "deploy",
-      "label": "Capital Deployment"
+      "label": "Capital Deployment",
+      "tooltip": "Completing acquisitions, executing post-deal integration, standing up portfolio company governance, and initiating value creation plans. The transition from deal team to portfolio operations happens here."
     },
     {
       "id": "operate",
-      "label": "Operate"
+      "label": "Operate",
+      "tooltip": "Driving portfolio company performance, overseeing capital projects, managing risk across the portfolio, and reporting to LPs. Ongoing tax optimization and compliance monitoring continue throughout."
     },
     {
       "id": "dispose",
-      "label": "Dispose & Wind Down"
+      "label": "Dispose & Wind Down",
+      "tooltip": "Preparing assets for exit, executing sales or IPOs, optimizing exit tax strategy, managing final distributions, and winding down the fund. Track record crystallizes in this phase."
     }
   ],
   "phaseColors": [
@@ -800,7 +805,7 @@
           ]
         },
         {
-          "name": "Internal audit & benchmarking",
+          "name": "Internal cost audit & benchmarking",
           "start": 3,
           "end": 4,
           "status": "scale",

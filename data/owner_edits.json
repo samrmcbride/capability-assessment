@@ -53,12 +53,12 @@
         "status": "enhance"
       },
       {
-        "poc": "Tiffany Chu",
+        "poc": "Tiffany Chu and Tom Hylton",
         "team": "Infrastructure Tax",
         "status": "scale"
       },
       {
-        "poc": "Tiffany Chu",
+        "poc": "Tiffany Chu and Tom Hylton",
         "team": "Transfer Pricing / Infrastructure Tax",
         "status": "scale"
       },

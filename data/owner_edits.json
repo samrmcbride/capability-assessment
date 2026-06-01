@@ -78,12 +78,12 @@
     "id": "financing",
     "items": [
       {
-        "poc": "Tom Hylton",
+        "poc": "Tiffany Chu and Tom Hylton",
         "team": "Infrastructure Tax",
         "status": "scale"
       },
       {
-        "poc": "Tom Hylton",
+        "poc": "Tiffany Chu and Tom Hylton",
         "team": "Deals - Capital Markets",
         "status": "scale"
       },
